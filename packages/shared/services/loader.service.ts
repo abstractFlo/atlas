@@ -2,6 +2,7 @@ import { container, InjectionToken, singleton } from 'tsyringe';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeLast } from 'rxjs/operators';
 import { QueueItemModel, QueueModel } from '../core';
+import { UtilsService } from './utils.service';
 
 @singleton()
 export class LoaderService {
@@ -99,7 +100,7 @@ export class LoaderService {
     this.queue.beforeCount.next(this.queue.before.size);
     this.queue.afterCount.next(this.queue.after.size);
 
-    setTimeout(() => {
+    UtilsService.setTimeout(() => {
       this.startingSubject.next(true);
       this.startingSubject.complete();
     }, 50);

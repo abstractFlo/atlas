@@ -10,8 +10,7 @@ import { EventServiceInterface, UtilsService } from '@abstractFlo/shared';
  */
 export const On = (name?: string): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    let eventName = name || propertyKey;
-    eventName = UtilsService.convertToEventName(eventName);
+    const eventName = name || propertyKey;
 
     return validateEventExistsAndPush(target, 'on', eventName, propertyKey, descriptor);
   };
@@ -26,8 +25,7 @@ export const On = (name?: string): MethodDecorator => {
  */
 export const Once = (name?: string): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    let eventName = name || propertyKey;
-    eventName = UtilsService.convertToEventName(eventName);
+    const eventName = name || propertyKey;
 
     return validateEventExistsAndPush(target, 'once', eventName, propertyKey, descriptor);
   };
@@ -43,14 +41,13 @@ export const Once = (name?: string): MethodDecorator => {
  */
 export const OnGui = (name?: string): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    let eventName = name || propertyKey;
-    eventName = UtilsService.convertToEventName(eventName);
+    const eventName = name || propertyKey;
 
     return validateEventExistsAndPush(target, 'onGui', eventName, propertyKey, descriptor);
   };
 };
 
-/**
+/**c
  * Helper for adding events
  *
  * @param {Object} target
@@ -73,7 +70,9 @@ export function validateEventExistsAndPush<T>(
     return original.apply(this, args);
   };
 
-  eventService.add(type, name, target.constructor.name, propertyKey);
+  const eventName = UtilsService.convertToEventName(name);
+
+  eventService.add(type, eventName, target.constructor.name, propertyKey);
 
   return descriptor;
 

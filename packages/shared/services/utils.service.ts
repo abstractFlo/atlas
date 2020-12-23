@@ -84,4 +84,48 @@ export class UtilsService {
     log(...message);
   }
 
+  /**
+   * Receive on event helper
+   *
+   * @param {string} eventName
+   * @param {(...args: any[]) => void} listener
+   */
+  public static eventOn(eventName: string, listener: (...args: any[]) => void): void {
+    const eventHandler = container.resolve<CallableFunction>('alt.on');
+    eventHandler(eventName, listener);
+  }
+
+  /**
+   * Receive once event helper
+   *
+   * @param {string} eventName
+   * @param {(...args: any[]) => void} listener
+   */
+  public static eventOnce(eventName: string, listener: (...args: any[]) => void): void {
+    const eventHandler = container.resolve<CallableFunction>('alt.once');
+    eventHandler(eventName, listener);
+  }
+
+  /**
+   * Unsubscribe from event helper
+   *
+   * @param {string} eventName
+   * @param {(...args: any[]) => void} listener
+   */
+  public static eventOff(eventName: string, listener: (...args: any[]) => void): void {
+    const eventHandler = container.resolve<CallableFunction>('alt.off');
+    eventHandler(eventName, listener);
+  }
+
+  /**
+   * Emit event helper
+   *
+   * @param {string} eventName
+   * @param args
+   */
+  public static eventEmit(eventName: string, ...args: any[]): void {
+    const eventHandler = container.resolve<CallableFunction>('alt.emit');
+    eventHandler(eventName, ...args);
+  }
+
 }

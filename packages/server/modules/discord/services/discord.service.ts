@@ -41,7 +41,7 @@ export class DiscordService {
    * @param {number} port
    */
   public startApiServer(port: number = 1337): void {
-    this.discordExpressServer.start(port);
+    //this.discordExpressServer.start(port);
   }
 
 
