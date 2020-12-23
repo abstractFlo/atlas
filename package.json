@@ -1,0 +1,32 @@
+{
+  "name": "framework",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "lerna run --parallel lib:bundle",
+    "build:local": "cross-env OUTPUT_LOCAL=true lerna run --parallel lib:bundle"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@altv/types-client": "^1.4.6",
+    "@altv/types-natives": "^1.1.0",
+    "@altv/types-server": "^1.6.5",
+    "@rollup/plugin-node-resolve": "^11.0.1",
+    "chokidar": "^3.4.3",
+    "cross-env": "^7.0.3",
+    "jscodeshift": "^0.11.0",
+    "lerna": "^3.22.1",
+    "rollup": "^2.35.1",
+    "rollup-plugin-auto-external": "^2.0.0",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-dts": "^2.0.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "typescript": "^4.1.3"
+  }
+}

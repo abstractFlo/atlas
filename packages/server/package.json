@@ -1,0 +1,39 @@
+{
+  "name": "@abstractFlo/server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lib:bundle": "rimraf dist && rollup -c"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@altv/types-server": "^1.6.5",
+    "@types/axios": "^0.14.0",
+    "@types/body-parser": "^1.19.0",
+    "@types/cors": "^2.8.9",
+    "@types/express": "^4.17.9",
+    "@types/fs-extra": "^9.0.5",
+    "@types/lodash": "^4.14.165",
+    "@types/sjcl": "^1.0.29",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "@abraham/reflection": "^0.7.0",
+    "@overnightjs/core": "^1.7.5",
+    "axios": "^0.21.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "discord.js": "^12.5.1",
+    "fs-extra": "^9.0.1",
+    "lodash": "^4.17.20",
+    "rxjs": "^6.6.3",
+    "sjcl": "^1.0.8",
+    "tsyringe": "^4.4.0",
+    "typeorm": "^0.2.29"
+  }
+}
