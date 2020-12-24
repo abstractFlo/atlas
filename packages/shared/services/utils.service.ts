@@ -20,6 +20,31 @@ export class UtilsService {
   }
 
   /**
+   * Run an interval
+   *
+   * @param {Function} listener
+   * @param {number} milliseconds
+   * @returns {number}
+   */
+  public static setInterval(listener: CallableFunction, milliseconds: number): number {
+    const setIntervalFn = container.resolve<CallableFunction>('alt.setInterval');
+
+    return setIntervalFn(listener, milliseconds);
+  }
+
+  /**
+   * Clear given interval
+   *
+   * @param {number} interval
+   * @returns {void}
+   */
+  public static clearInterval(interval: number): void {
+    const clearIntervalFn = container.resolve<CallableFunction>('alt.clearInterval');
+
+    return clearIntervalFn(interval);
+  }
+
+  /**
    * Convert given value to event name
    * e.g: myAwesomeEvent => my:awesome:event
    *

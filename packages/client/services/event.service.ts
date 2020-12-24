@@ -1,7 +1,6 @@
 import * as alt from 'alt-client';
 import { BaseEventService } from '@abstractFlo/shared';
-import { container, singleton } from 'tsyringe';
-import { WebviewService } from './webview.service';
+import { singleton } from 'tsyringe';
 
 @singleton()
 export class EventService extends BaseEventService {
@@ -47,7 +46,7 @@ export class EventService extends BaseEventService {
   }
 
   /**
-   * Receiv gui event
+   * Receive gui event
    *
    * @param {string} eventName
    * @param {(...args: any[]) => void} listener
@@ -55,6 +54,7 @@ export class EventService extends BaseEventService {
   public onGui(eventName: string, listener: (...args: any[]) => void): void {
     alt.emit('gui:on', eventName, listener);
   }
+
   /**
    * Return all available listener types for decorators
    *

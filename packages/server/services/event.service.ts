@@ -1,4 +1,4 @@
-import { BaseEventService, UtilsService } from '@abstractFlo/shared';
+import { BaseEventService } from '@abstractFlo/shared';
 import { singleton } from 'tsyringe';
 import * as alt from 'alt-server';
 import { Player } from 'alt-server';
@@ -13,8 +13,18 @@ export class EventService extends BaseEventService {
    * @param {string} eventName
    * @param args
    */
-  public emitClient(player: alt.Player | null, eventName: string, ...args: any[]): void {
+  public emitClient(player: Player | null, eventName: string, ...args: any[]): void {
     alt.emitClient(player, eventName, ...args);
+  }
+
+  /**
+   * Emit event to gui use client as bridge
+   * @param {Player | null} player
+   * @param {string} eventName
+   * @param args
+   */
+  public emitGui(player: Player | null, eventName: string, ...args: any[]): void {
+    alt.emitClient(player, 'server:emit:gui', eventName, ...args);
   }
 
   /**
@@ -46,16 +56,6 @@ export class EventService extends BaseEventService {
    */
   public onceClient(eventName: string, listener: (...args: any[]) => void): void {
     alt.onceClient(eventName, listener);
-  }
-
-  /**
-   * Receive gui event
-   *
-   * @param {string} eventName
-   * @param {(...args: any[]) => void} listener
-   */
-  public onGui(eventName: string, listener: (...args: any[]) => void): void {
-    UtilsService.logError('TODO Fix ServerSide OnGUI');
   }
 
   /**

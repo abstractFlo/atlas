@@ -136,6 +136,7 @@ export class WebviewService {
     this.listenReadyEvent();
     this.sendEventToServer();
     this.listenGuiOnEvent();
+    this.listenToServerSendGuiEvent();
   }
 
   /**
@@ -175,6 +176,19 @@ export class WebviewService {
   private listenGuiOnEvent() {
     this.eventService.on('gui:on', (eventName: string, listener: (...args: any[]) => void) => {
       this.webview.on(eventName, listener);
+    });
+  }
+
+  /**
+   * Emit event from server to gui use client as bridge
+   *
+   * @private
+   */
+  private listenToServerSendGuiEvent(): void {
+    this.eventService.onServer('server:emit:gui', (eventName: string, ...args: any[]) => {
+      UtilsService.setTimeout(() => {
+        this.webview.emit(eventName, ...args);
+      }, 125);
     });
   }
 }
