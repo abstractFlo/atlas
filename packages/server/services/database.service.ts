@@ -1,7 +1,7 @@
 import { container, InjectionToken, singleton } from 'tsyringe';
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
 import { ConfigService } from './config.service';
-import { from, Observable } from 'rxjs';
+import { defer, from, Observable } from 'rxjs';
 import { LoggerService } from '@abstractFlo/shared';
 import { share, tap } from 'rxjs/operators';
 
@@ -72,7 +72,7 @@ export class DatabaseService {
   private create(): Observable<Connection> {
     this.created = true;
 
-    return from(createConnection(this.config))
+    return defer(() => from(createConnection(this.config)))
         .pipe(
             tap(() => this.loggerService.started('Database')),
             share()
