@@ -1,21 +1,79 @@
 import { container, InjectionToken, singleton } from 'tsyringe';
 import { Observable, Subject } from 'rxjs';
-import { filter, takeLast } from 'rxjs/operators';
+import { delay, filter, takeLast } from 'rxjs/operators';
 import { QueueItemModel, QueueModel } from '../core';
 import { UtilsService } from './utils.service';
 
 @singleton()
 export class LoaderService {
 
+  /**
+   * Contains the complete loading queue
+   *
+   * @type {QueueModel}
+   * @private
+   */
   private queue: QueueModel = new QueueModel();
 
+  /**
+   * Contains the beforeCount observable
+   *
+   * @type {Observable<number>}
+   * @private
+   */
   private readonly beforeCount$: Observable<number> = this.queue.beforeCount.asObservable();
+
+  /**
+   * Contains the afterCount observable
+   *
+   * @type {Observable<number>}
+   * @private
+   */
   private readonly afterCount$: Observable<number> = this.queue.afterCount.asObservable();
+
+  /**
+   * Contains the afterBootstrapCount observable
+   *
+   * @type {Observable<number>}
+   * @private
+   */
   private readonly afterBootstrapCount$: Observable<number> = this.queue.afterBootstrapCount.asObservable();
 
+  /**
+   * Contains the starting subject for booting
+   *
+   * @type {Subject<boolean>}
+   * @private
+   */
   private readonly startingSubject: Subject<boolean> = new Subject<boolean>();
-  private readonly startingSubject$: Observable<boolean> = this.startingSubject.asObservable();
+
+  /**
+   * Contains the starting observable with default pipe
+   * @type {Observable<boolean>}
+   * @private
+   */
+  private startingSubject$: Observable<boolean> = this.startingSubject
+      .asObservable()
+      .pipe(
+          takeLast(1),
+          filter((value: boolean) => value)
+      );
+
+  /**
+   * Contains the finish subject to declare finish loading state
+   *
+   * @type {Subject<boolean>}
+   * @private
+   */
   private readonly finishSubject$: Subject<boolean> = new Subject<boolean>();
+
+  /**
+   * Check if loader run on serverSide
+   *
+   * @type {boolean}
+   * @private
+   */
+  private readonly isServerSide: boolean = typeof process !== 'undefined';
 
   /**
    * Return the loader queue status
@@ -32,43 +90,6 @@ export class LoaderService {
     }, null, 4);
   }
 
-  /**
-   * Bootstrap complete system
-   *
-   * @param {InjectionToken} target
-   * @returns {LoaderService}
-   */
-  public bootstrap<T>(target: InjectionToken): LoaderService {
-    container.afterResolution(target, (token: InjectionToken<T>, result: T) => {
-      this.resolve();
-    }, { frequency: 'Once' });
-
-    this.beforeCount$
-        .pipe(takeLast(1))
-        .subscribe(() => this.processWork(this.queue.after, this.queue.afterCount));
-
-    this.afterCount$
-        .pipe(takeLast(1))
-        .subscribe(() => this.processWork(this.queue.afterBootstrap, this.queue.afterBootstrapCount));
-
-    this.afterBootstrapCount$
-        .pipe(takeLast(1))
-        .subscribe(() => {
-          this.finishSubject$.next(true);
-          this.finishSubject$.complete();
-        });
-
-    this.startingSubject$
-        .pipe(
-            //tap(() => log('~y~Booting entire system => ~w~Please wait...')),
-            filter((value: boolean) => value)
-        )
-        .subscribe(() => this.processWork(this.queue.before, this.queue.beforeCount));
-
-    container.resolve(target);
-
-    return this;
-  }
 
   /**
    * Do something after finish booting
@@ -94,16 +115,54 @@ export class LoaderService {
   }
 
   /**
+   * Bootstrap complete system
+   *
+   * @param {InjectionToken} target
+   * @returns {LoaderService}
+   */
+  public bootstrap<T>(target: InjectionToken): LoaderService {
+    container.afterResolution(target, (token: InjectionToken<T>, result: T) => {
+      this.resolve();
+      UtilsService.setTimeout(() => {
+        this.startingSubject.next(true);
+        this.startingSubject.complete();
+      }, this.isServerSide ? 1 : 250);
+
+    }, { frequency: 'Once' });
+
+    this.beforeCount$
+        .pipe(takeLast(1))
+        .subscribe(() => this.processWork(this.queue.after, this.queue.afterCount));
+
+    this.afterCount$
+        .pipe(takeLast(1))
+        .subscribe(() => this.processWork(this.queue.afterBootstrap, this.queue.afterBootstrapCount));
+
+    this.afterBootstrapCount$
+        .pipe(takeLast(1))
+        .subscribe(() => {
+          this.finishSubject$.next(true);
+          this.finishSubject$.complete();
+        });
+
+    // Workaround for client side
+    if (this.isServerSide) {
+      this.startingSubject$ = this.startingSubject$.pipe(delay(250));
+    }
+
+    this.startingSubject$.subscribe(() => this.processWork(this.queue.before, this.queue.beforeCount));
+
+    container.resolve(target);
+
+    return this;
+  }
+
+  /**
    * Resolve all from queue
    */
   private resolve(): void {
     this.queue.beforeCount.next(this.queue.before.size);
     this.queue.afterCount.next(this.queue.after.size);
-
-    UtilsService.setTimeout(() => {
-      this.startingSubject.next(true);
-      this.startingSubject.complete();
-    }, 50);
   }
 
   /**
@@ -144,6 +203,5 @@ export class LoaderService {
 
           await method();
         });
-
   }
 }

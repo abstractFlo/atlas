@@ -13,8 +13,8 @@ export class UtilsService {
     const setTimeoutFn = container.resolve<CallableFunction>('alt.setTimeout');
     const clearTimeoutFn = container.resolve<CallableFunction>('alt.clearTimeout');
 
-    const timeout = setTimeoutFn(() => {
-      listener();
+    const timeout = setTimeoutFn(async () => {
+      await listener();
       clearTimeoutFn(timeout);
     }, duration);
   }

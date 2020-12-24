@@ -2,7 +2,7 @@ import { container, singleton } from 'tsyringe';
 import { DiscordConfigModel, DiscordEventModel } from '../models';
 import { ConfigService } from '../../../services';
 import { Client } from 'discord.js';
-import { from, Observable } from 'rxjs';
+import { defer, from, Observable } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
 import { LoggerService } from '@abstractFlo/shared';
 
@@ -108,7 +108,7 @@ export class DiscordBotService {
   private login(): Observable<Client> {
     this.created = true;
 
-    return from(this.client.login(this.config.bot_secret))
+    return defer(() => from(this.client.login(this.config.bot_secret)))
         .pipe(
             map(() => this.client),
             tap(() => this.loggerService.started('DiscordBot')),
