@@ -1,4 +1,5 @@
-import { validateEventExistsAndPush } from '@abstractFlo/shared';
+import { LoggerService, validateEventExistsAndPush } from '@abstractFlo/shared';
+import { container } from 'tsyringe';
 
 /**
  * Add onServer event listener

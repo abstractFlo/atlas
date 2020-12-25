@@ -126,7 +126,7 @@ export class LoaderService {
       UtilsService.setTimeout(() => {
         this.startingSubject.next(true);
         this.startingSubject.complete();
-      }, this.isServerSide ? 1 : 250);
+      }, 0);
 
     }, { frequency: 'Once' });
 
@@ -147,7 +147,7 @@ export class LoaderService {
 
     // Workaround for client side
     if (this.isServerSide) {
-      this.startingSubject$ = this.startingSubject$.pipe(delay(250));
+      this.startingSubject$ = this.startingSubject$.pipe(delay(100));
     }
 
     this.startingSubject$.subscribe(() => this.processWork(this.queue.before, this.queue.beforeCount));

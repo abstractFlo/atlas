@@ -23,8 +23,10 @@ export interface PlayerInterface {
 
   /**
    * Set realtime for player
+   *
+   * @param {Date} date
    */
-  setRealtime(): void;
+  setRealtime(date: Date): void;
 
   /**
    * Emit event directly to current player

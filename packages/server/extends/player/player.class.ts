@@ -34,9 +34,10 @@ export class PlayerClass extends Player implements PlayerInterface {
 
   /**
    * Set realtime for player
+   *
+   * @param {Date} date
    */
-  public setRealtime(): void {
-    const date = new Date();
+  public setRealtime(date: Date): void {
 
     this.setDateTime(
         date.getDate() as DateTimeDay,

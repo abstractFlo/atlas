@@ -10,7 +10,7 @@ export class BaseEventService implements EventServiceInterface {
    * @type {EventModel[]}
    */
   public events: EventModel[] = [];
-
+  
   /**
    * Start event loop
    */
@@ -22,7 +22,7 @@ export class BaseEventService implements EventServiceInterface {
       const internalMethod = this[event.type];
       const method = internalMethod.bind(this, event.eventName, instance[event.methodName].bind(instance));
 
-      return await method();
+      await method();
     });
   }
 
@@ -63,7 +63,7 @@ export class BaseEventService implements EventServiceInterface {
   public once(eventName: string, listener: (...args: any[]) => void): void {
     UtilsService.eventOnce(eventName, listener);
   }
-  
+
   /**
    * Unsubscribe from server event
    *
