@@ -2,6 +2,7 @@ import { DateTimeDay, DateTimeHour, DateTimeMinute, DateTimeMonth, DateTimeSecon
 import { PlayerInterface } from './player.interface';
 import { container } from 'tsyringe';
 import { EventService } from '../../services';
+import { DiscordUserModel } from '../../modules/discord/models';
 
 export class PlayerClass extends Player implements PlayerInterface {
 
@@ -11,6 +12,22 @@ export class PlayerClass extends Player implements PlayerInterface {
    * @type {boolean}
    */
   hasModel: boolean;
+
+  /**
+   * Contains the discord token for authentication
+   *
+   */
+  discordToken: string;
+
+  /**
+   * Contains the discord user model
+   */
+  discord: DiscordUserModel = new DiscordUserModel();
+
+  /**
+   * Contains the player login state
+   */
+  pendingLogin: boolean = false;
 
   /**
    * Return the token for discord authentication
@@ -66,6 +83,5 @@ export class PlayerClass extends Player implements PlayerInterface {
 
     this.pos = position;
   }
-
 
 }

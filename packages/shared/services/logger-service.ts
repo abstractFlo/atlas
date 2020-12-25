@@ -36,7 +36,7 @@ export class LoggerService {
    * @param message
    */
   starting(message: string): void {
-    UtilsService.log(`Starting ~lg~${message}~w~`);
+    UtilsService.log(`Starting ~y~${message}~w~`);
   }
 
   /**

@@ -32,6 +32,12 @@ export class UtilsService {
     return setIntervalFn(listener, milliseconds);
   }
 
+  public static nextTick(listener: CallableFunction): void {
+    const nextTickFn = container.resolve<CallableFunction>('alt.nextTick');
+
+    nextTickFn(listener);
+  }
+
   /**
    * Clear given interval
    *

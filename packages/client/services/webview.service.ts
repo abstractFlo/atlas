@@ -31,16 +31,6 @@ export class WebviewService {
   private webviewReadySubject$: Subject<boolean> = new Subject<boolean>();
 
   /**
-   * The ready event name
-   *
-   * e.g: gui:ready
-   *
-   * @type {string}
-   * @private
-   */
-  private readyEventName: string = container.resolve<string>('alt.webview.ready.eventName');
-
-  /**
    * The event name for sending from webview to server
    *
    * e.g: gui:emit:server
@@ -75,6 +65,15 @@ export class WebviewService {
   public add(eventName: string, targetName: string, methodName: string): void {
     const event = new WebviewEventModel().cast({ eventName, targetName, methodName });
     this.events.push(event);
+  }
+
+  /**
+   * Return the webview  instance
+   *
+   * @returns {WebView}
+   */
+  public getWebView(): WebView {
+    return this.webview;
   }
 
   /**
@@ -145,15 +144,9 @@ export class WebviewService {
    * @private
    */
   private listenReadyEvent(): void {
-    this.webview.on(this.readyEventName, () => {
-      this.eventService.emit(this.readyEventName);
-      this.eventService.emitServer(this.readyEventName);
-
-      UtilsService.setTimeout(() => {
-        this.webviewReadySubject$.next(true);
-        this.webviewReadySubject$.complete();
-      }, 50);
-
+    this.webview.on('load', () => {
+      this.webviewReadySubject$.next(true);
+      this.webviewReadySubject$.complete();
     });
   }
 
@@ -186,9 +179,9 @@ export class WebviewService {
    */
   private listenToServerSendGuiEvent(): void {
     this.eventService.onServer('server:emit:gui', (eventName: string, ...args: any[]) => {
-      UtilsService.setTimeout(() => {
+      UtilsService.nextTick(() => {
         this.webview.emit(eventName, ...args);
-      }, 125);
+      });
     });
   }
 }

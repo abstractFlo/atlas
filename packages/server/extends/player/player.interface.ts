@@ -1,6 +1,24 @@
 import { Vector3 } from 'alt-server';
+import { DiscordUserModel } from '../../modules/discord/models';
 
 export interface PlayerInterface {
+
+  /**
+   * Contains the discord token for authentication
+   *
+   */
+  discordToken: string;
+
+  /**
+   * Contains the discord user model
+   */
+  discord: DiscordUserModel;
+
+  /**
+   * Contains the player login state
+   */
+  pendingLogin: boolean;
+
 
   /**
    * Contains if player hasModel
