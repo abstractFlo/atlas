@@ -1,9 +1,9 @@
 import { container, InjectionToken, singleton } from 'tsyringe';
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
 import { ConfigService } from './config.service';
-import { from, Observable } from 'rxjs';
+import { defer, from, Observable } from 'rxjs';
 import { LoggerService } from '@abstractFlo/shared';
-import { delay, share, tap } from 'rxjs/operators';
+import { share } from 'rxjs/operators';
 
 
 @singleton()
@@ -38,7 +38,9 @@ export class DatabaseService {
   constructor(
       private readonly configService: ConfigService,
       private readonly loggerService: LoggerService
-  ) {}
+  ) {
+    this.connect();
+  }
 
   /**
    * Return the service observable
@@ -46,12 +48,7 @@ export class DatabaseService {
    * @returns {Observable<Connection>}
    * @private
    */
-  public isConnected(): Observable<Connection> {
-    if (!this.created) {
-      this.loggerService.starting('Database');
-      this.connect();
-    }
-
+  public initialize(): Observable<Connection> {
     return this.serviceObservable$;
   }
 
@@ -62,7 +59,7 @@ export class DatabaseService {
    */
   private connect() {
     this.serviceObservable$ = this.created
-        ? this.isConnected()
+        ? this.initialize()
         : this.create();
   }
 
@@ -75,11 +72,7 @@ export class DatabaseService {
   private create(): Observable<Connection> {
     this.created = true;
 
-    return from(createConnection(this.config))
-        .pipe(
-            delay(125),
-            tap(() => this.loggerService.started('Database')),
-            share()
-        );
+    return defer(() => from(createConnection(this.config)))
+        .pipe(share());
   }
 }
