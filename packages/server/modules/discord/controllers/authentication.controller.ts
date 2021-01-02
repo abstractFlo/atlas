@@ -45,6 +45,11 @@ export class AuthenticationController {
             filter((discordUser: DiscordUserModel) => !!discordUser.id && !!discordUser.username)
         )
         .subscribe((discordUser: DiscordUserModel) => {
+
+          discordUser = discordUser.cast({
+            avatarUrl: `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.jpg`
+          });
+          
           this.eventService.emit('discord:user:access:done', discordToken, discordUser);
           res.send('Authentication done, you can now close this window');
         }, (err: Error) => this.loggerService.error(err.message, err.stack));

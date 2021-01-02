@@ -1,5 +1,5 @@
-import { BaseEventService } from '@abstractFlo/shared';
-import { singleton } from 'tsyringe';
+import { BaseEventService, LoggerService } from '@abstractFlo/shared';
+import { container, singleton } from 'tsyringe';
 import * as alt from 'alt-server';
 import { Player } from 'alt-server';
 

@@ -157,7 +157,7 @@ export class WebviewService {
    */
   private sendEventToServer() {
     this.webview.on(this.webviewToServerEventName, (eventName: string, ...args: any[]) => {
-      this.eventService.emitServer('gui:emit:server', eventName, ...args);
+      this.eventService.emitServer(eventName, ...args);
     });
   }
 

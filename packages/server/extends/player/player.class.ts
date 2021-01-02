@@ -3,6 +3,7 @@ import { PlayerInterface } from './player.interface';
 import { container } from 'tsyringe';
 import { EventService } from '../../services';
 import { DiscordUserModel } from '../../modules/discord/models';
+import { UtilsService } from '@abstractFlo/shared';
 
 export class PlayerClass extends Player implements PlayerInterface {
 
@@ -47,6 +48,27 @@ export class PlayerClass extends Player implements PlayerInterface {
   public emit(eventName: string, ...args: any[]) {
     const eventService = container.resolve(EventService);
     eventService.emitClient(this, eventName, ...args);
+  }
+
+  /**
+   * Emit event directly to current player gui
+   *
+   * @param {string} eventName
+   * @param args
+   */
+  emitGui(eventName: string, ...args: any[]): void {
+    const eventService = container.resolve(EventService);
+    eventService.emitGui(this, eventName, ...args);
+  }
+
+  /**
+   * Emit event on nextTick to current player gui
+   *
+   * @param {string} eventName
+   * @param args
+   */
+  emitGuiNextTick(eventName: string, ...args: any[]): void {
+    UtilsService.setTimeout(() => this.emitGui(eventName, args), 25);
   }
 
   /**

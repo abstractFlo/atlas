@@ -25,4 +25,7 @@ export class DiscordUserModel extends JsonEntityModel {
 
   @Cast({ from: castToBoolean() })
   mfa_enabled: boolean;
+
+  @Cast({from: castToString()})
+  avatarUrl: string = '/images/128.jpg';
 }
