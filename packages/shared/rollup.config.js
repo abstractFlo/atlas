@@ -7,12 +7,12 @@ import dts from 'rollup-plugin-dts';
 export default [
   {
     input: './index.ts',
-    output: [
-      {
-        file: `${outDir}/shared/index.js`,
-        format: 'esm',
-      },
-    ],
+    output: outDir.map((oDir) => (
+        {
+          file: `${oDir}/shared/index.js`,
+          format: 'esm',
+        }
+    )),
     plugins: [
       typescript({
         useTsconfigDeclarationDir: true,
@@ -32,10 +32,12 @@ export default [
   },
   {
     input: '../../dist/types/shared/index.d.ts',
-    output: {
-      file: `${outDir}/shared/index.d.ts`,
-      format: 'esm',
-    },
+    output: outDir.map((oDir) => (
+        {
+          file: `${oDir}/shared/index.d.ts`,
+          format: 'esm',
+        }
+    )),
     plugins: [
       dts(),
     ],

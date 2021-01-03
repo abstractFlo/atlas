@@ -8,12 +8,12 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 export default [
   {
     input: './index.ts',
-    output: [
-      {
-        file: `${outDir}/client/index.js`,
-        format: 'esm',
-      },
-    ],
+    output: outDir.map((oDir) => (
+        {
+          file: `${oDir}/client/index.js`,
+          format: 'esm',
+        }
+    )),
     plugins: [
       nodeResolve(),
       typescript({
@@ -36,10 +36,12 @@ export default [
   },
   {
     input: '../../dist/types/client/index.d.ts',
-    output: {
-      file: `${outDir}/client/index.d.ts`,
-      format: 'esm',
-    },
+    output: outDir.map((oDir) => (
+        {
+          file: `${oDir}/client/index.d.ts`,
+          format: 'esm',
+        }
+    )),
     plugins: [
       dts(),
     ],

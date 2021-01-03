@@ -9,12 +9,12 @@ import dts from 'rollup-plugin-dts';
 export default [
   {
     input: './index.ts',
-    output: [
-      {
-        file: `${outDir}/server/index.js`,
-        format: 'esm',
-      },
-    ],
+    output: outDir.map((oDir) => (
+        {
+          file: `${oDir}/server/index.js`,
+          format: 'esm',
+        }
+    )),
     plugins: [
       typescript({
         useTsconfigDeclarationDir: true,
@@ -44,10 +44,12 @@ export default [
   },
   {
     input: '../../dist/types/server/index.d.ts',
-    output: {
-      file: `${outDir}/server/index.d.ts`,
-      format: 'esm',
-    },
+    output: outDir.map((oDir) => (
+        {
+          file: `${oDir}/server/index.d.ts`,
+          format: 'esm',
+        }
+    )),
     plugins: [
       dts(),
     ],
