@@ -1,5 +1,5 @@
 import { Vector3 } from 'alt-server';
-import { DiscordUserModel } from '../../modules/discord/models';
+import { DiscordUserModel } from '../../modules';
 
 export interface PlayerInterface {
 

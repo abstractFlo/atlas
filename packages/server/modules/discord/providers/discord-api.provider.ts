@@ -63,7 +63,7 @@ export class DiscordApiProvider {
   /**
    * Return URLSearchParams from given params
    *
-   * @param {{[p: string]: string}} params
+   * @param params
    * @returns {URLSearchParams}
    * @private
    */

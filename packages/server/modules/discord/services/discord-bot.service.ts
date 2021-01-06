@@ -31,7 +31,7 @@ export class DiscordBotService {
    * @private
    */
   public readonly client: Client = new Client(this.config.presences);
-
+  
   /**
    * Contains the client observable
    *

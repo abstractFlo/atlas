@@ -87,7 +87,9 @@ export class PlayerClass extends Player implements PlayerInterface {
         date.getSeconds() as DateTimeSecond
     );
 
-    this.emit('player:set:ms:per:game:minute', 60000);
+    const eventName = container.resolve<string>('alt.Player.setRealtime.eventName')
+
+    this.emit(eventName, 60000);
   }
 
   /**

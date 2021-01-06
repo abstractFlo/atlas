@@ -9,7 +9,7 @@ export class LoggerService {
    *
    * @param messages
    */
-  info(...messages: any[]): void {
+  public info(...messages: any[]): void {
     UtilsService.log(messages);
   }
 
@@ -18,7 +18,7 @@ export class LoggerService {
    *
    * @param messages
    */
-  warning(...messages: any[]): void {
+  public warning(...messages: any[]): void {
     UtilsService.logWarning(messages);
   }
 
@@ -26,7 +26,7 @@ export class LoggerService {
    * Add error to console
    * @param messages
    */
-  error(...messages: any[]): void {
+  public error(...messages: any[]): void {
     UtilsService.logError(messages);
   }
 
@@ -35,7 +35,7 @@ export class LoggerService {
    *
    * @param message
    */
-  starting(message: string): void {
+  public starting(message: string): void {
     UtilsService.log(`Starting ~y~${message}~w~`);
   }
 
@@ -44,9 +44,7 @@ export class LoggerService {
    *
    * @param message
    */
-  started(message: string): void {
+  public started(message: string): void {
     UtilsService.log(`Started ~lg~${message}~w~`);
   }
-
-
 }

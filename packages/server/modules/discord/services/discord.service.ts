@@ -39,10 +39,10 @@ export class DiscordService {
    * Start the express server
    *
    * @param {number} port
+   * @param callback
    */
-  public startApiServer(port: number = 1337): void {
-    //this.discordExpressServer.start(port);
+  public startApiServer(port: number = 1337, callback: CallableFunction): void {
+    this.discordExpressServer.start(port, callback);
   }
-
 
 }

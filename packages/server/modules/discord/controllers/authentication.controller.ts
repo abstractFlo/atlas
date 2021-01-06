@@ -1,4 +1,4 @@
-import { injectable } from 'tsyringe';
+import { container, injectable } from 'tsyringe';
 import { ClassMiddleware, Controller, Get } from '@overnightjs/core';
 import cors from 'cors';
 import { DiscordApiService } from '../services/discord-api.service';
@@ -28,7 +28,7 @@ export class AuthenticationController {
    * @private
    */
   @Get('')
-  private info(req: Request, res: Response) {
+  private info(req: Request, res: Response): void {
     const bearerToken = req.query.code as string;
     const discordToken = req.query.state as string;
 
@@ -46,11 +46,14 @@ export class AuthenticationController {
         )
         .subscribe((discordUser: DiscordUserModel) => {
 
+          // @Todo Remove and use the user.avatarURL({ format: 'jpg', dynamic: false, size: 128 }); from Bot!!!
           discordUser = discordUser.cast({
             avatarUrl: `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.jpg`
           });
-          
-          this.eventService.emit('discord:user:access:done', discordToken, discordUser);
+
+          const eventName = container.resolve<string>('express:discordUser:accessDone');
+          this.eventService.emit(eventName, discordToken, discordUser);
+
           res.send('Authentication done, you can now close this window');
         }, (err: Error) => this.loggerService.error(err.message, err.stack));
   }

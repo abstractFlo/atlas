@@ -17,7 +17,7 @@ export function Module(options?: ModuleOptionsDecoratorInterface) {
       container.register(m.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(m)) });
     });
   }
-
+    
   return (constructor: constructor<any>) => {
     container.register(constructor.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(constructor)) });
     return constructor;
