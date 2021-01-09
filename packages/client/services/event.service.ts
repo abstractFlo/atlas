@@ -1,9 +1,33 @@
 import * as alt from 'alt-client';
+import { BaseObjectType, Entity } from 'alt-client';
 import { BaseEventService } from '@abstractFlo/shared';
-import { singleton } from 'tsyringe';
+import { container, singleton } from 'tsyringe';
+import { GameEntityHandleModel } from '../models/game-entity-handle.model';
 
 @singleton()
 export class EventService extends BaseEventService {
+
+  private gameEntityHandle: GameEntityHandleModel[] = [];
+
+  /**
+   * Override start method and include entity create
+   */
+  public start() {
+    super.start();
+
+    if (this.gameEntityHandle.length) {
+      const onCreateHandler = this.gameEntityHandle.filter((handle: GameEntityHandleModel) => handle.type === 'gameEntityCreate');
+      const onDestroyHandler = this.gameEntityHandle.filter((handle: GameEntityHandleModel) => handle.type === 'gameEntityDestroy');
+
+      if (onCreateHandler.length) {
+        this.listenGameEntityCreate(onCreateHandler);
+      }
+
+      if (onDestroyHandler.length) {
+        this.listenGameEntityDestroy(onDestroyHandler);
+      }
+    }
+  }
 
   /**
    * Emit event to server
@@ -56,13 +80,79 @@ export class EventService extends BaseEventService {
   }
 
   /**
+   * Add new game entity create to array
+   *
+   * @param {string} type
+   * @param {BaseObjectType} entityType
+   * @param {string} targetName
+   * @param {string} methodName
+   * @private
+   */
+  public addGameEntityMethods(type: string, entityType: BaseObjectType, targetName: string, methodName: string) {
+    let availableDecoratorListenerTypes = this.getGameEntityDecoratorTypes();
+
+    if (availableDecoratorListenerTypes.includes(type)) {
+      const entityCreate = new GameEntityHandleModel().cast({ type, targetName, methodName, entityType });
+      this.gameEntityHandle.push(entityCreate);
+    }
+  }
+
+  /**
    * Return all available listener types for decorators
    *
    * @returns {string[]}
    * @private
    */
-  public getAvailableDecoratorListenerTypes(): string[] {
+  protected getAvailableDecoratorListenerTypes(): string[] {
     return ['onServer', 'onceServer'];
   }
 
+  /**
+   * Return all available listener for gameEntity Events
+   * @returns {string[]}
+   */
+  protected getGameEntityDecoratorTypes(): string[] {
+    return ['gameEntityCreate', 'gameEntityDestroy'];
+  }
+
+  /**
+   * Listen for game entity create
+   *
+   * @param {GameEntityHandleModel[]} onCreateHandler
+   * @private
+   */
+  private listenGameEntityCreate(onCreateHandler: GameEntityHandleModel[]) {
+    alt.on('gameEntityCreate', (entity: Entity) => {
+      this.handleGameEntityMethods(entity, onCreateHandler);
+    });
+  }
+
+  /**
+   * Listen for game entity destroy
+   *
+   * @param {GameEntityHandleModel[]} onCreateHandler
+   * @private
+   */
+  private listenGameEntityDestroy(onCreateHandler: GameEntityHandleModel[]) {
+    alt.on('gameEntityDestroy', (entity: Entity) => {
+      this.handleGameEntityMethods(entity, onCreateHandler);
+    });
+  }
+
+  /**
+   * Check and call given handlers
+   *
+   * @param {Entity} entity
+   * @param {GameEntityHandleModel[]} handlers
+   * @private
+   */
+  private handleGameEntityMethods(entity: Entity, handlers: GameEntityHandleModel[]) {
+    handlers.forEach((handler: GameEntityHandleModel) => {
+      if (entity.type === handler.entityType) {
+        const instance = container.resolve<any>(handler.targetName);
+        const method = instance[handler.methodName].bind(instance);
+        method(entity);
+      }
+    });
+  }
 }

@@ -90,7 +90,7 @@ export class BaseEventService implements EventServiceInterface {
    * @returns {string[]}
    * @private
    */
-  public getAvailableDecoratorListenerTypes(): string[] {
+  protected getAvailableDecoratorListenerTypes(): string[] {
     return [];
   }
 
