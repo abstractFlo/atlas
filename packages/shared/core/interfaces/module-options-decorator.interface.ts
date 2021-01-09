@@ -1,5 +1,7 @@
 export interface ModuleOptionsDecoratorInterface {
 
-  imports: any[];
+  imports?: any[];
+
+  components?: any[]
 
 }

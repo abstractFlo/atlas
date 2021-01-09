@@ -1,4 +1,4 @@
-import { Cast, castToString, JsonEntityModel } from '@abstractFlo/shared';
+import { Cast, castToString, JsonEntityModel } from '../../core';
 
 export class DiscordConfigModel extends JsonEntityModel {
 

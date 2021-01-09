@@ -1,5 +1,5 @@
 import { container, singleton } from 'tsyringe';
-import { WebView } from 'alt-client';
+import { showCursor, WebView } from 'alt-client';
 import { LoggerService, UtilsService } from '@abstractFlo/shared';
 import { EventService } from './event.service';
 import { WebviewEventModel } from '../models';
@@ -9,12 +9,21 @@ import { Observable, Subject } from 'rxjs';
 export class WebviewService {
 
   /**
+   * Current cursor count
+   *
+   * @type {number}
+   * @private
+   */
+  private cursorCount: number = 0;
+
+  /**
    * Contains the webview instance
    *
    * @type {WebView}
    * @private
    */
   private webview: WebView;
+
   /**
    * Contains the events for webview
    *
@@ -22,6 +31,7 @@ export class WebviewService {
    * @private
    */
   private events: WebviewEventModel[] = [];
+
   /**
    * Contains the ready subject for webview
    *
@@ -74,6 +84,35 @@ export class WebviewService {
    */
   public getWebView(): WebView {
     return this.webview;
+  }
+
+  /**
+   * Show cursor
+   */
+  public showCursor(): void {
+    showCursor(true);
+    this.cursorCount = this.cursorCount + 1;
+  }
+
+  /**
+   * Remove Cursor
+   */
+  public removeCursor(): void {
+    if (this.cursorCount > 0) {
+      showCursor(false);
+      this.cursorCount = this.cursorCount - 1;
+    }
+  }
+
+  /**
+   * Remove all cursors
+   */
+  public removeAllCursors(): void {
+    for (let i = 0; i < this.cursorCount; i++) {
+      showCursor(false);
+    }
+
+    this.cursorCount = 0;
   }
 
   /**

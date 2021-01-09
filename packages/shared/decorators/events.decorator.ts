@@ -31,7 +31,7 @@ export const Once = (name?: string): MethodDecorator => {
   };
 };
 
-/**c
+/**
  * Helper for adding events
  *
  * @param {Object} target

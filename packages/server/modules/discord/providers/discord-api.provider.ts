@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { DiscordConfigModel } from '../models';
+import { DiscordConfigModel } from '@abstractFlo/shared';
 import { ConfigService } from '../../../services';
 import { URLSearchParams } from 'url';
 

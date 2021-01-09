@@ -32,6 +32,30 @@ export class UtilsService {
     return setIntervalFn(listener, milliseconds);
   }
 
+  /**
+   * Run an interval and clear after duration
+   *
+   * @param {Function} listener
+   * @param {number} milliseconds
+   * @param intervalDuration
+   * @returns {number}
+   */
+  public static autoClearInterval(listener: CallableFunction, milliseconds: number, intervalDuration: number): void {
+    const setIntervalFn = container.resolve<CallableFunction>('alt.setInterval');
+    const clearIntervalFn = container.resolve<CallableFunction>('alt.clearInterval');
+
+    const interval = setIntervalFn(listener, milliseconds);
+
+    UtilsService.setTimeout(() => {
+      clearIntervalFn(interval);
+    }, intervalDuration);
+  }
+
+
+  /**
+   * Next tick
+   * @param {Function} listener
+   */
   public static nextTick(listener: CallableFunction): void {
     const nextTickFn = container.resolve<CallableFunction>('alt.nextTick');
 

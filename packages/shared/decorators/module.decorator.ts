@@ -11,11 +11,19 @@ import { constructor } from 'tsyringe/dist/typings/types';
  */
 export function Module(options?: ModuleOptionsDecoratorInterface) {
 
-  // Load imports
-  if (options && options.imports) {
-    options.imports.forEach((m: constructor<any>) => {
-      container.register(m.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(m)) });
-    });
+  // Load imports and Components
+  if (options) {
+    if(options.imports) {
+      options.imports.forEach((m: constructor<any>) => {
+        container.register(m.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(m)) });
+      });
+    }
+
+    if(options.components) {
+      options.components.forEach((m: constructor<any>) => {
+        container.register(m.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(m)) });
+      });
+    }
   }
     
   return (constructor: constructor<any>) => {

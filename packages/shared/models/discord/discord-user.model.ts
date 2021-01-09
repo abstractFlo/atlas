@@ -1,4 +1,4 @@
-import { Cast, castToBoolean, castToNumber, castToString, JsonEntityModel } from '@abstractFlo/shared';
+import { Cast, castToBoolean, castToNumber, castToString, JsonEntityModel } from '../../core';
 
 export class DiscordUserModel extends JsonEntityModel {
 

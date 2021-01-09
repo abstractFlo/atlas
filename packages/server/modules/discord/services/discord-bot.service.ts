@@ -1,10 +1,9 @@
 import { container, singleton } from 'tsyringe';
-import { DiscordConfigModel, DiscordEventModel } from '../models';
+import { DiscordConfigModel, DiscordEventModel, LoggerService } from '@abstractFlo/shared';
 import { ConfigService } from '../../../services';
 import { Client } from 'discord.js';
 import { defer, from, Observable } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
-import { LoggerService } from '@abstractFlo/shared';
 
 @singleton()
 export class DiscordBotService {
@@ -31,7 +30,7 @@ export class DiscordBotService {
    * @private
    */
   public readonly client: Client = new Client(this.config.presences);
-  
+
   /**
    * Contains the client observable
    *

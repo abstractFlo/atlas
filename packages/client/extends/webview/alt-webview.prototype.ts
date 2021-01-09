@@ -11,3 +11,5 @@ WebView.prototype.routeTo = (route: string, ...args: any[]) => {
   const routeToEventName = container.resolve<string>('alt.webview.routeTo.eventName');
   webview.emit(routeToEventName, route, ...args);
 };
+
+

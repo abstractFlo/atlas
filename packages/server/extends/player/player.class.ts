@@ -2,8 +2,7 @@ import { DateTimeDay, DateTimeHour, DateTimeMinute, DateTimeMonth, DateTimeSecon
 import { PlayerInterface } from './player.interface';
 import { container } from 'tsyringe';
 import { EventService } from '../../services';
-import { DiscordUserModel } from '../../modules/discord/models';
-import { UtilsService } from '@abstractFlo/shared';
+import { DiscordUserModel, UtilsService } from '@abstractFlo/shared';
 
 export class PlayerClass extends Player implements PlayerInterface {
 
@@ -87,7 +86,7 @@ export class PlayerClass extends Player implements PlayerInterface {
         date.getSeconds() as DateTimeSecond
     );
 
-    const eventName = container.resolve<string>('alt.Player.setRealtime.eventName')
+    const eventName = container.resolve<string>('alt.Player.setRealtime.eventName');
 
     this.emit(eventName, 60000);
   }

@@ -1,4 +1,4 @@
-import { Cast, castToNumber, castToString, JsonEntityModel } from '@abstractFlo/shared';
+import { Cast, castToNumber, castToString, JsonEntityModel } from '../../core';
 
 export class AccessTokenModel extends JsonEntityModel {
 
