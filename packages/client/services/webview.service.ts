@@ -3,7 +3,7 @@ import { showCursor, WebView } from 'alt-client';
 import { LoggerService, UtilsService } from '@abstractFlo/shared';
 import { EventService } from './event.service';
 import { WebviewEventModel } from '../models';
-import { Observable, Subject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 
 @singleton()
 export class WebviewService {
@@ -38,7 +38,7 @@ export class WebviewService {
    * @type {Subject<boolean>}
    * @private
    */
-  private webviewReadySubject$: Subject<boolean> = new Subject<boolean>();
+  private webviewReadySubject$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
   /**
    * The event name for sending from webview to server
