@@ -1,4 +1,5 @@
 import { container, injectable } from 'tsyringe';
+import { ClearService } from './clear.service';
 
 @injectable()
 export class UtilsService {
@@ -28,8 +29,22 @@ export class UtilsService {
    */
   public static setInterval(listener: CallableFunction, milliseconds: number): number {
     const setIntervalFn = container.resolve<CallableFunction>('alt.setInterval');
+    const interval = setIntervalFn(listener, milliseconds);
 
-    return setIntervalFn(listener, milliseconds);
+    return interval;
+  }
+
+  /**
+   * Run an everyTick Timer
+   *
+   * @param {Function} listener
+   * @returns {number}
+   */
+  public static everyTick(listener: CallableFunction): number {
+    const everyTickFn = container.resolve<CallableFunction>('alt.everyTick');
+    const interval = everyTickFn(listener);
+
+    return interval;
   }
 
   /**
@@ -58,8 +73,10 @@ export class UtilsService {
    */
   public static nextTick(listener: CallableFunction): void {
     const nextTickFn = container.resolve<CallableFunction>('alt.nextTick');
+    const clearService = container.resolve(ClearService);
+    const nextTick = nextTickFn(listener);
 
-    nextTickFn(listener);
+    clearService.addNextTick(Date.now(), nextTick);
   }
 
   /**
@@ -72,6 +89,42 @@ export class UtilsService {
     const clearIntervalFn = container.resolve<CallableFunction>('alt.clearInterval');
 
     return clearIntervalFn(interval);
+  }
+
+  /**
+   * Clear given timeout
+   *
+   * @param {number} timeout
+   * @returns {void}
+   */
+  public static clearTimeout(timeout: number): void {
+    const clearTimeoutFn = container.resolve<CallableFunction>('alt.clearTimeout');
+
+    return clearTimeoutFn(timeout);
+  }
+
+  /**
+   * Clear given nextTick
+   *
+   * @param {number} tick
+   * @returns {void}
+   */
+  public static clearNextTick(tick: number): void {
+    const clearNextTickFn = container.resolve<CallableFunction>('alt.clearNextTick');
+
+    return clearNextTickFn(tick);
+  }
+
+  /**
+   * Clear given everyTick
+   *
+   * @param {number} tick
+   * @returns {void}
+   */
+  public static clearEveryTick(tick: number): void {
+    const clearEveryTick = container.resolve<CallableFunction>('alt.clearEveryTick');
+
+    return clearEveryTick(tick);
   }
 
   /**

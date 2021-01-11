@@ -31,6 +31,27 @@ export default [
     ],
   },
   {
+    input: './registry.ts',
+    output: outDir.map((oDir) => (
+        {
+          file: `${oDir}/shared/registry.js`,
+          format: 'esm',
+        }
+    )),
+    plugins: [
+      typescript({
+        useTsconfigDeclarationDir: true,
+      }),
+      autoExternal({
+        builtins: true,
+        dependencies: true,
+        packagePath: './package.json',
+        peerDependencies: true,
+      }),
+    ],
+    external: [...builtinModules],
+  },
+  {
     input: '../../dist/types/shared/index.d.ts',
     output: outDir.map((oDir) => (
         {
