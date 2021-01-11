@@ -52,10 +52,17 @@ export default [
     )),
     plugins: [
       dts(),
+      autoExternal({
+        builtins: true,
+        dependencies: true,
+        packagePath: './package.json',
+        peerDependencies: true,
+      }),
     ],
     external: [
       'alt-server',
       '@abstractFlo/shared',
+      '@abraham/reflection',
       ...builtinModules,
     ],
   },

@@ -1,10 +1,9 @@
-import { container, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import { DiscordApiProvider } from '../providers/discord-api.provider';
 import { from, Observable } from 'rxjs';
 import { AccessTokenModel, DiscordUserModel } from '@abstractFlo/shared';
 import axios, { AxiosResponse } from 'axios';
 import { map } from 'rxjs/operators';
-import { ExpressServer } from '../express.server';
 
 @injectable()
 export class DiscordApiService {
@@ -63,17 +62,6 @@ export class DiscordApiService {
    */
   public getAuthUrl(token: string): string {
     return this.discordApiProvider.getAuthUrl(token);
-  }
-
-  /**
-   * Start the discord api express server
-   *
-   * @param {number} port
-   * @param callback
-   */
-  public start(port: number = 1337, callback: CallableFunction): void {
-    const expressServer = container.resolve(ExpressServer);
-    expressServer.start(port, callback);
   }
 
 }

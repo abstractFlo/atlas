@@ -1,7 +1,6 @@
-import { container } from 'tsyringe';
+import { container, InjectionToken } from 'tsyringe';
 
-export function setupRegistry(lib: any): void {
-
+export function altLibRegister(lib: any): void {
   // Timers
   container.register<CallableFunction>('alt.setTimeout', { useValue: lib.setTimeout });
   container.register<CallableFunction>('alt.clearTimeout', { useValue: lib.clearTimeout });
@@ -24,3 +23,16 @@ export function setupRegistry(lib: any): void {
   container.register<CallableFunction>('alt.emit', { useValue: lib.emit });
 }
 
+export function setupServerConfigPath(path: string): void {
+  container.register<string>('server.config.path.file', { useValue: path });
+}
+
+export function setupServerDatabaseEntities(entities: InjectionToken[]): void {
+  container.register<InjectionToken[]>('server.database.entities', { useValue: entities });
+}
+
+export function setupWebviewRegistry(url: string, routeToEventName: string): void {
+  container.register<string>('alt.webview.url', { useValue: url });
+  container.register<string>('alt.webview.routeTo.eventName', { useValue: routeToEventName });
+
+}

@@ -1,5 +1,5 @@
-import { BaseEventService } from '@abstractFlo/shared';
-import { container, singleton } from 'tsyringe';
+import { BaseEventService, FrameworkEvent } from '@abstractFlo/shared';
+import { singleton } from 'tsyringe';
 import * as alt from 'alt-server';
 import { Player } from 'alt-server';
 
@@ -19,13 +19,13 @@ export class EventService extends BaseEventService {
 
   /**
    * Emit event to gui use client as bridge
+   *
    * @param {Player | null} player
    * @param {string} eventName
    * @param args
    */
   public emitGui(player: Player | null, eventName: string, ...args: any[]): void {
-    const serverEmitEventName = container.resolve<string>('eventservice:emit:gui:eventName');
-    alt.emitClient(player, serverEmitEventName, eventName, ...args);
+    alt.emitClient(player, FrameworkEvent.EventService.ServerEmitGui, eventName, ...args);
   }
 
   /**

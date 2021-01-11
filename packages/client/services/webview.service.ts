@@ -1,6 +1,6 @@
 import { container, singleton } from 'tsyringe';
 import { showCursor, WebView } from 'alt-client';
-import { LoggerService, UtilsService } from '@abstractFlo/shared';
+import { FrameworkEvent, LoggerService, UtilsService } from '@abstractFlo/shared';
 import { EventService } from './event.service';
 import { WebviewEventModel } from '../models';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
@@ -48,7 +48,7 @@ export class WebviewService {
    * @type {string}
    * @private
    */
-  private webviewToServerEventName: string = container.resolve<string>('alt.webview.server.eventName');
+  private webviewToServerEventName: string = FrameworkEvent.EventService.GuiEmitServer;
 
   /**
    * Contains webview url
@@ -206,7 +206,7 @@ export class WebviewService {
    * @private
    */
   private listenGuiOnEvent() {
-    this.eventService.on('gui:on', (eventName: string, listener: (...args: any[]) => void) => {
+    this.eventService.on(FrameworkEvent.EventService.GuiOn, (eventName: string, listener: (...args: any[]) => void) => {
       this.webview.on(eventName, listener);
     });
   }
@@ -217,7 +217,7 @@ export class WebviewService {
    * @private
    */
   private listenToServerSendGuiEvent(): void {
-    this.eventService.onServer('server:emit:gui', (eventName: string, ...args: any[]) => {
+    this.eventService.onServer(FrameworkEvent.EventService.ServerEmitGui, (eventName: string, ...args: any[]) => {
       UtilsService.nextTick(() => {
         this.webview.emit(eventName, ...args);
       });

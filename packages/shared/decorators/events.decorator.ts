@@ -54,9 +54,9 @@ export function validateEventExistsAndPush<T>(
     return original.apply(this, args);
   };
 
-  const eventName = UtilsService.convertToEventName(name);
+  //const eventName = UtilsService.convertToEventName(name);
 
-  eventService.add(type, eventName, target.constructor.name, propertyKey);
+  eventService.add(type, name, target.constructor.name, propertyKey);
 
   return descriptor;
 

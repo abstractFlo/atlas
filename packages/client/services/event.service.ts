@@ -1,6 +1,6 @@
 import * as alt from 'alt-client';
 import { BaseObjectType, Entity } from 'alt-client';
-import { BaseEventService } from '@abstractFlo/shared';
+import { BaseEventService, FrameworkEvent } from '@abstractFlo/shared';
 import { container, singleton } from 'tsyringe';
 import { GameEntityHandleModel } from '../models/game-entity-handle.model';
 
@@ -76,7 +76,7 @@ export class EventService extends BaseEventService {
    * @param {(...args: any[]) => void} listener
    */
   public onGui(eventName: string, listener: (...args: any[]) => void): void {
-    alt.emit('gui:on', eventName, listener);
+    alt.emit(FrameworkEvent.EventService.GuiOn, eventName, listener);
   }
 
   /**

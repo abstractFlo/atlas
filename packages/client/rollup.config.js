@@ -49,6 +49,7 @@ export default [
       'alt-client',
       'natives',
       '@abstractFlo/shared',
+      '@abraham/reflection',
     ],
   },
 ];

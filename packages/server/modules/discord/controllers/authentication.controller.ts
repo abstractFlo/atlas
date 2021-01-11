@@ -1,11 +1,11 @@
-import { container, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import { ClassMiddleware, Controller, Get } from '@overnightjs/core';
 import cors from 'cors';
 import { DiscordApiService } from '../services/discord-api.service';
-import { EventService } from '../../../services';
+import { EventService } from '../../../services/event.service';
 import { Request, Response } from 'express';
 import { filter, mergeMap } from 'rxjs/operators';
-import { AccessTokenModel, DiscordUserModel, LoggerService } from '@abstractFlo/shared';
+import { AccessTokenModel, DiscordUserModel, FrameworkEvent, LoggerService } from '@abstractFlo/shared';
 
 @injectable()
 @Controller('auth')
@@ -58,8 +58,7 @@ export class AuthenticationController {
             avatarUrl: `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.jpg`
           });
 
-          const eventName = container.resolve<string>('express:discordUser:accessDone');
-          this.eventService.emit(eventName, discordToken, discordUser);
+          this.eventService.emit(FrameworkEvent.Discord.AuthDone, discordToken, discordUser);
 
           res.redirect('done');
         }, (err: Error) => this.loggerService.error(err.message, err.stack));

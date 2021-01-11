@@ -1,5 +1,4 @@
 import { container, injectable } from 'tsyringe';
-import { ClearService } from './clear.service';
 
 @injectable()
 export class UtilsService {
@@ -29,9 +28,7 @@ export class UtilsService {
    */
   public static setInterval(listener: CallableFunction, milliseconds: number): number {
     const setIntervalFn = container.resolve<CallableFunction>('alt.setInterval');
-    const interval = setIntervalFn(listener, milliseconds);
-
-    return interval;
+    return setIntervalFn(listener, milliseconds);
   }
 
   /**
@@ -42,9 +39,7 @@ export class UtilsService {
    */
   public static everyTick(listener: CallableFunction): number {
     const everyTickFn = container.resolve<CallableFunction>('alt.everyTick');
-    const interval = everyTickFn(listener);
-
-    return interval;
+    return everyTickFn(listener);
   }
 
   /**
@@ -73,10 +68,7 @@ export class UtilsService {
    */
   public static nextTick(listener: CallableFunction): void {
     const nextTickFn = container.resolve<CallableFunction>('alt.nextTick');
-    const clearService = container.resolve(ClearService);
     const nextTick = nextTickFn(listener);
-
-    clearService.addNextTick(Date.now(), nextTick);
   }
 
   /**
@@ -131,18 +123,13 @@ export class UtilsService {
    * Convert given value to event name
    * e.g: myAwesomeEvent => my:awesome:event
    *
-   * Only for custom events, alt:V events would be excluded
-   *
    * @param {string} value
    * @returns {string}
    */
   public static convertToEventName(value: string): string {
-    let events = container.resolve<string[]>('alt.internalEvents');
-
-    return events.includes(value)
-        ? value
-        : value.replace(/([a-zA-Z])(?=[A-Z])/g, '$1:')
-            .toLowerCase();
+    return value
+        .replace(/([a-zA-Z])(?=[A-Z])/g, '$1:')
+        .toLowerCase();
   }
 
   /**

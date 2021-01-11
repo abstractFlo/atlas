@@ -1,5 +1,7 @@
-import { EventModel, EventServiceInterface, UtilsService } from '@abstractFlo/shared';
+
 import { container, singleton } from 'tsyringe';
+import { EventModel, EventServiceInterface } from '../core';
+import { UtilsService } from './utils.service';
 
 @singleton()
 export class BaseEventService implements EventServiceInterface {

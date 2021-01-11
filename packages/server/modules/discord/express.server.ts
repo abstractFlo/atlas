@@ -2,14 +2,11 @@ import { container, singleton } from 'tsyringe';
 import { Server } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { AuthenticationController } from './controllers/authentication.controller';
-import { LoggerService } from '@abstractFlo/shared';
 
 @singleton()
 export class ExpressServer extends Server {
 
-  constructor(
-      private readonly loggerService: LoggerService
-  ) {
+  constructor() {
     super();
 
     this.app.use(bodyParser.json());

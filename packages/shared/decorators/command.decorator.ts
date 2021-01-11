@@ -1,5 +1,5 @@
 import { container } from 'tsyringe';
-import { CommandService } from '@abstractFlo/shared';
+import { CommandService } from '../services/command.service';
 
 
 /**

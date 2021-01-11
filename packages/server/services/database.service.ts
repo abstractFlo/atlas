@@ -2,7 +2,6 @@ import { container, InjectionToken, singleton } from 'tsyringe';
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
 import { ConfigService } from './config.service';
 import { defer, from, Observable } from 'rxjs';
-import { LoggerService } from '@abstractFlo/shared';
 import { share } from 'rxjs/operators';
 
 
@@ -36,8 +35,7 @@ export class DatabaseService {
   private created: boolean = false;
 
   constructor(
-      private readonly configService: ConfigService,
-      private readonly loggerService: LoggerService
+      private readonly configService: ConfigService
   ) {
     this.connect();
   }
