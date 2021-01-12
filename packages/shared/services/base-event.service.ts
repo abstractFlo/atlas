@@ -1,7 +1,6 @@
 import { container, singleton } from 'tsyringe';
 import { EventModel, EventServiceInterface } from '../core';
 import { UtilsService } from './utils.service';
-import { LoaderService } from './loader.service';
 import { StringResolver } from '../decorators/string-resolver.decorator';
 
 @StringResolver
@@ -18,9 +17,7 @@ export class BaseEventService implements EventServiceInterface {
   /**
    * Start event loop
    */
-  public start(done: CallableFunction): void {
-    UtilsService.log('Starting ~y~EventService Decorator~w~');
-
+  public start(): void {
     this.events.forEach(async (event: EventModel) => {
       const instance = container.resolve<any>(event.targetName);
       // Need to be rewrite the typings
@@ -30,8 +27,19 @@ export class BaseEventService implements EventServiceInterface {
 
       await method();
     });
+  }
 
-    UtilsService.log('Started ~lg~EventService Decorator~w~');
+  /**
+   * Autostart event service
+   * @param {Function} done
+   */
+  public autoStart(done: CallableFunction): void {
+    if (this.events.length) {
+      UtilsService.log('Starting ~y~EventService Decorator~w~');
+      this.start();
+      UtilsService.log('Started ~lg~EventService Decorator~w~');
+    }
+
     done();
   }
 
@@ -49,12 +57,6 @@ export class BaseEventService implements EventServiceInterface {
 
     if (availableDecoratorListenerTypes.includes(type)) {
       const event = new EventModel().cast({ type, eventName, targetName, methodName });
-
-      if (this.events.length === 0) {
-        const loaderService = container.resolve(LoaderService);
-        loaderService.add('afterBootstrap', 'start', this.constructor.name);
-      }
-
       this.events.push(event);
     }
   }

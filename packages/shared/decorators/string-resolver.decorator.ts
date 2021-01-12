@@ -8,7 +8,7 @@ import { constructor } from 'tsyringe/dist/typings/types';
  * @returns {constructor<any>}
  * @constructor
  */
-export const StringResolver = (constructor: constructor<any>) => {
+export const StringResolver = (constructor: any) => {
   container.register(constructor.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(constructor)) });
   return constructor;
 };

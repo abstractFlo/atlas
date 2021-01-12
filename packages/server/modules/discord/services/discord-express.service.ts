@@ -1,13 +1,12 @@
 import { injectable } from 'tsyringe';
 import { DiscordApiProvider } from '../providers/discord-api.provider';
 import { from, Observable } from 'rxjs';
-import { AccessTokenModel, DiscordUserModel, StringResolver } from '@abstractFlo/shared';
+import { AccessTokenModel, DiscordUserModel } from '@abstractFlo/shared';
 import axios, { AxiosResponse } from 'axios';
 import { map } from 'rxjs/operators';
 
-@StringResolver
 @injectable()
-export class DiscordApiService {
+export class DiscordExpressService {
 
   constructor(
       private readonly discordApiProvider: DiscordApiProvider
@@ -52,17 +51,5 @@ export class DiscordApiService {
     )).pipe(
         map((response: AxiosResponse<any>) => new DiscordUserModel().cast(response.data))
     );
-
   }
-
-  /**
-   * Return the auth url
-   *
-   * @param {string} token
-   * @returns {string}
-   */
-  public getAuthUrl(token: string): string {
-    return this.discordApiProvider.getAuthUrl(token);
-  }
-
 }

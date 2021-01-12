@@ -1,6 +1,6 @@
 import { container, singleton } from 'tsyringe';
 import { showCursor, WebView } from 'alt-client';
-import { FrameworkEvent, LoaderService, LoggerService, StringResolver, UtilsService } from '@abstractFlo/shared';
+import { FrameworkEvent, LoggerService, StringResolver, UtilsService } from '@abstractFlo/shared';
 import { EventService } from './event.service';
 import { WebviewEventModel } from '../models';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
@@ -63,7 +63,7 @@ export class WebviewService {
       private readonly loggerService: LoggerService,
       private readonly eventService: EventService
   ) {
-    this.registerAutoStart();
+    this.createInstance();
   }
 
   /**
@@ -133,10 +133,15 @@ export class WebviewService {
    * @param {Function} done
    */
   public autoStart(done: CallableFunction): void {
-    this.loggerService.starting('WebView');
+    UtilsService.log('Starting ~y~WebviewService~w~');
+
     this.initialize()
         .subscribe(() => {
-          this.loggerService.started('WebView');
+          /*  if (this.events.length) {
+              this.start();
+            }
+  */
+          UtilsService.log('Started ~lg~WebviewService~w~');
           done();
         });
   }
@@ -237,19 +242,5 @@ export class WebviewService {
         this.webview.emit(eventName, ...args);
       });
     });
-  }
-
-  /**
-   * Autostart the webview service after first resolution
-   *
-   * @private
-   */
-  private registerAutoStart(): void {
-    container.afterResolution(WebviewService, () => {
-      const loader = container.resolve(LoaderService);
-      loader.add('before', 'autoStart', this.constructor.name);
-
-      this.createInstance();
-    }, { frequency: 'Once' });
   }
 }

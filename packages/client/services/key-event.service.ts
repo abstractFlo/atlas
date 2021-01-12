@@ -1,7 +1,7 @@
 import { KeyEventModel } from '../models/key-event.model';
 import { EventService } from './event.service';
 import { container, singleton } from 'tsyringe';
-import { LoaderService, StringResolver, UtilsService } from '@abstractFlo/shared';
+import { StringResolver, UtilsService } from '@abstractFlo/shared';
 
 @StringResolver
 @singleton()
@@ -21,20 +21,26 @@ export class KeyEventService {
   /**
    * Start the event loop
    */
-  public start(done: CallableFunction): void {
+  public start(): void {
+    if (this.eventTypeExist('keyup')) {
+      this.eventService.on('keyup', this.keyup.bind(this));
+    }
 
+    if (this.eventTypeExist('keydown')) {
+      this.eventService.on('keydown', this.keydown.bind(this));
+    }
+  }
+
+  /**
+   * Autostart key event service
+   * 
+   * @param {Function} done
+   */
+  public autoStart(done: CallableFunction): void {
     if (this.eventTypeExist('keyup') || this.eventTypeExist('keydown')) {
-      UtilsService.log('Started ~y~KeyEventService~w~');
-
-      if (this.eventTypeExist('keyup')) {
-        this.eventService.on('keyup', this.keyup.bind(this));
-      }
-
-      if (this.eventTypeExist('keydown')) {
-        this.eventService.on('keydown', this.keydown.bind(this));
-      }
-
-      UtilsService.log('Started ~lg~KeyEventService~w~ => All registered keyevents now available');
+      UtilsService.log('Starting ~y~KeyEventService Decorator~w~');
+      this.start();
+      UtilsService.log('Started ~lg~KeyEventService Decorator~w~');
     }
 
     done();
@@ -53,11 +59,6 @@ export class KeyEventService {
 
     if (this.events.has(keyUnique)) {
       return;
-    }
-
-    if (this.events.size === 0) {
-      const loaderService = container.resolve(LoaderService);
-      loaderService.add('afterBootstrap', 'start', this.constructor.name);
     }
 
     const event = new KeyEventModel().cast({ key, type, target, methodName });

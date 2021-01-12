@@ -60,11 +60,7 @@ export class DiscordBotService {
       private readonly loggerService: LoggerService,
       private readonly loaderService: LoaderService
   ) {
-
-    container.afterResolution(DiscordBotService, () => {
-      this.loaderService.add('before', 'autoStart', this.constructor.name);
-      this.connect();
-    }, { frequency: 'Once' });
+    this.connect();
   }
 
   /**

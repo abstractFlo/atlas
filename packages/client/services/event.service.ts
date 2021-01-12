@@ -1,9 +1,10 @@
 import * as alt from 'alt-client';
 import { BaseObjectType, Entity } from 'alt-client';
-import { BaseEventService, FrameworkEvent, UtilsService } from '@abstractFlo/shared';
+import { BaseEventService, FrameworkEvent, StringResolver, UtilsService } from '@abstractFlo/shared';
 import { container, singleton } from 'tsyringe';
 import { GameEntityHandleModel } from '../models/game-entity-handle.model';
 
+@StringResolver
 @singleton()
 export class EventService extends BaseEventService {
 
@@ -12,25 +13,33 @@ export class EventService extends BaseEventService {
   /**
    * Override start method and include entity create
    */
-  public start(done: CallableFunction) {
-    if (this.gameEntityHandle.length) {
-      const onCreateHandler = this.gameEntityHandle.filter((handle: GameEntityHandleModel) => handle.type === 'gameEntityCreate');
-      const onDestroyHandler = this.gameEntityHandle.filter((handle: GameEntityHandleModel) => handle.type === 'gameEntityDestroy');
+  public start() {
+    const onCreateHandler = this.gameEntityHandle.filter((handle: GameEntityHandleModel) => handle.type === 'gameEntityCreate');
+    const onDestroyHandler = this.gameEntityHandle.filter((handle: GameEntityHandleModel) => handle.type === 'gameEntityDestroy');
 
-      if(onCreateHandler.length || onDestroyHandler.length) {
-        UtilsService.log('Starting ~y~GameEntityHandle Decorator~w~');
-        if (onCreateHandler.length) {
-          this.listenGameEntityCreate(onCreateHandler);
-        }
-
-        if (onDestroyHandler.length) {
-          this.listenGameEntityDestroy(onDestroyHandler);
-        }
-        UtilsService.log('Started ~lg~GameEntityHandle Decorator~w~');
-      }
+    if (onCreateHandler.length) {
+      this.listenGameEntityCreate(onCreateHandler);
     }
 
-    super.start(done);
+    if (onDestroyHandler.length) {
+      this.listenGameEntityDestroy(onDestroyHandler);
+    }
+
+    super.start();
+  }
+
+  /**
+   * Autostart game entity handler
+   *
+   * @param {Function} done
+   */
+  public autoStart(done: Function) {
+    if (this.gameEntityHandle.length) {
+      UtilsService.log('Starting ~y~GameEntityHandle Decorator~w~');
+      this.start();
+      UtilsService.log('Started ~lg~GameEntityHandle Decorator~w~');
+    }
+    super.autoStart(done);
   }
 
   /**

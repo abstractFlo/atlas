@@ -1,6 +1,8 @@
 import '@abraham/reflection';
 
-export * from './registry'
+import './setup';
+
+export * from './registry';
 export * from './core';
 export * from './decorators';
 export * from './services';

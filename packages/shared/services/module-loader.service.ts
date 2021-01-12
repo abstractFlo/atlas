@@ -15,8 +15,8 @@ export class ModuleLoaderService {
   public add(entity: constructor<any>): void {
     if (!this.pool.has(entity.name)) {
       this.pool.add(entity.name);
-
       container.register(entity.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(entity)) });
+      container.resolve(entity);
 
       if (entity.name.endsWith('Module')) {
         UtilsService.logLoaded(entity.name);

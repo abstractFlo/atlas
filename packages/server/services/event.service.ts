@@ -1,7 +1,6 @@
 import { BaseEventService, FrameworkEvent, StringResolver } from '@abstractFlo/shared';
 import { singleton } from 'tsyringe';
-import * as alt from 'alt-server';
-import { Player } from 'alt-server';
+import { emitClient, offClient, onceClient, onClient, Player } from 'alt-server';
 
 @StringResolver
 @singleton()
@@ -10,12 +9,12 @@ export class EventService extends BaseEventService {
   /**
    * Emit event to client
    *
-   * @param {alt.Player | null} player
+   * @param {Player | null} player
    * @param {string} eventName
    * @param args
    */
   public emitClient(player: Player | null, eventName: string, ...args: any[]): void {
-    alt.emitClient(player, eventName, ...args);
+    emitClient(player, eventName, ...args);
   }
 
   /**
@@ -26,7 +25,7 @@ export class EventService extends BaseEventService {
    * @param args
    */
   public emitGui(player: Player | null, eventName: string, ...args: any[]): void {
-    alt.emitClient(player, FrameworkEvent.EventService.ServerEmitGui, eventName, ...args);
+    emitClient(player, FrameworkEvent.EventService.ServerEmitGui, eventName, ...args);
   }
 
   /**
@@ -36,7 +35,7 @@ export class EventService extends BaseEventService {
    * @param {(...args: any[]) => void} listener
    */
   public offClient(eventName: string, listener: (...args: any[]) => void): void {
-    alt.offClient(eventName, listener);
+    offClient(eventName, listener);
   }
 
   /**
@@ -46,7 +45,7 @@ export class EventService extends BaseEventService {
    * @param {(...args: any[]) => void} listener
    */
   public onClient(eventName: string, listener: (...args: any[]) => void): void {
-    alt.onClient(eventName, listener);
+    onClient(eventName, listener);
   }
 
 
@@ -57,7 +56,7 @@ export class EventService extends BaseEventService {
    * @param {(...args: any[]) => void} listener
    */
   public onceClient(eventName: string, listener: (...args: any[]) => void): void {
-    alt.onceClient(eventName, listener);
+    onceClient(eventName, listener);
   }
 
   /**
