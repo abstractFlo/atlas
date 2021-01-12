@@ -10,7 +10,7 @@ export interface EventServiceInterface {
   /**
    * Start listen events
    */
-  start(): void;
+  start(done: CallableFunction): void;
 
   /**
    * Add event to events array

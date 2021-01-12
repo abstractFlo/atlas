@@ -1,6 +1,11 @@
 import { container, singleton } from 'tsyringe';
-import { CommandModel, EventServiceInterface } from '../core';
+import { CommandModel } from '../core';
+import { UtilsService } from './utils.service';
+import { LoaderService } from './loader.service';
+import { BaseEventService } from './base-event.service';
+import { StringResolver } from '../decorators/string-resolver.decorator';
 
+@StringResolver
 @singleton()
 export class CommandService {
 
@@ -41,6 +46,11 @@ export class CommandService {
       return;
     }
 
+    if (this.commands.size === 0) {
+      const loaderService = container.resolve(LoaderService);
+      loaderService.add('afterBootstrap', 'start', this.constructor.name);
+    }
+
     const command = new CommandModel().cast({ methodName, target });
     this.commands.set(cmd, command);
   }
@@ -73,9 +83,12 @@ export class CommandService {
   /**
    * Start consoleCommand listening process
    */
-  public start(): void {
-    const eventService = container.resolve<EventServiceInterface>('EventService');
+  public start(done: CallableFunction): void {
+    const eventService = container.resolve(BaseEventService);
+    UtilsService.log('Starting ~y~CommandService Decorator~w~');
     eventService.on('consoleCommand', this.consoleCommand.bind(this));
+    UtilsService.log('Started ~lg~CommandService Decorator~w~');
+    done();
   }
 
   /**
@@ -99,5 +112,4 @@ export class CommandService {
     this.setArguments(args);
     this.run(cmd);
   }
-
 }

@@ -1,7 +1,9 @@
 import { KeyEventModel } from '../models/key-event.model';
 import { EventService } from './event.service';
 import { container, singleton } from 'tsyringe';
+import { LoaderService, StringResolver, UtilsService } from '@abstractFlo/shared';
 
+@StringResolver
 @singleton()
 export class KeyEventService {
 
@@ -19,9 +21,23 @@ export class KeyEventService {
   /**
    * Start the event loop
    */
-  public start(): void {
-    this.eventService.on('keyup', this.keyup.bind(this));
-    this.eventService.on('keydown', this.keydown.bind(this));
+  public start(done: CallableFunction): void {
+
+    if (this.eventTypeExist('keyup') || this.eventTypeExist('keydown')) {
+      UtilsService.log('Started ~y~KeyEventService~w~');
+
+      if (this.eventTypeExist('keyup')) {
+        this.eventService.on('keyup', this.keyup.bind(this));
+      }
+
+      if (this.eventTypeExist('keydown')) {
+        this.eventService.on('keydown', this.keydown.bind(this));
+      }
+
+      UtilsService.log('Started ~lg~KeyEventService~w~ => All registered keyevents now available');
+    }
+
+    done();
   }
 
   /**
@@ -39,6 +55,11 @@ export class KeyEventService {
       return;
     }
 
+    if (this.events.size === 0) {
+      const loaderService = container.resolve(LoaderService);
+      loaderService.add('afterBootstrap', 'start', this.constructor.name);
+    }
+
     const event = new KeyEventModel().cast({ key, type, target, methodName });
     this.events.set(keyUnique, event);
   }
@@ -53,8 +74,19 @@ export class KeyEventService {
       const event = this.events.get(keyUnique);
       const instance = container.resolve<any>(event.target);
 
-      instance[event.methodName].bind(instance).apply(this);
+      instance[event.methodName].bind(instance);
     }
+  }
+
+  /**
+   * Check if given key exists in events array
+   *
+   * @param {"keyup" | "keydown"} type
+   * @return {boolean}
+   * @private
+   */
+  private eventTypeExist(type: 'keyup' | 'keydown'): boolean {
+    return !!Array.from(this.events.values()).filter((event: KeyEventModel) => event.type === type);
   }
 
   /**

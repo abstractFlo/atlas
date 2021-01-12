@@ -152,31 +152,49 @@ export class UtilsService {
   /**
    * Add message to console
    *
-   * @param message
+   * @param messages
    */
-  public static log(...message: any[]): void {
+  public static log(...messages: any[]): void {
     const log = container.resolve<CallableFunction>('alt.log');
-    log(...message);
+    log(...messages);
   }
 
   /**
    * Add warning to console
    *
-   * @param message
+   * @param messages
    */
-  public static logWarning(...message: any[]): void {
+  public static logWarning(...messages: any[]): void {
     const log = container.resolve<CallableFunction>('alt.logWarning');
-    log(...message);
+    log(...messages);
   }
 
   /**
    * Add error to console
    *
-   * @param message
+   * @param messages
    */
-  public static logError(...message: any[]): void {
+  public static logError(...messages: any[]): void {
     const log = container.resolve<CallableFunction>('alt.logError');
-    log(...message);
+    log(...messages);
+  }
+
+  /**
+   * Add loaded message to console
+   *
+   * @param messages
+   */
+  public static logLoaded(...messages: any[]): void {
+    messages.forEach((message: any) => UtilsService.log(`Loaded ~lg~${message}~w~`));
+  }
+
+  /**
+   * Add unloaded message to console
+   *
+   * @param messages
+   */
+  public static logUnloaded(...messages: any[]): void {
+    messages.forEach((message: any) => UtilsService.log(`Unloaded ~lg~${message}~w~`));
   }
 
   /**

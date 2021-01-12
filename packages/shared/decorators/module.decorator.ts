@@ -1,6 +1,8 @@
-import { container, instanceCachingFactory } from 'tsyringe';
+import { container } from 'tsyringe';
 import { ModuleOptionsDecoratorInterface } from '../core/interfaces';
 import { constructor } from 'tsyringe/dist/typings/types';
+import { ModuleLoaderService } from '../services/module-loader.service';
+import { UtilsService } from '../services';
 
 /**
  * Register class as string injection token and load all import dependencies
@@ -11,23 +13,21 @@ import { constructor } from 'tsyringe/dist/typings/types';
  */
 export function Module(options?: ModuleOptionsDecoratorInterface) {
 
+  const moduleLoaderService = container.resolve(ModuleLoaderService);
+
   // Load imports and Components
   if (options) {
-    if(options.imports) {
-      options.imports.forEach((m: constructor<any>) => {
-        container.register(m.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(m)) });
-      });
+    if (options.imports) {
+      options.imports.forEach((m: constructor<any>) => moduleLoaderService.add(m));
     }
 
-    if(options.components) {
-      options.components.forEach((m: constructor<any>) => {
-        container.register(m.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(m)) });
-      });
+    if (options.components) {
+      options.components.forEach((m: constructor<any>) => moduleLoaderService.add(m));
     }
   }
-    
+
   return (constructor: constructor<any>) => {
-    container.register(constructor.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(constructor)) });
+    moduleLoaderService.add(constructor);
     return constructor;
   };
 }
