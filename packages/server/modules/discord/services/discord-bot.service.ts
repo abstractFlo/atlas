@@ -1,10 +1,18 @@
 import { container, singleton } from 'tsyringe';
-import { DiscordConfigModel, DiscordEventModel, LoggerService } from '@abstractFlo/shared';
+import {
+  DiscordConfigModel,
+  DiscordEventModel,
+  LoaderService,
+  LoggerService,
+  StringResolver,
+  UtilsService
+} from '@abstractFlo/shared';
 import { ConfigService } from '../../../services';
 import { Client } from 'discord.js';
 import { defer, from, Observable } from 'rxjs';
-import { map, share, tap } from 'rxjs/operators';
+import { map, share } from 'rxjs/operators';
 
+@StringResolver
 @singleton()
 export class DiscordBotService {
 
@@ -49,9 +57,30 @@ export class DiscordBotService {
 
   constructor(
       private readonly configService: ConfigService,
-      private readonly loggerService: LoggerService
+      private readonly loggerService: LoggerService,
+      private readonly loaderService: LoaderService
   ) {
-    this.connect();
+
+    container.afterResolution(DiscordBotService, () => {
+      this.loaderService.add('before', 'autoStart', this.constructor.name);
+      this.connect();
+    }, { frequency: 'Once' });
+  }
+
+  /**
+   * Autostart the discord bot it class is first time resolved
+   *
+   * @param {Function} done
+   */
+  public autoStart(done: CallableFunction): void {
+    UtilsService.log('Starting ~y~DiscordBot~w~');
+
+    this.initialize().subscribe(() => {
+      this.start();
+      UtilsService.log('Started ~lg~DiscordBot~w~');
+      done();
+    });
+
   }
 
   /**
@@ -67,24 +96,40 @@ export class DiscordBotService {
   }
 
   /**
-   * Start event loop
+   * Destroy/Logout the discord bot
    */
-  public start(): void {
-    this.events.forEach((event: DiscordEventModel) => {
-      const instance = container.resolve<any>(event.targetName);
-      const method = instance[event.methodName].bind(instance);
-
-      this.client.on(event.eventName, method);
-    });
+  public destroy(): void {
+    this.client.destroy();
   }
 
   /**
    * Return the client service observable
    *
    * @returns {Observable<Client>}
+   * @private
    */
-  public initialize(): Observable<Client> {
+  private initialize(): Observable<Client> {
     return this.serviceObservable$;
+  }
+
+  /**
+   * Start event loop
+   *
+   * @private
+   */
+  private start(): void {
+    if (this.events.length) {
+      UtilsService.log('Starting ~y~DiscordBot Decorators~w~');
+
+      this.events.forEach((event: DiscordEventModel) => {
+        const instance = container.resolve<any>(event.targetName);
+        const method = instance[event.methodName].bind(instance);
+
+        this.client.on(event.eventName, method);
+      });
+
+      UtilsService.log('Started ~lg~DiscordBot Decorators~w~');
+    }
   }
 
   /**
@@ -110,7 +155,6 @@ export class DiscordBotService {
     return defer(() => from(this.client.login(this.config.bot_secret)))
         .pipe(
             map(() => this.client),
-            tap(() => this.loggerService.started('DiscordBot')),
             share()
         );
   }

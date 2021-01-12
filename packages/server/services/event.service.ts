@@ -1,8 +1,9 @@
-import { BaseEventService, FrameworkEvent } from '@abstractFlo/shared';
+import { BaseEventService, FrameworkEvent, StringResolver } from '@abstractFlo/shared';
 import { singleton } from 'tsyringe';
 import * as alt from 'alt-server';
 import { Player } from 'alt-server';
 
+@StringResolver
 @singleton()
 export class EventService extends BaseEventService {
 

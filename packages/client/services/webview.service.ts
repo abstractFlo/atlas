@@ -1,10 +1,11 @@
 import { container, singleton } from 'tsyringe';
 import { showCursor, WebView } from 'alt-client';
-import { FrameworkEvent, LoggerService, UtilsService } from '@abstractFlo/shared';
+import { FrameworkEvent, LoaderService, LoggerService, StringResolver, UtilsService } from '@abstractFlo/shared';
 import { EventService } from './event.service';
 import { WebviewEventModel } from '../models';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 
+@StringResolver
 @singleton()
 export class WebviewService {
 
@@ -62,7 +63,7 @@ export class WebviewService {
       private readonly loggerService: LoggerService,
       private readonly eventService: EventService
   ) {
-    this.createInstance();
+    this.registerAutoStart();
   }
 
   /**
@@ -128,12 +129,16 @@ export class WebviewService {
   }
 
   /**
-   * Return the webview ready subject as observable
-   *
-   * @returns {Observable<boolean>}
+   * AutoStart webview service
+   * @param {Function} done
    */
-  public initialize(): Observable<boolean> {
-    return this.webviewReadySubject$;
+  public autoStart(done: CallableFunction): void {
+    this.loggerService.starting('WebView');
+    this.initialize()
+        .subscribe(() => {
+          this.loggerService.started('WebView');
+          done();
+        });
   }
 
   /**
@@ -161,6 +166,16 @@ export class WebviewService {
    */
   public destroy(): void {
     this.webview.destroy();
+  }
+
+  /**
+   * Return the webview ready subject as observable
+   *
+   * @returns {Observable<boolean>}
+   * @private
+   */
+  private initialize(): Observable<boolean> {
+    return this.webviewReadySubject$;
   }
 
   /**
@@ -222,5 +237,19 @@ export class WebviewService {
         this.webview.emit(eventName, ...args);
       });
     });
+  }
+
+  /**
+   * Autostart the webview service after first resolution
+   *
+   * @private
+   */
+  private registerAutoStart(): void {
+    container.afterResolution(WebviewService, () => {
+      const loader = container.resolve(LoaderService);
+      loader.add('before', 'autoStart', this.constructor.name);
+
+      this.createInstance();
+    }, { frequency: 'Once' });
   }
 }
