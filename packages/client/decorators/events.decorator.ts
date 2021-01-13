@@ -1,7 +1,4 @@
-import { validateEventExistsAndPush } from '@abstractFlo/shared';
-import { BaseObjectType } from 'alt-client';
-import { container } from 'tsyringe';
-import { EventService } from '../services';
+import { BaseObjectTypeConfig, validateEventExistsAndPush } from '@abstractFlo/shared';
 
 /**
  * Add onServer event listener
@@ -51,54 +48,28 @@ export const OnGui = (name?: string): MethodDecorator => {
 /**
  * GameEntityCreate Decorator
  *
- * @param {BaseObjectType} entityType
+ * @param {typeof BaseObjectTypeConfig} entityType
  * @returns {MethodDecorator}
  * @constructor
  */
 
-export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator => {
+export const GameEntityCreate = (entityType: keyof typeof BaseObjectTypeConfig): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    return validateGameEntityExistsAndPush(target, 'gameEntityCreate', entityType, propertyKey, descriptor);
+    const entity = BaseObjectTypeConfig[entityType];
+    return validateEventExistsAndPush(target, 'gameEntityCreate', entity, propertyKey, descriptor, 'gameEntity');
   };
 };
 
 /**
  * GameEntityDestroy Decorator
  *
- * @param {BaseObjectType} entityType
+ * @param {typeof BaseObjectTypeConfig} entityType
  * @returns {MethodDecorator}
  * @constructor
  */
-export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator => {
+export const GameEntityDestroy = (entityType: keyof typeof BaseObjectTypeConfig): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    return validateGameEntityExistsAndPush(target, 'gameEntityDestroy', entityType, propertyKey, descriptor);
+    const entity = BaseObjectTypeConfig[entityType];
+    return validateEventExistsAndPush(target, 'gameEntityDestroy', entity, propertyKey, descriptor, 'gameEntity');
   };
 };
-
-/**
- * Helper for adding gameEntity Helpers
- *
- * @param {Object} target
- * @param {string} type
- * @param {BaseObjectType} entityType
- * @param {string} propertyKey
- * @param {PropertyDescriptor} descriptor
- * @returns {PropertyDescriptor | void}
- */
-function validateGameEntityExistsAndPush<T>(
-    target: Object,
-    type: string,
-    entityType: BaseObjectType,
-    propertyKey: string,
-    descriptor: PropertyDescriptor): PropertyDescriptor | void {
-  const eventService = container.resolve(EventService);
-  const original = descriptor.value;
-
-  descriptor.value = function (...args: any[]) {
-    return original.apply(this, args);
-  };
-
-  eventService.addGameEntityMethods(type, entityType, target.constructor.name, propertyKey);
-
-  return descriptor;
-}

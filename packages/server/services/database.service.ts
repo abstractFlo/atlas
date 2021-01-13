@@ -1,8 +1,9 @@
-import { container, InjectionToken, singleton } from 'tsyringe';
+import { container, singleton } from 'tsyringe';
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
 import { ConfigService } from './config.service';
 import { defer, from, Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
+import { EntitySchema } from 'typeorm/entity-schema/EntitySchema';
 
 
 @singleton()
@@ -15,8 +16,16 @@ export class DatabaseService {
    */
   public config: ConnectionOptions = {
     ...this.configService.get('database'),
-    entities: container.resolve<InjectionToken[]>('server.database.entities')
+    entities: []
   };
+
+  /**
+   * Database entities
+   *
+   * @type {(Function | string | EntitySchema<any>)[]}
+   * @private
+   */
+  private entities: Function[];
 
   /**
    * Contains the connection observable
@@ -37,6 +46,8 @@ export class DatabaseService {
   constructor(
       private readonly configService: ConfigService
   ) {
+
+    this.setupEntities();
     this.connect();
   }
 
@@ -72,5 +83,20 @@ export class DatabaseService {
 
     return defer(() => from(createConnection(this.config)))
         .pipe(share());
+  }
+
+  /**
+   * Setup entities for database
+   *
+   * @private
+   */
+  private setupEntities() {
+    try {
+      this.entities = container.resolve<Function[]>('server.database.entities');
+    } catch (e) {
+      this.entities = [];
+    }
+
+    this.config.entities.push(...this.entities);
   }
 }

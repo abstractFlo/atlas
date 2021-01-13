@@ -1,16 +1,8 @@
-import { EventModel } from '../models';
-
 export interface EventServiceInterface {
-
   /**
-   * Contains all registered events
+   * Autostart listen events
    */
-  events: EventModel[];
-
-  /**
-   * Start listen events
-   */
-  start(done: CallableFunction): void;
+  autoStart(done: CallableFunction): void;
 
   /**
    * Add event to events array
@@ -108,4 +100,14 @@ export interface EventServiceInterface {
    */
   emitServer?(name: string, ...args: any[]): void;
 
+  /**
+   * Handle game entity events
+   *
+   * @param {string} type
+   * @param entity
+   * @param {string} target
+   * @param {string} methodName
+   * @param {string} metaKey
+   */
+  addHandlerMethods?(type: string, entity: any, target: string, methodName: string, metaKey?: string): void;
 }

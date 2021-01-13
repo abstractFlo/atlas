@@ -1,6 +1,6 @@
-import { BaseEventService, FrameworkEvent, StringResolver } from '@abstractFlo/shared';
+import { BaseEventService, EntityHandleModel, FrameworkEvent, StringResolver } from '@abstractFlo/shared';
 import { singleton } from 'tsyringe';
-import { emitClient, offClient, onceClient, onClient, Player } from 'alt-server';
+import { emitClient, Entity, offClient, onceClient, onClient, Player } from 'alt-server';
 
 @StringResolver
 @singleton()
@@ -48,7 +48,6 @@ export class EventService extends BaseEventService {
     onClient(eventName, listener);
   }
 
-
   /**
    * Receive once event from client
    *
@@ -60,13 +59,19 @@ export class EventService extends BaseEventService {
   }
 
   /**
-   * Return all available listener types for decorators
+   * Listen handlers for given type
    *
-   * @returns {string[]}
-   * @private
+   * @param {string} type
+   * @param {EntityHandleModel[]} handlers
+   * @protected
    */
-  public getAvailableDecoratorListenerTypes(): string[] {
-    return ['onClient', 'onceClient'];
+  protected listenHandlerForType(type: string, handlers: EntityHandleModel[]) {
+    this.on(type, (entity: Entity, ...args: any[]) => {
+      this.handleMethods<Entity>(entity, handlers, ...args);
+    });
   }
 
+  protected isEntityType(entity: Entity, type: number): boolean {
+    return entity.type === type;
+  }
 }

@@ -7,6 +7,14 @@ import { UtilsService } from '@abstractFlo/shared';
 @singleton()
 export class ExpressServer extends Server {
 
+  /**
+   * Contains the server port
+   *
+   * @type {number}
+   * @private
+   */
+  private port: number;
+
   constructor() {
     super();
 
@@ -36,10 +44,15 @@ export class ExpressServer extends Server {
    */
   public autoStart(done: CallableFunction): void {
     UtilsService.log('Starting ~y~DiscordApiServer~w~');
-    const port = container.resolve<number>('discord.express.port');
 
-    this.start(port, () => {
-      UtilsService.log(`Started ~lg~DiscordApiServer~w~ on port ~y~${port}~w~`);
+    try {
+      this.port = container.resolve<number>('discord.express.port');
+    } catch (e) {
+      this.port = 1337;
+    }
+
+    this.start(this.port, () => {
+      UtilsService.log(`Started ~lg~DiscordApiServer~w~ on port ~y~${this.port}~w~`);
       done();
     });
 

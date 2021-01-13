@@ -34,5 +34,8 @@ export function setupServerDatabaseEntities(entities: InjectionToken[]): void {
 export function setupWebviewRegistry(url: string, routeToEventName: string): void {
   container.register<string>('alt.webview.url', { useValue: url });
   container.register<string>('alt.webview.routeTo.eventName', { useValue: routeToEventName });
+}
 
+export function setDiscordApiServerPort(port: number) {
+  container.register<number>('discord.express.port', { useValue: port });
 }

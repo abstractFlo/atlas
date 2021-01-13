@@ -1,5 +1,5 @@
 import { container } from 'tsyringe';
-import { LoaderService } from '../services/loader.service';
+import { LoaderService } from '../services';
 
 /**
  * Add method to before queue

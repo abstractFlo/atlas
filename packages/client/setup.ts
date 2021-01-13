@@ -3,6 +3,7 @@ import { PlayerWorker } from './worker/player.worker';
 import { EventServiceInterface, LoaderService } from '@abstractFlo/shared';
 import { EventService, KeyEventService, WebviewService } from './services';
 
+
 container.resolve(PlayerWorker);
 const loaderService = container.resolve(LoaderService);
 
