@@ -7,4 +7,3 @@ export * from './services';
 export * from './decorators';
 export * from './modules';
 export * from './extends';
-export * from './models';
