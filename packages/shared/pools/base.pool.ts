@@ -1,4 +1,4 @@
-export class BasePool<T, K = string|number> {
+export class BasePool<T, K = string | number> {
 
   /**
    * Contains the pool
@@ -16,7 +16,7 @@ export class BasePool<T, K = string|number> {
    * @return {Map<string|number, T> | void}
    */
   public add(identifier: K, entity: T): Map<K, T> | void {
-    if(!this.pool.has(identifier)){
+    if (!this.has(identifier)) {
       this.pool.set(identifier, entity);
     }
   }
@@ -28,9 +28,19 @@ export class BasePool<T, K = string|number> {
    * @return {T | void}
    */
   public get(identifier: K): T | void {
-    if(!this.pool.has(identifier)){
-      return this.pool.get(identifier)
+    if (this.has(identifier)) {
+      return this.pool.get(identifier);
     }
+  }
+
+  /**
+   * Check if the pool has identifier
+   *
+   * @param {K} identifier
+   * @return {boolean}
+   */
+  public has(identifier: K): boolean {
+    return this.pool.has(identifier);
   }
 
   /**
@@ -58,7 +68,7 @@ export class BasePool<T, K = string|number> {
    * @return {boolean}
    */
   public remove(identifier: K): boolean {
-    return this.pool.has(identifier)
+    return this.has(identifier)
         ? this.pool.delete(identifier)
         : false;
   }

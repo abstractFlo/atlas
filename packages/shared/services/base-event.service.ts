@@ -178,9 +178,12 @@ export class BaseEventService implements EventServiceInterface {
 
         if (isMetaChange && hasMetaKey) {
           args.shift();
+          method(entity, ...args);
+        } else if(!isMetaChange) {
+          method(entity, ...args);
         }
 
-        method(entity, ...args);
+
       }
 
     });
@@ -193,7 +196,7 @@ export class BaseEventService implements EventServiceInterface {
    * @protected
    */
   protected isEntityType(entity: any, type: number): boolean {
-    return false;
+    return entity.type === type;
   }
 
   /**
