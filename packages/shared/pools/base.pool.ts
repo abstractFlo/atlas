@@ -9,6 +9,15 @@ export class BasePool<T, K = string | number> {
   protected pool: Map<K, T> = new Map<K, T>();
 
   /**
+   * Return the pool size
+   *
+   * @return {number}
+   */
+  public get size(): number {
+    return this.pool.size;
+  }
+
+  /**
    * Create new entity inside pool if not exists
    *
    * @param {K} identifier
@@ -68,9 +77,7 @@ export class BasePool<T, K = string | number> {
    * @return {boolean}
    */
   public remove(identifier: K): boolean {
-    return this.has(identifier)
-        ? this.pool.delete(identifier)
-        : false;
+    return this.pool.delete(identifier);
   }
 
   /**
