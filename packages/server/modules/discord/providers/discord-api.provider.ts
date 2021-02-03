@@ -54,7 +54,7 @@ export class DiscordApiProvider {
       response_type: 'code',
       scope: 'identify',
       client_id: this.config.client_id,
-      redirect_url: encodeURI(this.config.redirect_url),
+      redirect_uri: encodeURI(this.config.redirect_url),
       state
     });
   }

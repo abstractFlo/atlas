@@ -33,7 +33,7 @@ export class KeyEventService {
 
   /**
    * Autostart key event service
-   * 
+   *
    * @param {Function} done
    */
   public autoStart(done: CallableFunction): void {
@@ -71,11 +71,18 @@ export class KeyEventService {
    * @param {string} keyUnique
    */
   public run(keyUnique: string): void {
-    if (this.events.has(keyUnique)) {
-      const event = this.events.get(keyUnique);
-      const instance = container.resolve<any>(event.target);
+    const event = this.events.get(keyUnique);
 
-      instance[event.methodName].bind(instance);
+    if (event) {
+      const instances = container.resolveAll<any>(event.target);
+
+      instances.forEach(async (instance) => {
+        if (instance[event.methodName]) {
+          const method = instance[event.methodName].bind(instance);
+          await method();
+        }
+      });
+
     }
   }
 
@@ -87,7 +94,7 @@ export class KeyEventService {
    * @private
    */
   private eventTypeExist(type: 'keyup' | 'keydown'): boolean {
-    return !!Array.from(this.events.values()).filter((event: KeyEventModel) => event.type === type);
+    return !!Array.from(this.events.values()).filter((event: KeyEventModel) => event.type === type).length;
   }
 
   /**

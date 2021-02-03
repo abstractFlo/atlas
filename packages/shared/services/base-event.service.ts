@@ -179,7 +179,7 @@ export class BaseEventService implements EventServiceInterface {
         if (isMetaChange && hasMetaKey) {
           args.shift();
           method(entity, ...args);
-        } else if(!isMetaChange) {
+        } else if (!isMetaChange) {
           method(entity, ...args);
         }
 
@@ -201,6 +201,7 @@ export class BaseEventService implements EventServiceInterface {
 
   /**
    * Start the entity handler
+   *
    * @private
    */
   private startEntityHandle() {
@@ -243,14 +244,19 @@ export class BaseEventService implements EventServiceInterface {
    * @private
    */
   private startBaseMethods() {
-    this.events.forEach(async (event: EventModel) => {
-      const instance = container.resolve<any>(event.targetName);
+    this.events.forEach((event: EventModel) => {
+      const instances = container.resolveAll<any>(event.targetName);
       // Need to be rewrite the typings
       //@ts-ignore
       const internalMethod = this[event.type];
-      const method = internalMethod.bind(this, event.eventName, instance[event.methodName].bind(instance));
 
-      await method();
+      instances.forEach(async (instance) => {
+        if (instance[event.methodName]) {
+          const method = internalMethod.bind(this, event.eventName, instance[event.methodName].bind(instance));
+          await method();
+        }
+      });
+
     });
   }
 }

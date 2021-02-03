@@ -10,13 +10,18 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 export class WebviewService {
 
   /**
+   * Contains the routeTo eventName
+   * @type {string}
+   * @private
+   */
+  private readonly routeToEventName: string = container.resolve<string>('alt.webview.routeTo.eventName');
+  /**
    * Current cursor count
    *
    * @type {number}
    * @private
    */
   private cursorCount: number = 0;
-
   /**
    * Contains the webview instance
    *
@@ -24,7 +29,6 @@ export class WebviewService {
    * @private
    */
   private webview: WebView;
-
   /**
    * Contains the events for webview
    *
@@ -32,7 +36,6 @@ export class WebviewService {
    * @private
    */
   private events: WebviewEventModel[] = [];
-
   /**
    * Contains the ready subject for webview
    *
@@ -40,7 +43,6 @@ export class WebviewService {
    * @private
    */
   private webviewReadySubject$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
-
   /**
    * The event name for sending from webview to server
    *
@@ -88,36 +90,55 @@ export class WebviewService {
   }
 
   /**
+   * Emit the route change to webview
+   *
+   * @param {string} route
+   * @param args
+   */
+  public routeTo(route: string, ...args: any[]): WebviewService {
+    this.webview.emit(this.routeToEventName, route, ...args);
+    return this;
+  }
+
+  /**
    * Show cursor
    */
-  public showCursor(): void {
+  public showCursor(): WebviewService {
     showCursor(true);
     this.cursorCount = this.cursorCount + 1;
+
+    return this;
   }
 
   /**
    * Remove Cursor
    */
-  public removeCursor(): void {
+  public removeCursor(): WebviewService {
     if (this.cursorCount > 0) {
       showCursor(false);
       this.cursorCount = this.cursorCount - 1;
     }
+
+    return this;
   }
 
   /**
    * Remove all cursors
    */
-  public removeAllCursors(): void {
+  public removeAllCursors(): WebviewService {
     for (let i = 0; i < this.cursorCount; i++) {
       showCursor(false);
     }
 
     this.cursorCount = 0;
+
+    return this;
   }
 
   /**
    * Start event loop
+   *
+   * @ToDo Fragwürdig warum das da ist???
    */
   public start(): void {
     this.events.forEach((event: WebviewEventModel) => {
@@ -137,10 +158,6 @@ export class WebviewService {
 
     this.initialize()
         .subscribe(() => {
-          /*  if (this.events.length) {
-              this.start();
-            }
-  */
           UtilsService.log('Started ~lg~WebviewService~w~');
           done();
         });
@@ -152,8 +169,9 @@ export class WebviewService {
    * @param {string} eventName
    * @param args
    */
-  public emit(eventName: string, ...args: any[]): void {
+  public emit(eventName: string, ...args: any[]): WebviewService {
     this.webview.emit(eventName, ...args);
+    return this;
   }
 
   /**
@@ -171,6 +189,28 @@ export class WebviewService {
    */
   public destroy(): void {
     this.webview.destroy();
+  }
+
+  /**
+   * Set webview in focus
+   *
+   * @return {WebviewService}
+   */
+  public focus(): WebviewService {
+    this.webview.focus();
+
+    return this;
+  }
+
+  /**
+   * Set webview in focus
+   *
+   * @return {WebviewService}
+   */
+  public unfocus(): WebviewService {
+    this.webview.unfocus();
+
+    return this;
   }
 
   /**

@@ -1,4 +1,3 @@
-import * as alt from 'alt-server';
 import { container } from 'tsyringe';
 import { EventServiceInterface, LoaderService } from '@abstractFlo/shared';
 import { DiscordApiService, DiscordBotService } from './modules';

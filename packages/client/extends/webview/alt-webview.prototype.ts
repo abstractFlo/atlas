@@ -8,9 +8,8 @@ declare module 'alt-client' {
 }
 
 WebView.prototype.routeTo = (route: string, ...args: any[]) => {
-  const webview = container.resolve(WebviewService).getWebView();
-  const routeToEventName = container.resolve<string>('alt.webview.routeTo.eventName');
-  webview.emit(routeToEventName, route, ...args);
+  const webviewService = container.resolve(WebviewService);
+  webviewService.routeTo(route, ...args);
 };
 
 

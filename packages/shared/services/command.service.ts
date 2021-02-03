@@ -59,9 +59,13 @@ export class CommandService {
 
     if (cmd.startsWith(this.prefix) && this.commands.has(command)) {
       const commandEntry = this.commands.get(command);
-      const instance = container.resolve<any>(commandEntry.target);
+      const instances = container.resolveAll<any>(commandEntry.target);
 
-      instance[commandEntry.methodName].bind(instance).apply(this, this.cmdArgs);
+      instances.forEach((instance) => {
+        if (instance[commandEntry.methodName]) {
+          instance[commandEntry.methodName].bind(instance).apply(this, this.cmdArgs);
+        }
+      });
     }
   }
 
