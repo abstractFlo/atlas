@@ -69,6 +69,13 @@ export class EventService extends BaseEventService {
     });
   }
 
+  /**
+   * Check if given entity has given type
+   *
+   * @param {any} entity
+   * @param {string} type
+   * @protected
+   */
   protected isEntityType(entity: Entity, type: number): boolean {
     return entity.type === type;
   }

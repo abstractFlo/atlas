@@ -1,6 +1,6 @@
 import { container, singleton } from 'tsyringe';
 import { join } from 'path';
-import { get } from 'lodash';
+import { get, set } from 'lodash';
 import { readJSONSync } from 'fs-extra';
 
 @singleton()
@@ -30,6 +30,14 @@ export class ConfigService {
    */
   private readonly config: { [id: string]: any };
 
+  /**
+   * Variable for custom config
+   *
+   * @type {{[p: string]: any}}
+   * @private
+   */
+  private customConfig: { [id: string]: any } = {};
+
   constructor() {
     this.config = readJSONSync(this.path);
   }
@@ -44,7 +52,19 @@ export class ConfigService {
    * @returns {any}
    */
   public get(key: string, defaultValue: any = null): any {
-    return get(this.config, key, defaultValue);
+    const config = {...this.customConfig, ...this.config};
+    return get(config, key, defaultValue);
+  }
+
+  /**
+   * Set a custom config key
+   *
+   * @param {string} key
+   * @param value
+   * @return {object}
+   */
+  public set(key: string, value: any) {
+    this.customConfig = set(this.customConfig, key, value);
   }
 
 }

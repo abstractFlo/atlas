@@ -16,7 +16,7 @@ export const OnClient = (name?: string): MethodDecorator => {
 };
 
 /**
- * Add onceClient event listener
+ * Add onceClient event listencer
  *
  * @param {string} name
  * @returns {MethodDecorator}

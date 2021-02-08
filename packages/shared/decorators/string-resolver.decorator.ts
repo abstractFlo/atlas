@@ -1,5 +1,4 @@
 import { container, instanceCachingFactory } from 'tsyringe';
-import { constructor } from 'tsyringe/dist/typings/types';
 
 /**
  * Register class as string injection token

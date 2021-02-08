@@ -25,8 +25,10 @@ export class ModuleLoaderService {
       this.pool.set(entity.name, [...poolEntry, entity.name]);
     }
 
-    container.register(entity.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(entity)) });
-    container.resolve(entity);
+    if (!container.isRegistered(entity.name)) {
+      container.register(entity.name, { useFactory: instanceCachingFactory<any>(c => c.resolve(entity)) });
+      container.resolve(entity);
+    }
   }
 
 }

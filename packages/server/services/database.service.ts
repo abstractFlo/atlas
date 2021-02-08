@@ -4,8 +4,9 @@ import { ConfigService } from './config.service';
 import { defer, from, Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 import { EntitySchema } from 'typeorm/entity-schema/EntitySchema';
+import { StringResolver } from '@abstractFlo/shared';
 
-
+@StringResolver
 @singleton()
 export class DatabaseService {
 
@@ -46,7 +47,6 @@ export class DatabaseService {
   constructor(
       private readonly configService: ConfigService
   ) {
-
     this.setupEntities();
     this.connect();
   }
@@ -60,6 +60,12 @@ export class DatabaseService {
   public initialize(): Observable<Connection> {
     return this.serviceObservable$;
   }
+
+  /**
+   * Autostart the service
+   *
+   * @param {Function} done
+   */
 
   /**
    * Create the database connection observable
