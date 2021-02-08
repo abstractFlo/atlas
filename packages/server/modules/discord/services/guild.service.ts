@@ -1,28 +1,36 @@
-import { inject, singleton } from 'tsyringe';
-import { Client, Guild } from 'discord.js';
+import { container, singleton } from 'tsyringe';
+import { Guild } from 'discord.js';
+import { StringResolver } from '@abstractFlo/shared';
+import { DiscordBotService } from './discord-bot.service';
 import { ConfigService } from '../../../services';
 
+@StringResolver
 @singleton()
 export class GuildService {
 
-  public readonly guild: Guild;
-
-  constructor(
-      @inject('discord.client') private readonly client: Client,
-      protected readonly configService: ConfigService
-  ) {
-    this.guild = this.getGuild();
-  }
-
   /**
-   * Fetch Server/Guild from client
+   * The discord bot service
    *
+   * @type {DiscordBotService}
    * @private
    */
-  private getGuild(): Guild {
-    return this.client
-        .guilds
-        .cache
-        .get(this.configService.get('discord.server_id'));
+  private guildBotService = container.resolve(DiscordBotService);
+
+  /**
+   * The config service
+   *
+   * @type {ConfigService}
+   * @private
+   */
+  private guildConfigService = container.resolve(ConfigService);
+
+  /**
+   * Public guild variable
+   *
+   * @return {Guild}
+   */
+  public get guild(): Guild {
+    const serverId = this.guildConfigService.get('discord.server_id');
+    return this.guildBotService.client.guilds.cache.get(serverId);
   }
 }
