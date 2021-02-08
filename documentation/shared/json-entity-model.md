@@ -1,2 +1,0 @@
-# JSON Entity Model
-
