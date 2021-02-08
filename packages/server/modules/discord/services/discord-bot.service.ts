@@ -1,12 +1,5 @@
 import { container, singleton } from 'tsyringe';
-import {
-  DiscordConfigModel,
-  DiscordEventModel,
-  LoaderService,
-  LoggerService,
-  StringResolver,
-  UtilsService
-} from '@abstractFlo/shared';
+import { DiscordConfigModel, DiscordEventModel, StringResolver, UtilsService } from '@abstractFlo/shared';
 import { ConfigService } from '../../../services';
 import { Client } from 'discord.js';
 import { defer, from, Observable } from 'rxjs';
@@ -56,9 +49,7 @@ export class DiscordBotService {
   private created: boolean = false;
 
   constructor(
-      private readonly configService: ConfigService,
-      private readonly loggerService: LoggerService,
-      private readonly loaderService: LoaderService
+      private readonly configService: ConfigService
   ) {
     this.connect();
   }
@@ -71,11 +62,15 @@ export class DiscordBotService {
   public autoStart(done: CallableFunction): void {
     UtilsService.log('Starting ~y~DiscordBot~w~');
 
-    this.initialize().subscribe(() => {
-      this.start();
-      UtilsService.log('Started ~lg~DiscordBot~w~');
-      done();
-    });
+    this.initialize()
+        .subscribe(() => {
+
+          container.register<Client>('discord.client', { useValue: this.client });
+
+          this.start();
+          UtilsService.log('Started ~lg~DiscordBot~w~');
+          done();
+        });
 
   }
 
@@ -118,10 +113,12 @@ export class DiscordBotService {
       UtilsService.log('Starting ~y~DiscordBot Decorators~w~');
 
       this.events.forEach((event: DiscordEventModel) => {
-        const instance = container.resolve<any>(event.targetName);
-        const method = instance[event.methodName].bind(instance);
+        const instances = container.resolveAll<any>(event.targetName);
 
-        this.client.on(event.eventName, method);
+        instances.forEach((instance) => {
+          const method = instance[event.methodName].bind(instance);
+          this.client.on(event.eventName, method);
+        });
       });
 
       UtilsService.log('Started ~lg~DiscordBot Decorators~w~');
