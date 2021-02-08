@@ -141,5 +141,3 @@ class YourModule {
 You can push as many as you want on each queue step. You only keep in mind, that any step would be call if the before step is finished and in this order:   
 **@Before** -&gt; **@After** -&gt; **@AfterBootstrap**
 {% endhint %}
-
-Fooo Bar Baz
