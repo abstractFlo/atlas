@@ -73,3 +73,51 @@ export const GameEntityDestroy = (entityType: keyof typeof BaseObjectTypeConfig)
     return validateEventExistsAndPush(target, 'gameEntityDestroy', entity, propertyKey, descriptor, 'gameEntity');
   };
 };
+
+/**
+ * Decorate streamSyncedMetaChange event to prevent multiple instance for same event listener
+ *
+ * @param {typeof BaseObjectTypeConfig} entityType
+ * @param {string} metaKey
+ * @return {MethodDecorator}
+ * @constructor
+ */
+export const StreamSyncedMetaChange = (entityType: keyof typeof BaseObjectTypeConfig, metaKey?: string): MethodDecorator => {
+  return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    const entity = BaseObjectTypeConfig[entityType];
+
+    return validateEventExistsAndPush(
+        target,
+        'streamSyncedMetaChange',
+        entity,
+        propertyKey,
+        descriptor,
+        'metaChange',
+        metaKey
+    );
+  };
+};
+
+/**
+ * Decorate syncedMetaChange event to prevent multiple instance for same event listener
+ *
+ * @param {typeof BaseObjectTypeConfig} entityType
+ * @param {string} metaKey
+ * @return {MethodDecorator}
+ * @constructor
+ */
+export const SyncedMetaChange = (entityType: keyof typeof BaseObjectTypeConfig, metaKey?: string): MethodDecorator => {
+  return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    const entity = BaseObjectTypeConfig[entityType];
+
+    return validateEventExistsAndPush(
+        target,
+        'syncedMetaChange',
+        entity,
+        propertyKey,
+        descriptor,
+        'metaChange',
+        metaKey
+    );
+  };
+};

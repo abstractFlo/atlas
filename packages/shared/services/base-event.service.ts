@@ -170,20 +170,21 @@ export class BaseEventService implements EventServiceInterface {
 
       const isMetaChange = ['syncedMetaChange', 'streamSyncedMetaChange'].includes(handler.type);
       const hasMetaKey = handler.metaKey && args[0] === handler.metaKey;
-      const isEntityType = this.isEntityType(entity, handler.entityType);
+      const isEntityType = this.isEntityType(entity, handler.entityType) as unknown as boolean;
 
       if (isEntityType) {
-        const instance = container.resolve<any>(handler.targetName);
-        const method: CallableFunction = instance[handler.methodName].bind(instance);
+        const instances = container.resolveAll<any>(handler.targetName);
 
-        if (isMetaChange && hasMetaKey) {
-          args.shift();
-          method(entity, ...args);
-        } else if (!isMetaChange) {
-          method(entity, ...args);
-        }
+        instances.forEach((instance) => {
+          const method: CallableFunction = instance[handler.methodName].bind(instance);
 
-
+          if (isMetaChange && hasMetaKey) {
+            args.shift();
+            method(entity, ...args);
+          } else if (!hasMetaKey) {
+            method(entity, ...args);
+          }
+        });
       }
 
     });
@@ -191,13 +192,12 @@ export class BaseEventService implements EventServiceInterface {
 
   /**
    * Check if given entity has given type
+   *
    * @param {any} entity
    * @param {string} type
    * @protected
    */
-  protected isEntityType(entity: any, type: number): boolean {
-    return entity.type === type;
-  }
+  protected isEntityType(entity: any, type: number) {}
 
   /**
    * Start the entity handler
@@ -205,26 +205,13 @@ export class BaseEventService implements EventServiceInterface {
    * @private
    */
   private startEntityHandle() {
-    const onCreateHandler = this.getHandler('gameEntityCreate');
-    const onDestroyHandler = this.getHandler('gameEntityDestroy');
-    const syncedMetaChangeHandler = this.getHandler('syncedMetaChange');
-    const streamSyncedMetaChangeHandler = this.getHandler('streamSyncedMetaChange');
+    this.handlerTypes.forEach((type: string) => {
+      const handler = this.getHandler(type);
 
-    if (onCreateHandler.length) {
-      this.listenHandlerForType('gameEntityCreate', onCreateHandler);
-    }
-
-    if (onDestroyHandler.length) {
-      this.listenHandlerForType('gameEntityDestroy', onDestroyHandler);
-    }
-
-    if (syncedMetaChangeHandler.length) {
-      this.listenHandlerForType('syncedMetaChange', syncedMetaChangeHandler);
-    }
-
-    if (streamSyncedMetaChangeHandler.length) {
-      this.listenHandlerForType('streamSyncedMetaChange', streamSyncedMetaChangeHandler);
-    }
+      if (handler.length) {
+        this.listenHandlerForType(type, handler);
+      }
+    });
   }
 
   /**
@@ -256,7 +243,6 @@ export class BaseEventService implements EventServiceInterface {
           await method();
         }
       });
-
     });
   }
 }

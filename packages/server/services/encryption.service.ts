@@ -17,6 +17,7 @@ export class EncryptionService {
 
   /**
    * Hash a string of data into random SHA256 Hash
+   *
    * @param {string} data
    * @returns {string}
    */

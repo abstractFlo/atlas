@@ -16,5 +16,3 @@ container.afterResolution(DiscordBotService, () => {
 container.afterResolution(DiscordApiService, () => {
   loader.add('after', 'autoStart', 'ExpressServer');
 }, { frequency: 'Once' });
-
-
