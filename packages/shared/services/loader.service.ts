@@ -189,6 +189,7 @@ export class LoaderService {
    * @param {Map<string, QueueItemModel>} property
    * @param {Subject<number>} propertyCount
    * @param {string | null} key
+   * @param {number} timeout
    * @private
    */
   private doneCallback(property: Map<string, QueueItemModel>, propertyCount: Subject<number>, key: string | null = null): void {
