@@ -194,14 +194,34 @@ export class LoaderService {
    * @private
    */
   private processWork(property: Map<string, QueueItemModel>, propertyCount: Subject<number>): void {
-    property.size === 0
-        ? this.doneCallback(property, propertyCount)
-        : property.forEach(async (value: QueueItemModel, key: string) => {
-          const instance = container.resolve<any>(value.target);
-          const doneCallback = this.doneCallback.bind(this, property, propertyCount, key);
-          const method = instance[value.methodName].bind(instance, doneCallback);
+    if (property.size === 0) {
+      this.doneCallback(property, propertyCount);
+    } else {
+      propertyCount
+          .pipe(
+              filter((size: number) => size !== 0)
+          )
+          .subscribe(() => this.processQueueItem(property, propertyCount));
 
-          await method();
-        });
+      this.processQueueItem(property, propertyCount);
+    }
+  }
+
+  /**
+   * Process one item from queue
+   *
+   * @param {Map<string, QueueItemModel>} property
+   * @param {Subject<number>} propertyCount
+   * @return {Promise<void>}
+   * @private
+   */
+  private async processQueueItem(property: Map<string, QueueItemModel>, propertyCount: Subject<number>): Promise<void> {
+    const nextItem = property.values().next().value as QueueItemModel;
+    const nextKey = property.keys().next().value as string;
+    const instance = container.resolve<any>(nextItem.target);
+    const doneCallback = this.doneCallback.bind(this, property, propertyCount, nextKey);
+    const method = instance[nextItem.methodName].bind(instance, doneCallback);
+
+    await method();
   }
 }
