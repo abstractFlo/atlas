@@ -9,6 +9,5 @@ export * from './services';
 export * from './models';
 export * from './pools';
 export * from './constants';
-export * from './config';
 
 

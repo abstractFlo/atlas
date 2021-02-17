@@ -64,19 +64,15 @@ export class EventService extends BaseEventService {
    * @protected
    */
   protected listenHandlerForType(type: string, handlers: EntityHandleModel[]) {
-    this.on(type, (entity: Entity, ...args: any[]) => {
-      this.handleMethods<Entity>(entity, handlers, ...args);
+    this.on(type, (...args: any[]) => {
+      const entity = args.shift();
+
+      switch (true) {
+        case ['syncedMetaChange', 'streamSyncedMetaChange', 'gameEntityCreate', 'gameEntityDestroy'].includes(type):
+          this.handleMetaChangeMethods<Entity>(entity, entity.type, handlers, ...args);
+          break;
+      }
     });
   }
 
-  /**
-   * Check if given entity has given type
-   *
-   * @param {any} entity
-   * @param {string} type
-   * @protected
-   */
-  protected isEntityType(entity: Entity, type: number): boolean {
-    return entity.type === type;
-  }
 }

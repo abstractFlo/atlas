@@ -1,11 +1,9 @@
-import { Cast, EventModel } from '../core';
+import { Cast, EventModel, HasOne } from '../core';
+import { ValidateOptionsModel } from './validate-options.model';
 
 export class EntityHandleModel extends EventModel {
 
+  @HasOne(ValidateOptionsModel)
   @Cast()
-  entityType: number;
-
-  @Cast()
-  metaKey: string;
-
+  options: ValidateOptionsModel;
 }

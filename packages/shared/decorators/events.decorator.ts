@@ -1,5 +1,6 @@
 import { container } from 'tsyringe';
 import { EventServiceInterface } from '../core';
+import { ValidateOptionsModel } from '../models';
 
 /**
  * Add on event listener
@@ -11,8 +12,8 @@ import { EventServiceInterface } from '../core';
 export const On = (name?: string): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
-
-    return validateEventExistsAndPush(target, 'on', eventName, propertyKey, descriptor);
+    const options = new ValidateOptionsModel().cast({ name: eventName });
+    return validateEventExistsAndPush(target, 'on', propertyKey, descriptor, options);
   };
 };
 
@@ -26,8 +27,8 @@ export const On = (name?: string): MethodDecorator => {
 export const Once = (name?: string): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
-
-    return validateEventExistsAndPush(target, 'once', eventName, propertyKey, descriptor);
+    const options = new ValidateOptionsModel().cast({ name: eventName });
+    return validateEventExistsAndPush(target, 'once', propertyKey, descriptor, options);
   };
 };
 
@@ -36,21 +37,17 @@ export const Once = (name?: string): MethodDecorator => {
  *
  * @param {Object} target
  * @param {string} type
- * @param {string|BaseObjectType} entity
  * @param {string} propertyKey
  * @param {PropertyDescriptor} descriptor
- * @param {'base'|'gameEntity'|'metaChange'} eventAddTo
- * @param {string} metaKey
+ * @param options
  * @returns {PropertyDescriptor | void}
  */
 export function validateEventExistsAndPush<T>(
     target: Object,
     type: string,
-    entity: string | number,
     propertyKey: string,
     descriptor: PropertyDescriptor,
-    eventAddTo: 'base' | 'gameEntity' | 'metaChange' = 'base',
-    metaKey?: string
+    options: ValidateOptionsModel
 ): PropertyDescriptor | void {
 
   const eventService = container.resolve<EventServiceInterface>('EventService');
@@ -60,13 +57,14 @@ export function validateEventExistsAndPush<T>(
     return original.apply(this, args);
   };
 
-  switch (eventAddTo) {
+  switch (options.eventAddTo) {
     case 'gameEntity':
     case 'metaChange':
-      eventService.addHandlerMethods(type, entity, target.constructor.name, propertyKey, metaKey);
+    case 'colShape':
+      eventService.addHandlerMethods(type, target.constructor.name, propertyKey, options);
       break;
     default:
-      eventService.add(type, String(entity), target.constructor.name, propertyKey);
+      eventService.add(type, target.constructor.name, propertyKey, options);
       break;
   }
   return descriptor;

@@ -2,7 +2,7 @@ import { container, singleton } from 'tsyringe';
 import { EventModel, EventServiceInterface } from '../core';
 import { UtilsService } from './utils.service';
 import { StringResolver } from '../decorators/string-resolver.decorator';
-import { EntityHandleModel } from '../models';
+import { EntityHandleModel, ValidateOptionsModel } from '../models';
 
 @StringResolver
 @singleton()
@@ -24,6 +24,22 @@ export class BaseEventService implements EventServiceInterface {
   private handlers: EntityHandleModel[] = [];
 
   /**
+   * Return all available listener types for handler decorators
+   *
+   * @returns {string[]}
+   */
+  protected get handlerTypes(): string[] {
+    return [
+      'syncedMetaChange',
+      'streamSyncedMetaChange',
+      'gameEntityCreate',
+      'gameEntityDestroy',
+      'entityEnterColshape',
+      'entityLeaveColshape'
+    ];
+  }
+
+  /**
    * Return all available listener types for decorators
    *
    * @returns {string[]}
@@ -38,20 +54,6 @@ export class BaseEventService implements EventServiceInterface {
       'onClient',
       'onceServer',
       'onceClient'
-    ];
-  }
-
-  /**
-   * Return all available listener types for handler decorators
-   *
-   * @returns {string[]}
-   */
-  private get handlerTypes(): string[] {
-    return [
-      'syncedMetaChange',
-      'streamSyncedMetaChange',
-      'gameEntityCreate',
-      'gameEntityDestroy'
     ];
   }
 
@@ -79,13 +81,13 @@ export class BaseEventService implements EventServiceInterface {
    * Add event to events array
    *
    * @param {string} type
-   * @param {string} eventName
    * @param {string} targetName
    * @param {string} methodName
+   * @param options
    */
-  public add(type: string, eventName: string, targetName: string, methodName: string): void {
+  public add(type: string, targetName: string, methodName: string, options: ValidateOptionsModel): void {
     if (this.availableDecoratorListenerTypes.includes(type)) {
-      const event = new EventModel().cast({ type, eventName, targetName, methodName });
+      const event = new EventModel().cast({ type, eventName: options.name, targetName, methodName });
       this.events.push(event);
     }
   }
@@ -94,16 +96,21 @@ export class BaseEventService implements EventServiceInterface {
    * Add new game entity handler to array
    *
    * @param {string} type
-   * @param {number} entityType
    * @param {string} targetName
    * @param {string} methodName
-   * @param {string} metaKey
+   * @param options
    * @private
    */
-  public addHandlerMethods(type: string, entityType: number, targetName: string, methodName: string, metaKey?: string) {
+  public addHandlerMethods(type: string, targetName: string, methodName: string, options: ValidateOptionsModel) {
     if (this.handlerTypes.includes(type)) {
-      const entityCreate = new EntityHandleModel().cast({ type, targetName, methodName, entityType, metaKey });
-      this.handlers.push(entityCreate);
+      const entityHandle = new EntityHandleModel().cast({
+        type,
+        targetName,
+        methodName,
+        options
+      });
+
+      this.handlers.push(entityHandle);
     }
   }
 
@@ -156,36 +163,35 @@ export class BaseEventService implements EventServiceInterface {
    */
   protected listenHandlerForType<T>(type: string, handlers: EntityHandleModel[]) {}
 
-
   /**
    * Check and call given handlers
    *
    * @param {T} entity
+   * @param {number} entityType
    * @param {EntityHandleModel[]} handlers
+   * @param isMetaChange
    * @param {any[]} args
    * @private
    */
-  protected handleMethods<T>(entity: T, handlers: EntityHandleModel[], ...args: any[]) {
+  protected handleMetaChangeMethods<T>(entity: T, entityType: number, handlers: EntityHandleModel[], isMetaChange: boolean = false, ...args: any[]) {
     handlers.forEach((handler: EntityHandleModel) => {
 
-      const isMetaChange = ['syncedMetaChange', 'streamSyncedMetaChange'].includes(handler.type);
-      const hasMetaKey = handler.metaKey && args[0] === handler.metaKey;
-      const isEntityType = this.isEntityType(entity, handler.entityType) as unknown as boolean;
+      // Stop it not the same type
+      const isNotSameType = !this.isEntityType(entityType, handler.options.entity);
+      if (isNotSameType) return;
 
-      if (isEntityType) {
-        const instances = container.resolveAll<any>(handler.targetName);
+      const hasMetaKey = handler.options.metaKey !== undefined && args[0] === handler.options.metaKey;
+      const instances = container.resolveAll<any>(handler.targetName);
 
-        instances.forEach((instance) => {
-          const method: CallableFunction = instance[handler.methodName].bind(instance);
+      instances.forEach((instance) => {
+        const method: CallableFunction = instance[handler.methodName].bind(instance);
 
-          if (isMetaChange && hasMetaKey) {
-            args.shift();
-            method(entity, ...args);
-          } else if (!hasMetaKey) {
-            method(entity, ...args);
-          }
-        });
-      }
+        if (isMetaChange && hasMetaKey) {
+          args.shift();
+        }
+
+        method(entity, ...args);
+      });
 
     });
   }
@@ -193,11 +199,13 @@ export class BaseEventService implements EventServiceInterface {
   /**
    * Check if given entity has given type
    *
-   * @param {any} entity
+   * @param {number} entityType
    * @param {string} type
    * @protected
    */
-  protected isEntityType(entity: any, type: number) {}
+  protected isEntityType(entityType: number, type: number): boolean {
+    return entityType === type;
+  }
 
   /**
    * Start the entity handler

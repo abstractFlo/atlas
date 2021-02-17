@@ -1,3 +1,5 @@
+import { ValidateOptionsModel } from '../../models';
+
 export interface EventServiceInterface {
   /**
    * Autostart listen events
@@ -8,11 +10,11 @@ export interface EventServiceInterface {
    * Add event to events array
    *
    * @param {string} type
-   * @param {string} eventName
    * @param {string} targetName
    * @param {string} methodName
+   * @param options
    */
-  add(type: string, eventName: string, targetName: string, methodName: string): void;
+  add(type: string, targetName: string, methodName: string, options: ValidateOptionsModel): void;
 
   /**
    * Receive event from client/server
@@ -104,10 +106,10 @@ export interface EventServiceInterface {
    * Handle game entity events
    *
    * @param {string} type
-   * @param entity
    * @param {string} target
    * @param {string} methodName
-   * @param {string} metaKey
+   * @param {ValidateOptionsModel} options
    */
-  addHandlerMethods?(type: string, entity: any, target: string, methodName: string, metaKey?: string): void;
+  addHandlerMethods?(type: string, target: string, methodName: string, options: ValidateOptionsModel): void;
+
 }

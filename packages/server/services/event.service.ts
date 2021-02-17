@@ -1,6 +1,6 @@
 import { BaseEventService, EntityHandleModel, FrameworkEvent, StringResolver } from '@abstractFlo/shared';
-import { singleton } from 'tsyringe';
-import { emitClient, Entity, offClient, onceClient, onClient, Player } from 'alt-server';
+import { container, singleton } from 'tsyringe';
+import { Colshape, emitClient, Entity, offClient, onceClient, onClient, Player } from 'alt-server';
 
 @StringResolver
 @singleton()
@@ -66,20 +66,56 @@ export class EventService extends BaseEventService {
    * @protected
    */
   protected listenHandlerForType(type: string, handlers: EntityHandleModel[]) {
-    this.on(type, (entity: Entity, ...args: any[]) => {
-      this.handleMethods<Entity>(entity, handlers, ...args);
+    this.on(type, (...args: any[]) => {
+      const entity = args.shift();
+
+      switch (true) {
+        case ['syncedMetaChange', 'streamSyncedMetaChange'].includes(type):
+          this.handleMetaChangeMethods<Entity>(entity, entity.type, handlers, true, ...args);
+          break;
+
+        case ['entityEnterColshape', 'entityLeaveColshape'].includes(type):
+          this.handleColShapeMethods(entity, handlers, args.shift(), ...args);
+          break;
+      }
     });
   }
 
   /**
-   * Check entity type
+   * Handle all colShape events
    *
-   * @param {Entity} entity
-   * @param {number} type
-   * @return {boolean}
+   * @param {Colshape} colShape
+   * @param {EntityHandleModel[]} handlers
+   * @param entity
+   * @param args
    * @protected
    */
-  protected isEntityType(entity: Entity, type: number): boolean {
-    return entity.type === type;
+  protected handleColShapeMethods(colShape: Colshape, handlers: EntityHandleModel[], entity: Entity, ...args: any[]): void {
+    handlers.forEach((handler: EntityHandleModel) => {
+
+      // Stop if not the same colshape type
+      const isNotSameType = colShape.colshapeType !== handler.options.colShapeType;
+      if (isNotSameType) return;
+
+      // Stop if name is set and not the same
+      const hasNameButNotTheSame = handler.options.name !== undefined && colShape.name !== handler.options.name;
+      if (hasNameButNotTheSame) return;
+
+      // Stop if entity is set and not the same
+      const hasEntityButNotTheSame =
+          handler.options.entity !== undefined && !this.isEntityType(entity.type, handler.options.entity);
+
+      if (hasEntityButNotTheSame) return;
+
+      const instances = container.resolveAll<any>(handler.targetName);
+
+      instances.forEach((instance) => {
+        const method: CallableFunction = instance[handler.methodName].bind(instance);
+
+        method(entity, ...args);
+      });
+
+    });
   }
+
 }

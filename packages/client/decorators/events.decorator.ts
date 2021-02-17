@@ -1,4 +1,5 @@
-import { BaseObjectTypeConfig, validateEventExistsAndPush } from '@abstractFlo/shared';
+import { validateEventExistsAndPush, ValidateOptionsModel } from '@abstractFlo/shared';
+import { BaseObjectType } from 'alt-client';
 
 /**
  * Add onServer event listener
@@ -10,8 +11,9 @@ import { BaseObjectTypeConfig, validateEventExistsAndPush } from '@abstractFlo/s
 export const OnServer = (name?: string): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
+    const options = new ValidateOptionsModel().cast({ name: eventName });
 
-    return validateEventExistsAndPush(target, 'onServer', eventName, propertyKey, descriptor);
+    return validateEventExistsAndPush(target, 'onServer', propertyKey, descriptor, options);
   };
 };
 
@@ -25,8 +27,9 @@ export const OnServer = (name?: string): MethodDecorator => {
 export const OnceServer = (name?: string): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
+    const options = new ValidateOptionsModel().cast({ name: eventName });
 
-    return validateEventExistsAndPush(target, 'onceServer', eventName, propertyKey, descriptor);
+    return validateEventExistsAndPush(target, 'onceServer', propertyKey, descriptor, options);
   };
 };
 
@@ -40,60 +43,61 @@ export const OnceServer = (name?: string): MethodDecorator => {
 export const OnGui = (name?: string): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
+    const options = new ValidateOptionsModel().cast({ name: eventName });
 
-    return validateEventExistsAndPush(target, 'onGui', eventName, propertyKey, descriptor);
+    return validateEventExistsAndPush(target, 'onGui', propertyKey, descriptor, options);
   };
 };
 
 /**
  * GameEntityCreate Decorator
  *
- * @param {typeof BaseObjectTypeConfig} entityType
+ * @param {BaseObjectType} entityType
  * @returns {MethodDecorator}
  * @constructor
  */
 
-export const GameEntityCreate = (entityType: keyof typeof BaseObjectTypeConfig): MethodDecorator => {
+export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    const entity = BaseObjectTypeConfig[entityType];
-    return validateEventExistsAndPush(target, 'gameEntityCreate', entity, propertyKey, descriptor, 'gameEntity');
+    const options = new ValidateOptionsModel().cast({ entity: entityType, eventAddTo: 'gameEntity' });
+
+    return validateEventExistsAndPush(target, 'gameEntityCreate', propertyKey, descriptor, options);
   };
 };
 
 /**
  * GameEntityDestroy Decorator
  *
- * @param {typeof BaseObjectTypeConfig} entityType
+ * @param {BaseObjectType} entityType
  * @returns {MethodDecorator}
  * @constructor
  */
-export const GameEntityDestroy = (entityType: keyof typeof BaseObjectTypeConfig): MethodDecorator => {
+export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    const entity = BaseObjectTypeConfig[entityType];
-    return validateEventExistsAndPush(target, 'gameEntityDestroy', entity, propertyKey, descriptor, 'gameEntity');
+    const options = new ValidateOptionsModel().cast({ entity: entityType, eventAddTo: 'gameEntity' });
+
+    return validateEventExistsAndPush(target, 'gameEntityDestroy', propertyKey, descriptor, options);
   };
 };
 
 /**
  * Decorate streamSyncedMetaChange event to prevent multiple instance for same event listener
  *
- * @param {typeof BaseObjectTypeConfig} entityType
+ * @param {BaseObjectType} entityType
  * @param {string} metaKey
  * @return {MethodDecorator}
  * @constructor
  */
-export const StreamSyncedMetaChange = (entityType: keyof typeof BaseObjectTypeConfig, metaKey?: string): MethodDecorator => {
+export const StreamSyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    const entity = BaseObjectTypeConfig[entityType];
+    const options = new ValidateOptionsModel().cast({ entity: entityType, metaKey, eventAddTo: 'metaChange' });
 
     return validateEventExistsAndPush(
         target,
         'streamSyncedMetaChange',
-        entity,
         propertyKey,
         descriptor,
-        'metaChange',
-        metaKey
+        options
     );
   };
 };
@@ -101,23 +105,21 @@ export const StreamSyncedMetaChange = (entityType: keyof typeof BaseObjectTypeCo
 /**
  * Decorate syncedMetaChange event to prevent multiple instance for same event listener
  *
- * @param {typeof BaseObjectTypeConfig} entityType
+ * @param {BaseObjectType} entityType
  * @param {string} metaKey
  * @return {MethodDecorator}
  * @constructor
  */
-export const SyncedMetaChange = (entityType: keyof typeof BaseObjectTypeConfig, metaKey?: string): MethodDecorator => {
+export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
   return <T>(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    const entity = BaseObjectTypeConfig[entityType];
+    const options = new ValidateOptionsModel().cast({ entity: entityType, metaKey, eventAddTo: 'metaChange' });
 
     return validateEventExistsAndPush(
         target,
         'syncedMetaChange',
-        entity,
         propertyKey,
         descriptor,
-        'metaChange',
-        metaKey
+        options
     );
   };
 };
