@@ -94,18 +94,18 @@ export class EventService extends BaseEventService {
     handlers.forEach((handler: EntityHandleModel) => {
 
       // Stop if not the same colshape type
-      const isNotSameType = colShape.colshapeType !== handler.options.colShapeType;
-      if (isNotSameType) return;
+      const hasSameType = colShape.colshapeType === handler.options.colShapeType;
+      if (!hasSameType) return;
 
       // Stop if name is set and not the same
-      const hasNameButNotTheSame = handler.options.name !== undefined && colShape.name !== handler.options.name;
-      if (hasNameButNotTheSame) return;
+      const hasSameName = handler.options.name !== undefined && colShape.name === handler.options.name;
+      if (!hasSameName) return;
 
       // Stop if entity is set and not the same
-      const hasEntityButNotTheSame =
-          handler.options.entity !== undefined && !this.isEntityType(entity.type, handler.options.entity);
+      const hasSameEntity =
+          handler.options.entity !== undefined && this.isEntityType(entity.type, handler.options.entity);
 
-      if (hasEntityButNotTheSame) return;
+      if (!hasSameEntity) return;
 
       const instances = container.resolveAll<any>(handler.targetName);
 

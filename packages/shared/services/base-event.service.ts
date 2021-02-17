@@ -177,8 +177,8 @@ export class BaseEventService implements EventServiceInterface {
     handlers.forEach((handler: EntityHandleModel) => {
 
       // Stop it not the same type
-      const isNotSameType = !this.isEntityType(entityType, handler.options.entity);
-      if (isNotSameType) return;
+      const hasSameType = this.isEntityType(entityType, handler.options.entity);
+      if (!hasSameType) return;
 
       const hasMetaKey = handler.options.metaKey !== undefined && args[0] === handler.options.metaKey;
       const instances = container.resolveAll<any>(handler.targetName);
