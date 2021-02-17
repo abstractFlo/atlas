@@ -1,6 +1,6 @@
 import { container, InjectionToken, singleton } from 'tsyringe';
-import { Observable, Subject } from 'rxjs';
-import { delay, filter, takeLast } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { delay, filter, mergeMap, takeLast } from 'rxjs/operators';
 import { QueueItemModel, QueueModel } from '../core';
 import { UtilsService } from './utils.service';
 
@@ -145,9 +145,27 @@ export class LoaderService {
           this.finishSubject$.complete();
         });
 
-    // Workaround for client side
+    // Workaround for server side
     if (this.isServerSide) {
-      this.startingSubject$ = this.startingSubject$.pipe(delay(100));
+      let entities: Function[];
+
+      try {
+        entities = container.resolve('server.database.entities');
+      } catch {
+        entities = [];
+      }
+
+      this.startingSubject$ = this.startingSubject$.pipe(
+          delay(125),
+          mergeMap(() => {
+            if (entities.length) {
+              const dbService = container.resolve<any>('DatabaseService');
+              return dbService.initialize() as Observable<boolean>;
+            }
+
+            return of(true);
+          })
+      );
     }
 
     this.startingSubject$.subscribe(() => this.processWork(this.queue.before, this.queue.beforeCount));

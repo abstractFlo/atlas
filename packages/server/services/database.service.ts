@@ -2,9 +2,8 @@ import { container, singleton } from 'tsyringe';
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
 import { ConfigService } from './config.service';
 import { defer, from, Observable } from 'rxjs';
-import { share } from 'rxjs/operators';
-import { EntitySchema } from 'typeorm/entity-schema/EntitySchema';
-import { StringResolver } from '@abstractFlo/shared';
+import { share, tap } from 'rxjs/operators';
+import { LoggerService, StringResolver } from '@abstractFlo/shared';
 
 @StringResolver
 @singleton()
@@ -23,7 +22,7 @@ export class DatabaseService {
   /**
    * Database entities
    *
-   * @type {(Function | string | EntitySchema<any>)[]}
+   * @type {Function[]}
    * @private
    */
   private entities: Function[];
@@ -45,7 +44,8 @@ export class DatabaseService {
   private created: boolean = false;
 
   constructor(
-      private readonly configService: ConfigService
+      private readonly configService: ConfigService,
+      private readonly loggerService: LoggerService
   ) {
     this.setupEntities();
     this.connect();
@@ -87,8 +87,10 @@ export class DatabaseService {
   private create(): Observable<Connection> {
     this.created = true;
 
-    return defer(() => from(createConnection(this.config)))
-        .pipe(share());
+    return defer(() => {
+      this.loggerService.starting('DatabaseService');
+      return from(createConnection(this.config));
+    }).pipe(share(), tap(() => this.loggerService.started('DatabaseService')));
   }
 
   /**
