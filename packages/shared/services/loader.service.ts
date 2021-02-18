@@ -109,9 +109,11 @@ export class LoaderService {
    * @param {"before" | "after" | "afterBootstrap"} type
    * @param key
    * @param target
+   * @param doneCheckIntervalTime
    */
-  public add(type: 'before' | 'after' | 'afterBootstrap', key: string, target: string): void {
-    this.queue[type].set(`${target}_${key}`, new QueueItemModel().cast({ target, methodName: key }));
+  public add(type: 'before' | 'after' | 'afterBootstrap', key: string, target: string, doneCheckIntervalTime: number): void {
+    const queueItemModel = new QueueItemModel().cast({ target, methodName: key, doneCheckIntervalTime });
+    this.queue[type].set(`${target}_${key}`, queueItemModel);
   }
 
   /**
@@ -188,11 +190,15 @@ export class LoaderService {
    *
    * @param {Map<string, QueueItemModel>} property
    * @param {Subject<number>} propertyCount
+   * @param doneCheckIntervalId
    * @param {string | null} key
-   * @param {number} timeout
    * @private
    */
-  private doneCallback(property: Map<string, QueueItemModel>, propertyCount: Subject<number>, key: string | null = null): void {
+  private doneCallback(property: Map<string, QueueItemModel>, propertyCount: Subject<number>, key: string | null = null, doneCheckIntervalId?: number): void {
+
+    if (doneCheckIntervalId) {
+      UtilsService.clearInterval(doneCheckIntervalId);
+    }
 
     if (key !== null) {
       property.delete(key);
@@ -217,9 +223,7 @@ export class LoaderService {
       this.doneCallback(property, propertyCount);
     } else {
       propertyCount
-          .pipe(
-              filter((size: number) => size !== 0)
-          )
+          .pipe(filter((size: number) => size !== 0))
           .subscribe(() => this.processQueueItem(property, propertyCount));
 
       this.processQueueItem(property, propertyCount);
@@ -235,12 +239,24 @@ export class LoaderService {
    * @private
    */
   private async processQueueItem(property: Map<string, QueueItemModel>, propertyCount: Subject<number>): Promise<void> {
-    const nextItem = property.values().next().value as QueueItemModel;
+    const nextItem = property.values().next().value;
     const nextKey = property.keys().next().value as string;
-    const instance = container.resolve<any>(nextItem.target);
-    const doneCallback = this.doneCallback.bind(this, property, propertyCount, nextKey);
-    const method = instance[nextItem.methodName].bind(instance, doneCallback);
 
-    await method();
+    if (nextItem !== undefined) {
+      const instance = container.resolve<any>(nextItem.target);
+
+      const doneCheckIntervalId = UtilsService.setInterval(() => {
+        const [module, method] = nextKey.split('_');
+        UtilsService.log(`~lb~[Module: ${module}]~y~{Method: ${method}}~w~ - ~r~Have you maybe forgotten the done callback?~w~`);
+        UtilsService.log(`~y~If not, increase decorator runtime parameter ~w~[yours: ${nextItem.doneCheckIntervalTime}ms] ~lg~[default: 5000ms] ~w~`);
+        UtilsService.clearInterval(doneCheckIntervalId);
+      }, nextItem.doneCheckIntervalTime);
+
+      const doneCallback = this.doneCallback.bind(this, property, propertyCount, nextKey, doneCheckIntervalId);
+      const method = instance[nextItem.methodName].bind(instance, doneCallback);
+
+      await method();
+    }
+
   }
 }

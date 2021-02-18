@@ -1,4 +1,4 @@
-import { Cast, castToString, JsonEntityModel } from '../json-entity';
+import { Cast, castToNumber, castToString, JsonEntityModel } from '../json-entity';
 
 export class QueueItemModel extends JsonEntityModel {
 
@@ -7,4 +7,7 @@ export class QueueItemModel extends JsonEntityModel {
 
   @Cast({ from: castToString() })
   methodName: string;
+
+  @Cast({ from: castToNumber() })
+  doneCheckIntervalTime: number = 5000;
 }

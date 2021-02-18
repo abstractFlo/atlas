@@ -4,41 +4,41 @@ import { LoaderService } from '../services';
 /**
  * Add method to before queue
  *
- * @param {Object} target
- * @param {string} propertyKey
- * @param {PropertyDescriptor} descriptor
  * @returns {PropertyDescriptor | void}
  * @constructor
+ * @param doneCheckIntervalTime
  */
-export function Before(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void {
-  return validateLoaderAndPush(target, propertyKey, 'before', descriptor);
-}
+export const Before = (doneCheckIntervalTime?: number): MethodDecorator => {
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    return validateLoaderAndPush(target, propertyKey, 'before', descriptor, doneCheckIntervalTime);
+  };
+};
 
 /**
  * Add method to after queue
  *
- * @param {Object} target
- * @param {string} propertyKey
- * @param {PropertyDescriptor} descriptor
  * @returns {PropertyDescriptor | void}
  * @constructor
+ * @param doneCheckIntervalTime
  */
-export function After(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void {
-  return validateLoaderAndPush(target, propertyKey, 'after', descriptor);
-}
+export const After = (doneCheckIntervalTime?: number): MethodDecorator => {
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    return validateLoaderAndPush(target, propertyKey, 'after', descriptor, doneCheckIntervalTime);
+  };
+};
 
 /**
  * Add method to afterBootstrap queue
  *
- * @param {Object} target
- * @param {string} propertyKey
- * @param {PropertyDescriptor} descriptor
  * @returns {PropertyDescriptor | void}
  * @constructor
+ * @param doneCheckIntervalTime
  */
-export function AfterBootstrap(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void {
-  return validateLoaderAndPush(target, propertyKey, 'afterBootstrap', descriptor);
-}
+export const AfterBootstrap = (doneCheckIntervalTime?: number): MethodDecorator => {
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    return validateLoaderAndPush(target, propertyKey, 'afterBootstrap', descriptor, doneCheckIntervalTime);
+  };
+};
 
 /**
  * Helper for adding method to specific queue
@@ -47,9 +47,10 @@ export function AfterBootstrap(target: Object, propertyKey: string, descriptor: 
  * @param {string} propertyKey
  * @param {"before" | "after" | "afterBootstrap"} type
  * @param {PropertyDescriptor} descriptor
+ * @param doneCheckIntervalTime
  * @returns {PropertyDescriptor | void}
  */
-function validateLoaderAndPush(target: Object, propertyKey: string, type: 'before' | 'after' | 'afterBootstrap', descriptor: PropertyDescriptor): PropertyDescriptor | void {
+function validateLoaderAndPush(target: Object, propertyKey: string, type: 'before' | 'after' | 'afterBootstrap', descriptor: PropertyDescriptor, doneCheckIntervalTime: number): PropertyDescriptor | void {
   const loaderService = container.resolve(LoaderService);
   const original = descriptor.value;
 
@@ -57,7 +58,7 @@ function validateLoaderAndPush(target: Object, propertyKey: string, type: 'befor
     return original.apply(this, args);
   };
 
-  loaderService.add(type, propertyKey, target.constructor.name);
+  loaderService.add(type, propertyKey, target.constructor.name, doneCheckIntervalTime);
 
   return descriptor;
 }
