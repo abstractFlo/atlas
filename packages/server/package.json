@@ -41,5 +41,8 @@
     "sjcl": "^1.0.8",
     "tsyringe": "^4.4.0",
     "typeorm": "^0.2.31"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
