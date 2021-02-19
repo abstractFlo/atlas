@@ -1,5 +1,5 @@
 {
-  "name": "@abstractFlo/server",
+  "name": "@abstractflo/server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -44,5 +44,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "56a02ed520eefd2e312dc74dfff4686edaa2fe9d"
 }
