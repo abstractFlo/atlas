@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/client",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Project Atlas clientside framework part",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@abraham/reflection": "^0.7.0",
-    "@abstractflo/shared": "^1.0.2",
+    "@abstractflo/shared": "^1.0.3",
     "tsyringe": "^4.4.0"
   },
   "publishConfig": {
