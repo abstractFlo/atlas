@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "type": "module",
@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@abraham/reflection": "^0.7.0",
-    "@abstractflo/shared": "^1.0.0",
+    "@abstractflo/shared": "^1.0.1",
     "@overnightjs/core": "^1.7.5",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
@@ -46,5 +46,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "56a02ed520eefd2e312dc74dfff4686edaa2fe9d"
+  "gitHead": "071c5de53387313c5d7a8fe3017dbf36d0b4b108"
 }

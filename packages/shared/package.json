@@ -1,11 +1,9 @@
 {
   "name": "@abstractflo/shared",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/shared/index.js",
-  "files": [
-
-  ],
+  "files": [],
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -30,5 +28,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "56a02ed520eefd2e312dc74dfff4686edaa2fe9d"
+  "gitHead": "071c5de53387313c5d7a8fe3017dbf36d0b4b108"
 }
