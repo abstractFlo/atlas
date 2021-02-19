@@ -3,6 +3,7 @@ import typescript from 'rollup-plugin-typescript2';
 import autoExternal from 'rollup-plugin-auto-external';
 import builtinModules from 'builtin-modules';
 import dts from 'rollup-plugin-dts';
+import {terser} from 'rollup-plugin-terser';
 
 export default [
   {
@@ -22,6 +23,13 @@ export default [
         dependencies: true,
         packagePath: './package.json',
         peerDependencies: true,
+      }),
+      terser({
+        keep_classnames: true,
+        keep_fnames: true,
+        output: {
+          comments: false,
+        },
       }),
     ],
     external: [

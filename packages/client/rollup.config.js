@@ -4,6 +4,7 @@ import autoExternal from 'rollup-plugin-auto-external';
 import builtinModules from 'builtin-modules';
 import dts from 'rollup-plugin-dts';
 import nodeResolve from '@rollup/plugin-node-resolve';
+import {terser} from 'rollup-plugin-terser';
 
 export default [
   {
@@ -25,6 +26,13 @@ export default [
         packagePath: './package.json',
         peerDependencies: true,
       }),
+      terser({
+        keep_classnames: true,
+        keep_fnames: true,
+        output: {
+          comments: false,
+        },
+      })
     ],
     external: [
       '@abstractFlo/shared',

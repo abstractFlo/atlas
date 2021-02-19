@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "lerna run --parallel lib:bundle",
-    "build:local": "cross-env OUTPUT_LOCAL=true lerna run --parallel lib:bundle"
+    "build:local": "cross-env OUTPUT_LOCAL=true lerna run --parallel lib:bundle",
+    "publish": "lerna publish from-package"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +19,7 @@
     "@altv/types-server": "^1.7.2",
     "cross-env": "^7.0.3",
     "lerna": "^3.22.1",
+    "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.1.5"
   }
 }
