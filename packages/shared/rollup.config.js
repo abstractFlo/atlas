@@ -8,12 +8,19 @@ import {terser} from 'rollup-plugin-terser';
 export default [
   {
     input: './index.ts',
-    output: outDir.map((oDir) => (
-        {
-          file: `${oDir}/shared/index.js`,
-          format: 'esm',
-        }
-    )),
+    output: outDir.map((oDir) => {
+
+      let path = `${oDir}/shared`;
+
+      if (process.env.NODE_ENV === 'production') {
+        path = path.replace('/shared', '');
+      }
+
+      return {
+        file: `${path}/index.js`,
+        format: 'esm',
+      };
+    }),
     plugins: [
       typescript({
         useTsconfigDeclarationDir: true,
@@ -40,12 +47,17 @@ export default [
   },
   {
     input: '../../dist/types/shared/index.d.ts',
-    output: outDir.map((oDir) => (
-        {
-          file: `${oDir}/shared/index.d.ts`,
-          format: 'esm',
-        }
-    )),
+    output: outDir.map((oDir) => {
+      let path = `${oDir}/shared`;
+
+      if (process.env.NODE_ENV === 'production') {
+        path = path.replace('/shared', '');
+      }
+      return {
+        file: `${path}/index.d.ts`,
+        format: 'esm',
+      };
+    }),
     plugins: [
       dts(),
       autoExternal({

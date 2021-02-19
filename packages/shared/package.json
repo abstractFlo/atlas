@@ -1,16 +1,16 @@
 {
   "name": "@abstractflo/shared",
-  "version": "1.0.1",
-  "description": "",
-  "main": "dist/shared/index.js",
-  "files": [],
+  "version": "1.0.2",
+  "description": "Project Atlas shared framework part",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lib:bundle": "rimraf dist && rollup -c"
   },
   "keywords": [],
-  "author": "",
+  "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
   "license": "ISC",
   "devDependencies": {
     "builtin-modules": "^3.2.0",

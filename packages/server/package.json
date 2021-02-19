@@ -1,15 +1,16 @@
 {
   "name": "@abstractflo/server",
-  "version": "1.0.1",
-  "description": "",
-  "main": "index.js",
+  "version": "1.0.2",
+  "description": "Project Atlas serverside framework part",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lib:bundle": "rimraf dist && rollup -c"
   },
   "keywords": [],
-  "author": "",
+  "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
   "license": "ISC",
   "devDependencies": {
     "@altv/types-server": "^1.7.2",
@@ -30,7 +31,7 @@
   },
   "dependencies": {
     "@abraham/reflection": "^0.7.0",
-    "@abstractflo/shared": "^1.0.1",
+    "@abstractflo/shared": "^1.0.2",
     "@overnightjs/core": "^1.7.5",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",

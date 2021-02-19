@@ -6,9 +6,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "lerna run --parallel lib:bundle",
+    "build": "cross-env NODE_ENV=production lerna run --parallel lib:bundle",
     "build:local": "cross-env OUTPUT_LOCAL=true lerna run --parallel lib:bundle",
-    "publish": "lerna publish from-package"
+    "publish": "lerna publish --no-git-tag-version --no-push --skip-npm --force-publish * --yes && lerna exec -- npm publish"
   },
   "keywords": [],
   "author": "",

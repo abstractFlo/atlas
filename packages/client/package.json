@@ -1,15 +1,16 @@
 {
   "name": "@abstractflo/client",
-  "version": "1.0.1",
-  "description": "",
-  "main": "index.js",
+  "version": "1.0.2",
+  "description": "Project Atlas clientside framework part",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lib:bundle": "rimraf dist && rollup -c"
   },
   "keywords": [],
-  "author": "",
+  "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
   "license": "ISC",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^11.2.0",
@@ -22,7 +23,7 @@
   },
   "dependencies": {
     "@abraham/reflection": "^0.7.0",
-    "@abstractflo/shared": "^1.0.1",
+    "@abstractflo/shared": "^1.0.2",
     "tsyringe": "^4.4.0"
   },
   "publishConfig": {

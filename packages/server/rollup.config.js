@@ -10,12 +10,19 @@ import {terser} from 'rollup-plugin-terser';
 export default [
   {
     input: './index.ts',
-    output: outDir.map((oDir) => (
-        {
-          file: `${oDir}/server/index.js`,
-          format: 'esm',
-        }
-    )),
+    output: outDir.map((oDir) => {
+
+      let path = `${oDir}/server`;
+
+      if (process.env.NODE_ENV === 'production') {
+        path = path.replace('/server', '');
+      }
+
+      return {
+        file: `${path}/index.js`,
+        format: 'esm',
+      };
+    }),
     plugins: [
       typescript({
         useTsconfigDeclarationDir: true,
@@ -52,12 +59,17 @@ export default [
   },
   {
     input: '../../dist/types/server/index.d.ts',
-    output: outDir.map((oDir) => (
-        {
-          file: `${oDir}/server/index.d.ts`,
-          format: 'esm',
-        }
-    )),
+    output: outDir.map((oDir) => {
+      let path = `${oDir}/server`;
+
+      if (process.env.NODE_ENV === 'production') {
+        path = path.replace('/server', '');
+      }
+      return {
+        file: `${path}/index.d.ts`,
+        format: 'esm',
+      };
+    }),
     plugins: [
       dts(),
       autoExternal({
