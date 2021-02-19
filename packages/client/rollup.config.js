@@ -8,7 +8,7 @@ import {terser} from 'rollup-plugin-terser';
 
 export default [
   {
-    input: './index.ts',
+    input: './src/index.ts',
     output: outDir.map((oDir) => {
 
       let path = `${oDir}/client`;
@@ -42,7 +42,7 @@ export default [
       }),
     ],
     external: [
-      '@abstractFlo/shared',
+      '@abstractflo/shared',
       'alt-client',
       'alt-webview',
       'natives',
@@ -68,7 +68,7 @@ export default [
     external: [
       'alt-client',
       'natives',
-      '@abstractFlo/shared',
+      '@abstractflo/shared',
       '@abraham/reflection',
     ],
   },

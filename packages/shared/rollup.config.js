@@ -7,7 +7,7 @@ import {terser} from 'rollup-plugin-terser';
 
 export default [
   {
-    input: './index.ts',
+    input: './src/index.ts',
     output: outDir.map((oDir) => {
 
       let path = `${oDir}/shared`;
@@ -70,7 +70,6 @@ export default [
 
     external: [
       'tsyringe/dist/typings/types',
-      '@abstractFlo/shared',
       ...builtinModules,
     ],
   },

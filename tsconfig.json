@@ -25,8 +25,8 @@
     "declarationDir": "dist/types",
     "allowJs": true,
     "paths": {
-      "@abstractFlo/shared": [
-        "shared"
+      "@abstractflo/shared": [
+        "shared/src"
       ]
     }
   },

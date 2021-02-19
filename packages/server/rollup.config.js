@@ -9,7 +9,7 @@ import {terser} from 'rollup-plugin-terser';
 
 export default [
   {
-    input: './index.ts',
+    input: './src/index.ts',
     output: outDir.map((oDir) => {
 
       let path = `${oDir}/server`;
@@ -48,7 +48,7 @@ export default [
       }),
     ],
     external: [
-      '@abstractFlo/shared',
+      '@abstractflo/shared',
       'alt-server',
       'rxjs',
       'rxjs/operators',
@@ -81,7 +81,7 @@ export default [
     ],
     external: [
       'alt-server',
-      '@abstractFlo/shared',
+      '@abstractflo/shared',
       '@abraham/reflection',
       ...builtinModules,
     ],
