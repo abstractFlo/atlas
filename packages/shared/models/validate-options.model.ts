@@ -1,4 +1,4 @@
-import { Cast, castToNumber, castToString, JsonEntityModel } from '../core';
+import { Cast, castToNumber, castToString, JsonEntityModel } from '../core/json-entity';
 
 export class ValidateOptionsModel extends JsonEntityModel {
 

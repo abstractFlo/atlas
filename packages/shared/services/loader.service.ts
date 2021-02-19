@@ -111,7 +111,7 @@ export class LoaderService {
    * @param target
    * @param doneCheckIntervalTime
    */
-  public add(type: 'before' | 'after' | 'afterBootstrap', key: string, target: string, doneCheckIntervalTime: number): void {
+  public add(type: 'before' | 'after' | 'afterBootstrap', key: string, target: string, doneCheckIntervalTime?: number): void {
     const queueItemModel = new QueueItemModel().cast({ target, methodName: key, doneCheckIntervalTime });
     this.queue[type].set(`${target}_${key}`, queueItemModel);
   }

@@ -1,4 +1,4 @@
-import { ValidateOptionsModel } from '../../models';
+import { ValidateOptionsModel } from '../../models/validate-options.model';
 
 export interface EventServiceInterface {
   /**

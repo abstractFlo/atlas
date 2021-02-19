@@ -15,6 +15,7 @@ export class WebviewService {
    * @private
    */
   private readonly routeToEventName: string = container.resolve<string>('alt.webview.routeTo.eventName');
+
   /**
    * Current cursor count
    *
@@ -22,6 +23,7 @@ export class WebviewService {
    * @private
    */
   private cursorCount: number = 0;
+
   /**
    * Contains the webview instance
    *
@@ -29,6 +31,7 @@ export class WebviewService {
    * @private
    */
   private webview: WebView;
+
   /**
    * Contains the events for webview
    *
@@ -36,6 +39,7 @@ export class WebviewService {
    * @private
    */
   private events: WebviewEventModel[] = [];
+
   /**
    * Contains the ready subject for webview
    *
@@ -43,6 +47,7 @@ export class WebviewService {
    * @private
    */
   private webviewReadySubject$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  
   /**
    * The event name for sending from webview to server
    *

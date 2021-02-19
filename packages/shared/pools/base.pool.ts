@@ -1,4 +1,4 @@
-export class BasePool<T, K = string | number> {
+export abstract class BasePool<T, K = string | number> {
 
   /**
    * Contains the pool
