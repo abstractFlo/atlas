@@ -1,6 +1,6 @@
 import { singleton } from 'tsyringe';
 import { EventService } from '../services';
-import { FrameworkEvent } from '@abstractflo/shared';
+import { FrameworkEvent } from '@abstractflo/atlas-shared';
 import { setMsPerGameMinute } from 'alt-client';
 
 @singleton()

@@ -2,7 +2,7 @@ import { container, singleton } from 'tsyringe';
 import { Server } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { AuthenticationController } from './controllers/authentication.controller';
-import { UtilsService } from '@abstractflo/shared';
+import { UtilsService } from '@abstractflo/atlas-shared';
 
 @singleton()
 export class ExpressServer extends Server {

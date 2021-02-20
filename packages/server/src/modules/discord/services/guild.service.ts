@@ -1,6 +1,6 @@
 import { container, singleton } from 'tsyringe';
 import { Guild } from 'discord.js';
-import { StringResolver } from '@abstractflo/shared';
+import { StringResolver } from '@abstractflo/atlas-shared';
 import { DiscordBotService } from './discord-bot.service';
 import { ConfigService } from '../../../services';
 

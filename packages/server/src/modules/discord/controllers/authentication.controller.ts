@@ -5,7 +5,7 @@ import { DiscordApiService } from '../services/discord-api.service';
 import { EventService } from '../../../services/event.service';
 import { Request, Response } from 'express';
 import { filter, mergeMap } from 'rxjs/operators';
-import { AccessTokenModel, DiscordUserModel, FrameworkEvent, LoggerService } from '@abstractflo/shared';
+import { AccessTokenModel, DiscordUserModel, FrameworkEvent, LoggerService } from '@abstractflo/atlas-shared';
 
 @injectable()
 @Controller('auth')

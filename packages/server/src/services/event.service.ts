@@ -1,4 +1,4 @@
-import { BaseEventService, EntityHandleModel, FrameworkEvent, StringResolver } from '@abstractflo/shared';
+import { BaseEventService, EntityHandleModel, FrameworkEvent, StringResolver } from '@abstractflo/atlas-shared';
 import { container, singleton } from 'tsyringe';
 import { Colshape, emitClient, Entity, offClient, onceClient, onClient, Player } from 'alt-server';
 

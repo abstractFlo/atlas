@@ -1,5 +1,5 @@
 import { container } from 'tsyringe';
-import { EventServiceInterface, LoaderService } from '@abstractflo/shared';
+import { EventServiceInterface, LoaderService } from '@abstractflo/atlas-shared';
 import { DiscordApiService, DiscordBotService } from './modules';
 import { EventService } from './services';
 import { ExpressServer } from './modules/discord/express.server';

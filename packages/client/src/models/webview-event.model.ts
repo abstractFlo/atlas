@@ -1,4 +1,4 @@
-import { Cast, castToString, JsonEntityModel } from '@abstractflo/shared';
+import { Cast, castToString, JsonEntityModel } from '@abstractflo/atlas-shared';
 
 export class WebviewEventModel extends JsonEntityModel {
 

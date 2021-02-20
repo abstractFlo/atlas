@@ -1,4 +1,4 @@
-import { Cast, castToNumber, castToString, JsonEntityModel } from '@abstractflo/shared';
+import { Cast, castToNumber, castToString, JsonEntityModel } from '@abstractflo/atlas-shared';
 
 export class KeyEventModel extends JsonEntityModel {
 

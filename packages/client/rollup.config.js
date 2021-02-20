@@ -34,7 +34,7 @@ export default [
       }),
     ],
     external: [
-      '@abstractflo/shared',
+      '@abstractflo/atlas-shared',
       'alt-client',
       'alt-webview',
       'natives',
@@ -60,7 +60,7 @@ export default [
     external: [
       'alt-client',
       'natives',
-      '@abstractflo/shared',
+      '@abstractflo/atlas-shared',
       '@abraham/reflection',
     ],
   },

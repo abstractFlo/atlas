@@ -1,5 +1,5 @@
 import { emit, emitServer, Entity, offServer, onceServer, onServer } from 'alt-client';
-import { BaseEventService, EntityHandleModel, FrameworkEvent, StringResolver } from '@abstractflo/shared';
+import { BaseEventService, EntityHandleModel, FrameworkEvent, StringResolver } from '@abstractflo/atlas-shared';
 import { singleton } from 'tsyringe';
 
 @StringResolver

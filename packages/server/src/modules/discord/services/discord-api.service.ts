@@ -1,7 +1,7 @@
 import { injectable } from 'tsyringe';
 import { DiscordApiProvider } from '../providers/discord-api.provider';
 import { from, Observable } from 'rxjs';
-import { AccessTokenModel, DiscordUserModel, StringResolver } from '@abstractflo/shared';
+import { AccessTokenModel, DiscordUserModel, StringResolver } from '@abstractflo/atlas-shared';
 import axios, { AxiosResponse } from 'axios';
 import { map } from 'rxjs/operators';
 

@@ -1,6 +1,6 @@
 import { container, singleton } from 'tsyringe';
 import { showCursor, WebView } from 'alt-client';
-import { FrameworkEvent, LoggerService, StringResolver, UtilsService } from '@abstractflo/shared';
+import { FrameworkEvent, LoggerService, StringResolver, UtilsService } from '@abstractflo/atlas-shared';
 import { EventService } from './event.service';
 import { WebviewEventModel } from '../models';
 import { Observable, ReplaySubject, Subject } from 'rxjs';

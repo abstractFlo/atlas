@@ -3,7 +3,7 @@ import { Connection, ConnectionOptions, createConnection } from 'typeorm';
 import { ConfigService } from './config.service';
 import { defer, from, Observable } from 'rxjs';
 import { share, tap } from 'rxjs/operators';
-import { LoggerService, StringResolver } from '@abstractflo/shared';
+import { LoggerService, StringResolver } from '@abstractflo/atlas-shared';
 
 @StringResolver
 @singleton()

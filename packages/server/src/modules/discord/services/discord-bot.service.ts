@@ -1,5 +1,5 @@
 import { container, singleton } from 'tsyringe';
-import { DiscordConfigModel, DiscordEventModel, StringResolver, UtilsService } from '@abstractflo/shared';
+import { DiscordConfigModel, DiscordEventModel, StringResolver, UtilsService } from '@abstractflo/atlas-shared';
 import { ConfigService } from '../../../services';
 import { Client } from 'discord.js';
 import { defer, from, Observable } from 'rxjs';

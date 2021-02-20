@@ -1,4 +1,4 @@
-import { validateEventExistsAndPush, ValidateOptionsModel } from '@abstractflo/shared';
+import { validateEventExistsAndPush, ValidateOptionsModel } from '@abstractflo/atlas-shared';
 import { BaseObjectType } from 'alt-client';
 
 /**

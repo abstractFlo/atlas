@@ -1,6 +1,6 @@
 import { container } from 'tsyringe';
 import { PlayerWorker } from './worker/player.worker';
-import { EventServiceInterface, LoaderService } from '@abstractflo/shared';
+import { EventServiceInterface, LoaderService } from '@abstractflo/atlas-shared';
 import { EventService, KeyEventService, WebviewService } from './services';
 
 

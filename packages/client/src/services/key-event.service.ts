@@ -1,7 +1,7 @@
 import { KeyEventModel } from '../models/key-event.model';
 import { EventService } from './event.service';
 import { container, singleton } from 'tsyringe';
-import { StringResolver, UtilsService } from '@abstractflo/shared';
+import { StringResolver, UtilsService } from '@abstractflo/atlas-shared';
 
 @StringResolver
 @singleton()

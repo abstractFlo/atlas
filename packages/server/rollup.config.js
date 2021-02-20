@@ -32,7 +32,7 @@ export default [
       }),
     ],
     external: [
-      '@abstractflo/shared',
+      '@abstractflo/atlas-shared',
       'alt-server',
       'rxjs',
       'rxjs/operators',
@@ -65,7 +65,7 @@ export default [
     ],
     external: [
       'alt-server',
-      '@abstractflo/shared',
+      '@abstractflo/atlas-shared',
       '@abraham/reflection',
       ...builtinModules,
     ],
