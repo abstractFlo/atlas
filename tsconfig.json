@@ -25,7 +25,7 @@
     "declarationDir": "dist/types",
     "allowJs": true,
     "paths": {
-      "@abstractflo/shared": [
+      "@abstractflo/atlas-shared": [
         "shared/src"
       ]
     }
