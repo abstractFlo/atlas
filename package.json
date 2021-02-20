@@ -17,6 +17,7 @@
     "@altv/types-client": "^1.5.2",
     "@altv/types-natives": "^1.1.0",
     "@altv/types-server": "^1.7.2",
+    "@types/jscodeshift": "^0.7.2",
     "cross-env": "^7.0.3",
     "lerna": "^3.22.1",
     "rollup-plugin-terser": "^7.0.2",

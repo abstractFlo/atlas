@@ -1,1 +1,1995 @@
-import"@abraham/reflection";import{singleton as e,container as t}from"tsyringe";import{emitServer as r,offServer as n,onServer as i,onceServer as o,emit as s,showCursor as c,WebView as u,setMsPerGameMinute as a}from"alt-client";import{BaseEventService as h,FrameworkEvent as l,StringResolver as b,Cast as p,castToString as d,JsonEntityModel as f,UtilsService as y,LoggerService as v,castToNumber as S,LoaderService as w,ValidateOptionsModel as _,validateEventExistsAndPush as m}from"@abstractflo/shared";function __decorate(e,t,r,n){var i,o=arguments.length,s=o<3?t:null===n?n=Object.getOwnPropertyDescriptor(t,r):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(e,t,r,n);else for(var c=e.length-1;c>=0;c--)(i=e[c])&&(s=(o<3?i(s):o>3?i(t,r,s):i(t,r))||s);return o>3&&s&&Object.defineProperty(t,r,s),s}function __metadata(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)}let E=class EventService extends h{emitServer(e,...t){r(e,...t)}offServer(e,t){n(e,t)}onServer(e,t){i(e,t)}onceServer(e,t){o(e,t)}onGui(e,t){s(l.EventService.GuiOn,e,t)}listenHandlerForType(e,t){this.on(e,((...r)=>{const n=r.shift();switch(!0){case["syncedMetaChange","streamSyncedMetaChange","gameEntityCreate","gameEntityDestroy"].includes(e):this.handleMetaChangeMethods(n,n.type,t,...r)}}))}};E=__decorate([b,e()],E);class WebviewEventModel extends f{}__decorate([p({from:d()}),__metadata("design:type",String)],WebviewEventModel.prototype,"eventName",void 0),__decorate([p({from:d()}),__metadata("design:type",String)],WebviewEventModel.prototype,"targetName",void 0),__decorate([p({from:d()}),__metadata("design:type",String)],WebviewEventModel.prototype,"methodName",void 0);var extendStatics=function(e,t){return(extendStatics=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var r in t)t.hasOwnProperty(r)&&(e[r]=t[r])})(e,t)};function __extends(e,t){function __(){this.constructor=e}extendStatics(e,t),e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)}function isFunction(e){return"function"==typeof e}var g=!1,x={Promise:void 0,set useDeprecatedSynchronousErrorHandling(e){e&&(new Error).stack;g=e},get useDeprecatedSynchronousErrorHandling(){return g}};function hostReportError(e){setTimeout((function(){throw e}),0)}var O={closed:!0,next:function(e){},error:function(e){if(x.useDeprecatedSynchronousErrorHandling)throw e;hostReportError(e)},complete:function(){}},A=function(){return Array.isArray||function(e){return e&&"number"==typeof e.length}}();var T=function(){function UnsubscriptionErrorImpl(e){return Error.call(this),this.message=e?e.length+" errors occurred during unsubscription:\n"+e.map((function(e,t){return t+1+") "+e.toString()})).join("\n  "):"",this.name="UnsubscriptionError",this.errors=e,this}return UnsubscriptionErrorImpl.prototype=Object.create(Error.prototype),UnsubscriptionErrorImpl}(),j=function(){function Subscription(e){this.closed=!1,this._parentOrParents=null,this._subscriptions=null,e&&(this._ctorUnsubscribe=!0,this._unsubscribe=e)}return Subscription.prototype.unsubscribe=function(){var e;if(!this.closed){var t,r=this,n=r._parentOrParents,i=r._ctorUnsubscribe,o=r._unsubscribe,s=r._subscriptions;if(this.closed=!0,this._parentOrParents=null,this._subscriptions=null,n instanceof Subscription)n.remove(this);else if(null!==n)for(var c=0;c<n.length;++c){n[c].remove(this)}if(isFunction(o)){i&&(this._unsubscribe=void 0);try{o.call(this)}catch(t){e=t instanceof T?flattenUnsubscriptionErrors(t.errors):[t]}}if(A(s)){c=-1;for(var u=s.length;++c<u;){var a=s[c];if(null!==(t=a)&&"object"==typeof t)try{a.unsubscribe()}catch(t){e=e||[],t instanceof T?e=e.concat(flattenUnsubscriptionErrors(t.errors)):e.push(t)}}}if(e)throw new T(e)}},Subscription.prototype.add=function(e){var t=e;if(!e)return Subscription.EMPTY;switch(typeof e){case"function":t=new Subscription(e);case"object":if(t===this||t.closed||"function"!=typeof t.unsubscribe)return t;if(this.closed)return t.unsubscribe(),t;if(!(t instanceof Subscription)){var r=t;(t=new Subscription)._subscriptions=[r]}break;default:throw new Error("unrecognized teardown "+e+" added to Subscription.")}var n=t._parentOrParents;if(null===n)t._parentOrParents=this;else if(n instanceof Subscription){if(n===this)return t;t._parentOrParents=[n,this]}else{if(-1!==n.indexOf(this))return t;n.push(this)}var i=this._subscriptions;return null===i?this._subscriptions=[t]:i.push(t),t},Subscription.prototype.remove=function(e){var t=this._subscriptions;if(t){var r=t.indexOf(e);-1!==r&&t.splice(r,1)}},Subscription.EMPTY=function(e){return e.closed=!0,e}(new Subscription),Subscription}();function flattenUnsubscriptionErrors(e){return e.reduce((function(e,t){return e.concat(t instanceof T?t.errors:t)}),[])}var N=function(){return"function"==typeof Symbol?Symbol("rxSubscriber"):"@@rxSubscriber_"+Math.random()}(),I=function(e){function Subscriber(t,r,n){var i=e.call(this)||this;switch(i.syncErrorValue=null,i.syncErrorThrown=!1,i.syncErrorThrowable=!1,i.isStopped=!1,arguments.length){case 0:i.destination=O;break;case 1:if(!t){i.destination=O;break}if("object"==typeof t){t instanceof Subscriber?(i.syncErrorThrowable=t.syncErrorThrowable,i.destination=t,t.add(i)):(i.syncErrorThrowable=!0,i.destination=new R(i,t));break}default:i.syncErrorThrowable=!0,i.destination=new R(i,t,r,n)}return i}return __extends(Subscriber,e),Subscriber.prototype[N]=function(){return this},Subscriber.create=function(e,t,r){var n=new Subscriber(e,t,r);return n.syncErrorThrowable=!1,n},Subscriber.prototype.next=function(e){this.isStopped||this._next(e)},Subscriber.prototype.error=function(e){this.isStopped||(this.isStopped=!0,this._error(e))},Subscriber.prototype.complete=function(){this.isStopped||(this.isStopped=!0,this._complete())},Subscriber.prototype.unsubscribe=function(){this.closed||(this.isStopped=!0,e.prototype.unsubscribe.call(this))},Subscriber.prototype._next=function(e){this.destination.next(e)},Subscriber.prototype._error=function(e){this.destination.error(e),this.unsubscribe()},Subscriber.prototype._complete=function(){this.destination.complete(),this.unsubscribe()},Subscriber.prototype._unsubscribeAndRecycle=function(){var e=this._parentOrParents;return this._parentOrParents=null,this.unsubscribe(),this.closed=!1,this.isStopped=!1,this._parentOrParents=e,this},Subscriber}(j),R=function(e){function SafeSubscriber(t,r,n,i){var o,s=e.call(this)||this;s._parentSubscriber=t;var c=s;return isFunction(r)?o=r:r&&(o=r.next,n=r.error,i=r.complete,r!==O&&(isFunction((c=Object.create(r)).unsubscribe)&&s.add(c.unsubscribe.bind(c)),c.unsubscribe=s.unsubscribe.bind(s))),s._context=c,s._next=o,s._error=n,s._complete=i,s}return __extends(SafeSubscriber,e),SafeSubscriber.prototype.next=function(e){if(!this.isStopped&&this._next){var t=this._parentSubscriber;x.useDeprecatedSynchronousErrorHandling&&t.syncErrorThrowable?this.__tryOrSetError(t,this._next,e)&&this.unsubscribe():this.__tryOrUnsub(this._next,e)}},SafeSubscriber.prototype.error=function(e){if(!this.isStopped){var t=this._parentSubscriber,r=x.useDeprecatedSynchronousErrorHandling;if(this._error)r&&t.syncErrorThrowable?(this.__tryOrSetError(t,this._error,e),this.unsubscribe()):(this.__tryOrUnsub(this._error,e),this.unsubscribe());else if(t.syncErrorThrowable)r?(t.syncErrorValue=e,t.syncErrorThrown=!0):hostReportError(e),this.unsubscribe();else{if(this.unsubscribe(),r)throw e;hostReportError(e)}}},SafeSubscriber.prototype.complete=function(){var e=this;if(!this.isStopped){var t=this._parentSubscriber;if(this._complete){var wrappedComplete=function(){return e._complete.call(e._context)};x.useDeprecatedSynchronousErrorHandling&&t.syncErrorThrowable?(this.__tryOrSetError(t,wrappedComplete),this.unsubscribe()):(this.__tryOrUnsub(wrappedComplete),this.unsubscribe())}else this.unsubscribe()}},SafeSubscriber.prototype.__tryOrUnsub=function(e,t){try{e.call(this._context,t)}catch(e){if(this.unsubscribe(),x.useDeprecatedSynchronousErrorHandling)throw e;hostReportError(e)}},SafeSubscriber.prototype.__tryOrSetError=function(e,t,r){if(!x.useDeprecatedSynchronousErrorHandling)throw new Error("bad call");try{t.call(this._context,r)}catch(t){return x.useDeprecatedSynchronousErrorHandling?(e.syncErrorValue=t,e.syncErrorThrown=!0,!0):(hostReportError(t),!0)}return!1},SafeSubscriber.prototype._unsubscribe=function(){var e=this._parentSubscriber;this._context=null,this._parentSubscriber=null,e.unsubscribe()},SafeSubscriber}(I);var k=function(){return"function"==typeof Symbol&&Symbol.observable||"@@observable"}();function identity(e){return e}function pipeFromArray(e){return 0===e.length?identity:1===e.length?e[0]:function piped(t){return e.reduce((function(e,t){return t(e)}),t)}}var M=function(){function Observable(e){this._isScalar=!1,e&&(this._subscribe=e)}return Observable.prototype.lift=function(e){var t=new Observable;return t.source=this,t.operator=e,t},Observable.prototype.subscribe=function(e,t,r){var n=this.operator,i=function toSubscriber(e,t,r){if(e){if(e instanceof I)return e;if(e[N])return e[N]()}return e||t||r?new I(e,t,r):new I(O)}(e,t,r);if(n?i.add(n.call(i,this.source)):i.add(this.source||x.useDeprecatedSynchronousErrorHandling&&!i.syncErrorThrowable?this._subscribe(i):this._trySubscribe(i)),x.useDeprecatedSynchronousErrorHandling&&i.syncErrorThrowable&&(i.syncErrorThrowable=!1,i.syncErrorThrown))throw i.syncErrorValue;return i},Observable.prototype._trySubscribe=function(e){try{return this._subscribe(e)}catch(t){x.useDeprecatedSynchronousErrorHandling&&(e.syncErrorThrown=!0,e.syncErrorValue=t),!function canReportError(e){for(;e;){var t=e,r=t.closed,n=t.destination,i=t.isStopped;if(r||i)return!1;e=n&&n instanceof I?n:null}return!0}(e)?console.warn(t):e.error(t)}},Observable.prototype.forEach=function(e,t){var r=this;return new(t=getPromiseCtor(t))((function(t,n){var i;i=r.subscribe((function(t){try{e(t)}catch(e){n(e),i&&i.unsubscribe()}}),n,t)}))},Observable.prototype._subscribe=function(e){var t=this.source;return t&&t.subscribe(e)},Observable.prototype[k]=function(){return this},Observable.prototype.pipe=function(){for(var e=[],t=0;t<arguments.length;t++)e[t]=arguments[t];return 0===e.length?this:pipeFromArray(e)(this)},Observable.prototype.toPromise=function(e){var t=this;return new(e=getPromiseCtor(e))((function(e,r){var n;t.subscribe((function(e){return n=e}),(function(e){return r(e)}),(function(){return e(n)}))}))},Observable.create=function(e){return new Observable(e)},Observable}();function getPromiseCtor(e){if(e||(e=Promise),!e)throw new Error("no Promise impl found");return e}var P=function(){function ObjectUnsubscribedErrorImpl(){return Error.call(this),this.message="object unsubscribed",this.name="ObjectUnsubscribedError",this}return ObjectUnsubscribedErrorImpl.prototype=Object.create(Error.prototype),ObjectUnsubscribedErrorImpl}(),C=function(e){function SubjectSubscription(t,r){var n=e.call(this)||this;return n.subject=t,n.subscriber=r,n.closed=!1,n}return __extends(SubjectSubscription,e),SubjectSubscription.prototype.unsubscribe=function(){if(!this.closed){this.closed=!0;var e=this.subject,t=e.observers;if(this.subject=null,t&&0!==t.length&&!e.isStopped&&!e.closed){var r=t.indexOf(this.subscriber);-1!==r&&t.splice(r,1)}}},SubjectSubscription}(j),D=function(e){function SubjectSubscriber(t){var r=e.call(this,t)||this;return r.destination=t,r}return __extends(SubjectSubscriber,e),SubjectSubscriber}(I),W=function(e){function Subject(){var t=e.call(this)||this;return t.observers=[],t.closed=!1,t.isStopped=!1,t.hasError=!1,t.thrownError=null,t}return __extends(Subject,e),Subject.prototype[N]=function(){return new D(this)},Subject.prototype.lift=function(e){var t=new U(this,this);return t.operator=e,t},Subject.prototype.next=function(e){if(this.closed)throw new P;if(!this.isStopped)for(var t=this.observers,r=t.length,n=t.slice(),i=0;i<r;i++)n[i].next(e)},Subject.prototype.error=function(e){if(this.closed)throw new P;this.hasError=!0,this.thrownError=e,this.isStopped=!0;for(var t=this.observers,r=t.length,n=t.slice(),i=0;i<r;i++)n[i].error(e);this.observers.length=0},Subject.prototype.complete=function(){if(this.closed)throw new P;this.isStopped=!0;for(var e=this.observers,t=e.length,r=e.slice(),n=0;n<t;n++)r[n].complete();this.observers.length=0},Subject.prototype.unsubscribe=function(){this.isStopped=!0,this.closed=!0,this.observers=null},Subject.prototype._trySubscribe=function(t){if(this.closed)throw new P;return e.prototype._trySubscribe.call(this,t)},Subject.prototype._subscribe=function(e){if(this.closed)throw new P;return this.hasError?(e.error(this.thrownError),j.EMPTY):this.isStopped?(e.complete(),j.EMPTY):(this.observers.push(e),new C(this,e))},Subject.prototype.asObservable=function(){var e=new M;return e.source=this,e},Subject.create=function(e,t){return new U(e,t)},Subject}(M),U=function(e){function AnonymousSubject(t,r){var n=e.call(this)||this;return n.destination=t,n.source=r,n}return __extends(AnonymousSubject,e),AnonymousSubject.prototype.next=function(e){var t=this.destination;t&&t.next&&t.next(e)},AnonymousSubject.prototype.error=function(e){var t=this.destination;t&&t.error&&this.destination.error(e)},AnonymousSubject.prototype.complete=function(){var e=this.destination;e&&e.complete&&this.destination.complete()},AnonymousSubject.prototype._subscribe=function(e){return this.source?this.source.subscribe(e):j.EMPTY},AnonymousSubject}(W),G=function(e){function QueueAction(t,r){var n=e.call(this,t,r)||this;return n.scheduler=t,n.work=r,n}return __extends(QueueAction,e),QueueAction.prototype.schedule=function(t,r){return void 0===r&&(r=0),r>0?e.prototype.schedule.call(this,t,r):(this.delay=r,this.state=t,this.scheduler.flush(this),this)},QueueAction.prototype.execute=function(t,r){return r>0||this.closed?e.prototype.execute.call(this,t,r):this._execute(t,r)},QueueAction.prototype.requestAsyncId=function(t,r,n){return void 0===n&&(n=0),null!==n&&n>0||null===n&&this.delay>0?e.prototype.requestAsyncId.call(this,t,r,n):t.flush(this)},QueueAction}(function(e){function AsyncAction(t,r){var n=e.call(this,t,r)||this;return n.scheduler=t,n.work=r,n.pending=!1,n}return __extends(AsyncAction,e),AsyncAction.prototype.schedule=function(e,t){if(void 0===t&&(t=0),this.closed)return this;this.state=e;var r=this.id,n=this.scheduler;return null!=r&&(this.id=this.recycleAsyncId(n,r,t)),this.pending=!0,this.delay=t,this.id=this.id||this.requestAsyncId(n,this.id,t),this},AsyncAction.prototype.requestAsyncId=function(e,t,r){return void 0===r&&(r=0),setInterval(e.flush.bind(e,this),r)},AsyncAction.prototype.recycleAsyncId=function(e,t,r){if(void 0===r&&(r=0),null!==r&&this.delay===r&&!1===this.pending)return t;clearInterval(t)},AsyncAction.prototype.execute=function(e,t){if(this.closed)return new Error("executing a cancelled action");this.pending=!1;var r=this._execute(e,t);if(r)return r;!1===this.pending&&null!=this.id&&(this.id=this.recycleAsyncId(this.scheduler,this.id,null))},AsyncAction.prototype._execute=function(e,t){var r=!1,n=void 0;try{this.work(e)}catch(e){r=!0,n=!!e&&e||new Error(e)}if(r)return this.unsubscribe(),n},AsyncAction.prototype._unsubscribe=function(){var e=this.id,t=this.scheduler,r=t.actions,n=r.indexOf(this);this.work=null,this.state=null,this.pending=!1,this.scheduler=null,-1!==n&&r.splice(n,1),null!=e&&(this.id=this.recycleAsyncId(t,e,null)),this.delay=null},AsyncAction}(function(e){function Action(t,r){return e.call(this)||this}return __extends(Action,e),Action.prototype.schedule=function(e,t){return this},Action}(j))),H=function(){function Scheduler(e,t){void 0===t&&(t=Scheduler.now),this.SchedulerAction=e,this.now=t}return Scheduler.prototype.schedule=function(e,t,r){return void 0===t&&(t=0),new this.SchedulerAction(this,e).schedule(r,t)},Scheduler.now=function(){return Date.now()},Scheduler}(),V=new(function(e){function QueueScheduler(){return null!==e&&e.apply(this,arguments)||this}return __extends(QueueScheduler,e),QueueScheduler}(function(e){function AsyncScheduler(t,r){void 0===r&&(r=H.now);var n=e.call(this,t,(function(){return AsyncScheduler.delegate&&AsyncScheduler.delegate!==n?AsyncScheduler.delegate.now():r()}))||this;return n.actions=[],n.active=!1,n.scheduled=void 0,n}return __extends(AsyncScheduler,e),AsyncScheduler.prototype.schedule=function(t,r,n){return void 0===r&&(r=0),AsyncScheduler.delegate&&AsyncScheduler.delegate!==this?AsyncScheduler.delegate.schedule(t,r,n):e.prototype.schedule.call(this,t,r,n)},AsyncScheduler.prototype.flush=function(e){var t=this.actions;if(this.active)t.push(e);else{var r;this.active=!0;do{if(r=e.execute(e.state,e.delay))break}while(e=t.shift());if(this.active=!1,r){for(;e=t.shift();)e.unsubscribe();throw r}}},AsyncScheduler}(H)))(G),K=new M((function(e){return e.complete()}));function empty$1(e){return e?function emptyScheduled(e){return new M((function(t){return e.schedule((function(){return t.complete()}))}))}(e):K}function isScheduler(e){return e&&"function"==typeof e.schedule}function scheduleArray(e,t){return new M((function(r){var n=new j,i=0;return n.add(t.schedule((function(){i!==e.length?(r.next(e[i++]),r.closed||n.add(this.schedule())):r.complete()}))),n}))}function fromArray(e,t){return t?scheduleArray(e,t):new M((r=e,function(e){for(var t=0,n=r.length;t<n&&!e.closed;t++)e.next(r[t]);e.complete()}));var r}function dispatch(e){var t=e.error;e.subscriber.error(t)}var F=function(){function Notification(e,t,r){this.kind=e,this.value=t,this.error=r,this.hasValue="N"===e}return Notification.prototype.observe=function(e){switch(this.kind){case"N":return e.next&&e.next(this.value);case"E":return e.error&&e.error(this.error);case"C":return e.complete&&e.complete()}},Notification.prototype.do=function(e,t,r){switch(this.kind){case"N":return e&&e(this.value);case"E":return t&&t(this.error);case"C":return r&&r()}},Notification.prototype.accept=function(e,t,r){return e&&"function"==typeof e.next?this.observe(e):this.do(e,t,r)},Notification.prototype.toObservable=function(){switch(this.kind){case"N":return function of(){for(var e=[],t=0;t<arguments.length;t++)e[t]=arguments[t];var r=e[e.length-1];return isScheduler(r)?(e.pop(),scheduleArray(e,r)):fromArray(e)}(this.value);case"E":return function throwError(e,t){return new M(t?function(r){return t.schedule(dispatch,0,{error:e,subscriber:r})}:function(t){return t.error(e)})}(this.error);case"C":return empty$1()}throw new Error("unexpected notification kind value")},Notification.createNext=function(e){return void 0!==e?new Notification("N",e):Notification.undefinedValueNotification},Notification.createError=function(e){return new Notification("E",void 0,e)},Notification.createComplete=function(){return Notification.completeNotification},Notification.completeNotification=new Notification("C"),Notification.undefinedValueNotification=new Notification("N",void 0),Notification}(),$=function(e){function ObserveOnSubscriber(t,r,n){void 0===n&&(n=0);var i=e.call(this,t)||this;return i.scheduler=r,i.delay=n,i}return __extends(ObserveOnSubscriber,e),ObserveOnSubscriber.dispatch=function(e){var t=e.notification,r=e.destination;t.observe(r),this.unsubscribe()},ObserveOnSubscriber.prototype.scheduleMessage=function(e){this.destination.add(this.scheduler.schedule(ObserveOnSubscriber.dispatch,this.delay,new Q(e,this.destination)))},ObserveOnSubscriber.prototype._next=function(e){this.scheduleMessage(F.createNext(e))},ObserveOnSubscriber.prototype._error=function(e){this.scheduleMessage(F.createError(e)),this.unsubscribe()},ObserveOnSubscriber.prototype._complete=function(){this.scheduleMessage(F.createComplete()),this.unsubscribe()},ObserveOnSubscriber}(I),Q=function(){return function ObserveOnMessage(e,t){this.notification=e,this.destination=t}}(),Y=function(e){function ReplaySubject(t,r,n){void 0===t&&(t=Number.POSITIVE_INFINITY),void 0===r&&(r=Number.POSITIVE_INFINITY);var i=e.call(this)||this;return i.scheduler=n,i._events=[],i._infiniteTimeWindow=!1,i._bufferSize=t<1?1:t,i._windowTime=r<1?1:r,r===Number.POSITIVE_INFINITY?(i._infiniteTimeWindow=!0,i.next=i.nextInfiniteTimeWindow):i.next=i.nextTimeWindow,i}return __extends(ReplaySubject,e),ReplaySubject.prototype.nextInfiniteTimeWindow=function(t){if(!this.isStopped){var r=this._events;r.push(t),r.length>this._bufferSize&&r.shift()}e.prototype.next.call(this,t)},ReplaySubject.prototype.nextTimeWindow=function(t){this.isStopped||(this._events.push(new q(this._getNow(),t)),this._trimBufferThenGetEvents()),e.prototype.next.call(this,t)},ReplaySubject.prototype._subscribe=function(e){var t,r=this._infiniteTimeWindow,n=r?this._events:this._trimBufferThenGetEvents(),i=this.scheduler,o=n.length;if(this.closed)throw new P;if(this.isStopped||this.hasError?t=j.EMPTY:(this.observers.push(e),t=new C(this,e)),i&&e.add(e=new $(e,i)),r)for(var s=0;s<o&&!e.closed;s++)e.next(n[s]);else for(s=0;s<o&&!e.closed;s++)e.next(n[s].value);return this.hasError?e.error(this.thrownError):this.isStopped&&e.complete(),t},ReplaySubject.prototype._getNow=function(){return(this.scheduler||V).now()},ReplaySubject.prototype._trimBufferThenGetEvents=function(){for(var e=this._getNow(),t=this._bufferSize,r=this._windowTime,n=this._events,i=n.length,o=0;o<i&&!(e-n[o].time<r);)o++;return i>t&&(o=Math.max(o,i-t)),o>0&&n.splice(0,o),n},ReplaySubject}(W),q=function(){return function ReplayEvent(e,t){this.time=e,this.value=t}}();let z=class WebviewService{constructor(e,r){this.loggerService=e,this.eventService=r,this.routeToEventName=t.resolve("alt.webview.routeTo.eventName"),this.cursorCount=0,this.events=[],this.webviewReadySubject$=new Y,this.webviewToServerEventName=l.EventService.GuiEmitServer,this.url=t.resolve("alt.webview.url"),this.createInstance()}add(e,t,r){const n=(new WebviewEventModel).cast({eventName:e,targetName:t,methodName:r});this.events.push(n)}getWebView(){return this.webview}routeTo(e,...t){return this.webview.emit(this.routeToEventName,e,...t),this}showCursor(){return c(!0),this.cursorCount=this.cursorCount+1,this}removeCursor(){return this.cursorCount>0&&(c(!1),this.cursorCount=this.cursorCount-1),this}removeAllCursors(){for(let e=0;e<this.cursorCount;e++)c(!1);return this.cursorCount=0,this}start(){this.events.forEach((e=>{const r=t.resolve(e.targetName),n=r[e.methodName].bind(r);this.webview.on(e.eventName,n)}))}autoStart(e){y.log("Starting ~y~WebviewService~w~"),this.initialize().subscribe((()=>{y.log("Started ~lg~WebviewService~w~"),e()}))}emit(e,...t){return this.webview.emit(e,...t),this}on(e,t){this.webview.on(e,t)}destroy(){this.webview.destroy()}focus(){return this.webview.focus(),this}unfocus(){return this.webview.unfocus(),this}initialize(){return this.webviewReadySubject$}createInstance(){this.webview=new u(this.url,!1),this.listenReadyEvent(),this.sendEventToServer(),this.listenGuiOnEvent(),this.listenToServerSendGuiEvent()}listenReadyEvent(){this.webview.on("load",(()=>{this.webviewReadySubject$.next(!0),this.webviewReadySubject$.complete()}))}sendEventToServer(){this.webview.on(this.webviewToServerEventName,((e,...t)=>{this.eventService.emitServer(e,...t)}))}listenGuiOnEvent(){this.eventService.on(l.EventService.GuiOn,((e,t)=>{this.webview.on(e,t)}))}listenToServerSendGuiEvent(){this.eventService.onServer(l.EventService.ServerEmitGui,((e,...t)=>{y.nextTick((()=>{this.webview.emit(e,...t)}))}))}};z=__decorate([b,e(),__metadata("design:paramtypes",[v,E])],z);class KeyEventModel extends f{}__decorate([p({from:d()}),__metadata("design:type",String)],KeyEventModel.prototype,"target",void 0),__decorate([p({from:d()}),__metadata("design:type",String)],KeyEventModel.prototype,"methodName",void 0),__decorate([p({from:d()}),__metadata("design:type",String)],KeyEventModel.prototype,"type",void 0),__decorate([p({from:S()}),__metadata("design:type",Number)],KeyEventModel.prototype,"key",void 0);let B=class KeyEventService{constructor(e){this.eventService=e,this.events=new Map}start(){this.eventTypeExist("keyup")&&this.eventService.on("keyup",this.keyup.bind(this)),this.eventTypeExist("keydown")&&this.eventService.on("keydown",this.keydown.bind(this))}autoStart(e){(this.eventTypeExist("keyup")||this.eventTypeExist("keydown"))&&(y.log("Starting ~y~KeyEventService Decorator~w~"),this.start(),y.log("Started ~lg~KeyEventService Decorator~w~")),e()}add(e,t,r,n){const i=`${e}_${t}`;if(this.events.has(i))return;const o=(new KeyEventModel).cast({key:t,type:e,target:r,methodName:n});this.events.set(i,o)}run(e){const r=this.events.get(e);if(r){t.resolveAll(r.target).forEach((async e=>{if(e[r.methodName]){const t=e[r.methodName].bind(e);await t()}}))}}eventTypeExist(e){return!!Array.from(this.events.values()).filter((t=>t.type===e)).length}keyup(e){this.run(`keyup_${e}`)}keydown(e){this.run(`keydown_${e}`)}};B=__decorate([b,e(),__metadata("design:paramtypes",[E])],B);let J=class PlayerWorker{constructor(e){this.eventService=e,this.handleRealTime()}handleRealTime(){this.eventService.onServer(l.Player.SetRealTime,(e=>{a(e)}))}};J=__decorate([e(),__metadata("design:paramtypes",[E])],J),t.resolve(J);const L=t.resolve(w);t.register("EventService",{useValue:t.resolve(E)}),t.afterResolution(B,(()=>{L.add("afterBootstrap","autoStart","KeyEventService")}),{frequency:"Once"}),t.afterResolution(z,(()=>{L.add("before","autoStart","WebviewService")}),{frequency:"Once"});const OnServer=e=>(t,r,n)=>{const i=e||r,o=(new _).cast({name:i});return m(t,"onServer",r,n,o)},OnceServer=e=>(t,r,n)=>{const i=e||r,o=(new _).cast({name:i});return m(t,"onceServer",r,n,o)},OnGui=e=>(t,r,n)=>{const i=e||r,o=(new _).cast({name:i});return m(t,"onGui",r,n,o)},GameEntityCreate=e=>(t,r,n)=>{const i=(new _).cast({entity:e,eventAddTo:"gameEntity"});return m(t,"gameEntityCreate",r,n,i)},GameEntityDestroy=e=>(t,r,n)=>{const i=(new _).cast({entity:e,eventAddTo:"gameEntity"});return m(t,"gameEntityDestroy",r,n,i)},StreamSyncedMetaChange=(e,t)=>(r,n,i)=>{const o=(new _).cast({entity:e,metaKey:t,eventAddTo:"metaChange"});return m(r,"streamSyncedMetaChange",n,i,o)},SyncedMetaChange=(e,t)=>(r,n,i)=>{const o=(new _).cast({entity:e,metaKey:t,eventAddTo:"metaChange"});return m(r,"syncedMetaChange",n,i,o)},KeyUp=e=>createDecorator(e,"keyup"),KeyDown=e=>createDecorator(e,"keydown");function createDecorator(e,r){return(n,i,o)=>{const s=t.resolve(B),c=o.value;return o.value=function(...e){return c.apply(this,e)},e="string"==typeof e?e.charCodeAt(0):e,s.add(r,e,n.constructor.name,i),o}}u.prototype.routeTo=(e,...r)=>{t.resolve(z).routeTo(e,...r)};export{E as EventService,GameEntityCreate,GameEntityDestroy,KeyDown,B as KeyEventService,KeyUp,OnGui,OnServer,OnceServer,StreamSyncedMetaChange,SyncedMetaChange,z as WebviewService};
+import '@abraham/reflection';
+import { singleton, container } from 'tsyringe';
+import { emitServer, offServer, onServer, onceServer, emit, showCursor, WebView, setMsPerGameMinute } from 'alt-client';
+import { BaseEventService, FrameworkEvent, StringResolver, Cast, castToString, JsonEntityModel, UtilsService, LoggerService, castToNumber, LoaderService, ValidateOptionsModel, validateEventExistsAndPush } from '@abstractflo/shared';
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+let EventService = class EventService extends BaseEventService {
+    /**
+     * Emit event to server
+     *
+     * @param {string} name
+     * @param args
+     */
+    emitServer(name, ...args) {
+        emitServer(name, ...args);
+    }
+    /**
+     * Unsubscribe from server event
+     *
+     * @param {string} name
+     * @param {(...args: any[]) => void} listener
+     */
+    offServer(name, listener) {
+        offServer(name, listener);
+    }
+    /**
+     * Receive event from server
+     *
+     * @param {string} name
+     * @param {(...args: any[]) => void} listener
+     */
+    onServer(name, listener) {
+        onServer(name, listener);
+    }
+    /**
+     * Receive once event from server
+     *
+     * @param {string} name
+     * @param {(...args: any[]) => void} listener
+     */
+    onceServer(name, listener) {
+        onceServer(name, listener);
+    }
+    /**
+     * Receive gui event
+     *
+     * @param {string} eventName
+     * @param {(...args: any[]) => void} listener
+     */
+    onGui(eventName, listener) {
+        emit(FrameworkEvent.EventService.GuiOn, eventName, listener);
+    }
+    /**
+     * Listen handlers for given type
+     *
+     * @param {string} type
+     * @param {EntityHandleModel[]} handlers
+     * @protected
+     */
+    listenHandlerForType(type, handlers) {
+        this.on(type, (...args) => {
+            const entity = args.shift();
+            switch (true) {
+                case ['syncedMetaChange', 'streamSyncedMetaChange', 'gameEntityCreate', 'gameEntityDestroy'].includes(type):
+                    this.handleMetaChangeMethods(entity, entity.type, handlers, ...args);
+                    break;
+            }
+        });
+    }
+};
+EventService = __decorate([
+    StringResolver,
+    singleton()
+], EventService);
+
+class WebviewEventModel extends JsonEntityModel {
+}
+__decorate([
+    Cast({ from: castToString() }),
+    __metadata("design:type", String)
+], WebviewEventModel.prototype, "eventName", void 0);
+__decorate([
+    Cast({ from: castToString() }),
+    __metadata("design:type", String)
+], WebviewEventModel.prototype, "targetName", void 0);
+__decorate([
+    Cast({ from: castToString() }),
+    __metadata("design:type", String)
+], WebviewEventModel.prototype, "methodName", void 0);
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+function isFunction(x) {
+    return typeof x === 'function';
+}
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+var _enable_super_gross_mode_that_will_cause_bad_things = false;
+var config = {
+    Promise: undefined,
+    set useDeprecatedSynchronousErrorHandling(value) {
+        if (value) {
+            var error = /*@__PURE__*/ new Error();
+            /*@__PURE__*/ console.warn('DEPRECATED! RxJS was set to use deprecated synchronous error handling behavior by code at: \n' + error.stack);
+        }
+        _enable_super_gross_mode_that_will_cause_bad_things = value;
+    },
+    get useDeprecatedSynchronousErrorHandling() {
+        return _enable_super_gross_mode_that_will_cause_bad_things;
+    },
+};
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+function hostReportError(err) {
+    setTimeout(function () { throw err; }, 0);
+}
+
+/** PURE_IMPORTS_START _config,_util_hostReportError PURE_IMPORTS_END */
+var empty = {
+    closed: true,
+    next: function (value) { },
+    error: function (err) {
+        if (config.useDeprecatedSynchronousErrorHandling) {
+            throw err;
+        }
+        else {
+            hostReportError(err);
+        }
+    },
+    complete: function () { }
+};
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+var isArray = /*@__PURE__*/ (function () { return Array.isArray || (function (x) { return x && typeof x.length === 'number'; }); })();
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+function isObject(x) {
+    return x !== null && typeof x === 'object';
+}
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+var UnsubscriptionErrorImpl = /*@__PURE__*/ (function () {
+    function UnsubscriptionErrorImpl(errors) {
+        Error.call(this);
+        this.message = errors ?
+            errors.length + " errors occurred during unsubscription:\n" + errors.map(function (err, i) { return i + 1 + ") " + err.toString(); }).join('\n  ') : '';
+        this.name = 'UnsubscriptionError';
+        this.errors = errors;
+        return this;
+    }
+    UnsubscriptionErrorImpl.prototype = /*@__PURE__*/ Object.create(Error.prototype);
+    return UnsubscriptionErrorImpl;
+})();
+var UnsubscriptionError = UnsubscriptionErrorImpl;
+
+/** PURE_IMPORTS_START _util_isArray,_util_isObject,_util_isFunction,_util_UnsubscriptionError PURE_IMPORTS_END */
+var Subscription = /*@__PURE__*/ (function () {
+    function Subscription(unsubscribe) {
+        this.closed = false;
+        this._parentOrParents = null;
+        this._subscriptions = null;
+        if (unsubscribe) {
+            this._ctorUnsubscribe = true;
+            this._unsubscribe = unsubscribe;
+        }
+    }
+    Subscription.prototype.unsubscribe = function () {
+        var errors;
+        if (this.closed) {
+            return;
+        }
+        var _a = this, _parentOrParents = _a._parentOrParents, _ctorUnsubscribe = _a._ctorUnsubscribe, _unsubscribe = _a._unsubscribe, _subscriptions = _a._subscriptions;
+        this.closed = true;
+        this._parentOrParents = null;
+        this._subscriptions = null;
+        if (_parentOrParents instanceof Subscription) {
+            _parentOrParents.remove(this);
+        }
+        else if (_parentOrParents !== null) {
+            for (var index = 0; index < _parentOrParents.length; ++index) {
+                var parent_1 = _parentOrParents[index];
+                parent_1.remove(this);
+            }
+        }
+        if (isFunction(_unsubscribe)) {
+            if (_ctorUnsubscribe) {
+                this._unsubscribe = undefined;
+            }
+            try {
+                _unsubscribe.call(this);
+            }
+            catch (e) {
+                errors = e instanceof UnsubscriptionError ? flattenUnsubscriptionErrors(e.errors) : [e];
+            }
+        }
+        if (isArray(_subscriptions)) {
+            var index = -1;
+            var len = _subscriptions.length;
+            while (++index < len) {
+                var sub = _subscriptions[index];
+                if (isObject(sub)) {
+                    try {
+                        sub.unsubscribe();
+                    }
+                    catch (e) {
+                        errors = errors || [];
+                        if (e instanceof UnsubscriptionError) {
+                            errors = errors.concat(flattenUnsubscriptionErrors(e.errors));
+                        }
+                        else {
+                            errors.push(e);
+                        }
+                    }
+                }
+            }
+        }
+        if (errors) {
+            throw new UnsubscriptionError(errors);
+        }
+    };
+    Subscription.prototype.add = function (teardown) {
+        var subscription = teardown;
+        if (!teardown) {
+            return Subscription.EMPTY;
+        }
+        switch (typeof teardown) {
+            case 'function':
+                subscription = new Subscription(teardown);
+            case 'object':
+                if (subscription === this || subscription.closed || typeof subscription.unsubscribe !== 'function') {
+                    return subscription;
+                }
+                else if (this.closed) {
+                    subscription.unsubscribe();
+                    return subscription;
+                }
+                else if (!(subscription instanceof Subscription)) {
+                    var tmp = subscription;
+                    subscription = new Subscription();
+                    subscription._subscriptions = [tmp];
+                }
+                break;
+            default: {
+                throw new Error('unrecognized teardown ' + teardown + ' added to Subscription.');
+            }
+        }
+        var _parentOrParents = subscription._parentOrParents;
+        if (_parentOrParents === null) {
+            subscription._parentOrParents = this;
+        }
+        else if (_parentOrParents instanceof Subscription) {
+            if (_parentOrParents === this) {
+                return subscription;
+            }
+            subscription._parentOrParents = [_parentOrParents, this];
+        }
+        else if (_parentOrParents.indexOf(this) === -1) {
+            _parentOrParents.push(this);
+        }
+        else {
+            return subscription;
+        }
+        var subscriptions = this._subscriptions;
+        if (subscriptions === null) {
+            this._subscriptions = [subscription];
+        }
+        else {
+            subscriptions.push(subscription);
+        }
+        return subscription;
+    };
+    Subscription.prototype.remove = function (subscription) {
+        var subscriptions = this._subscriptions;
+        if (subscriptions) {
+            var subscriptionIndex = subscriptions.indexOf(subscription);
+            if (subscriptionIndex !== -1) {
+                subscriptions.splice(subscriptionIndex, 1);
+            }
+        }
+    };
+    Subscription.EMPTY = (function (empty) {
+        empty.closed = true;
+        return empty;
+    }(new Subscription()));
+    return Subscription;
+}());
+function flattenUnsubscriptionErrors(errors) {
+    return errors.reduce(function (errs, err) { return errs.concat((err instanceof UnsubscriptionError) ? err.errors : err); }, []);
+}
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+var rxSubscriber = /*@__PURE__*/ (function () {
+    return typeof Symbol === 'function'
+        ? /*@__PURE__*/ Symbol('rxSubscriber')
+        : '@@rxSubscriber_' + /*@__PURE__*/ Math.random();
+})();
+
+/** PURE_IMPORTS_START tslib,_util_isFunction,_Observer,_Subscription,_internal_symbol_rxSubscriber,_config,_util_hostReportError PURE_IMPORTS_END */
+var Subscriber = /*@__PURE__*/ (function (_super) {
+    __extends(Subscriber, _super);
+    function Subscriber(destinationOrNext, error, complete) {
+        var _this = _super.call(this) || this;
+        _this.syncErrorValue = null;
+        _this.syncErrorThrown = false;
+        _this.syncErrorThrowable = false;
+        _this.isStopped = false;
+        switch (arguments.length) {
+            case 0:
+                _this.destination = empty;
+                break;
+            case 1:
+                if (!destinationOrNext) {
+                    _this.destination = empty;
+                    break;
+                }
+                if (typeof destinationOrNext === 'object') {
+                    if (destinationOrNext instanceof Subscriber) {
+                        _this.syncErrorThrowable = destinationOrNext.syncErrorThrowable;
+                        _this.destination = destinationOrNext;
+                        destinationOrNext.add(_this);
+                    }
+                    else {
+                        _this.syncErrorThrowable = true;
+                        _this.destination = new SafeSubscriber(_this, destinationOrNext);
+                    }
+                    break;
+                }
+            default:
+                _this.syncErrorThrowable = true;
+                _this.destination = new SafeSubscriber(_this, destinationOrNext, error, complete);
+                break;
+        }
+        return _this;
+    }
+    Subscriber.prototype[rxSubscriber] = function () { return this; };
+    Subscriber.create = function (next, error, complete) {
+        var subscriber = new Subscriber(next, error, complete);
+        subscriber.syncErrorThrowable = false;
+        return subscriber;
+    };
+    Subscriber.prototype.next = function (value) {
+        if (!this.isStopped) {
+            this._next(value);
+        }
+    };
+    Subscriber.prototype.error = function (err) {
+        if (!this.isStopped) {
+            this.isStopped = true;
+            this._error(err);
+        }
+    };
+    Subscriber.prototype.complete = function () {
+        if (!this.isStopped) {
+            this.isStopped = true;
+            this._complete();
+        }
+    };
+    Subscriber.prototype.unsubscribe = function () {
+        if (this.closed) {
+            return;
+        }
+        this.isStopped = true;
+        _super.prototype.unsubscribe.call(this);
+    };
+    Subscriber.prototype._next = function (value) {
+        this.destination.next(value);
+    };
+    Subscriber.prototype._error = function (err) {
+        this.destination.error(err);
+        this.unsubscribe();
+    };
+    Subscriber.prototype._complete = function () {
+        this.destination.complete();
+        this.unsubscribe();
+    };
+    Subscriber.prototype._unsubscribeAndRecycle = function () {
+        var _parentOrParents = this._parentOrParents;
+        this._parentOrParents = null;
+        this.unsubscribe();
+        this.closed = false;
+        this.isStopped = false;
+        this._parentOrParents = _parentOrParents;
+        return this;
+    };
+    return Subscriber;
+}(Subscription));
+var SafeSubscriber = /*@__PURE__*/ (function (_super) {
+    __extends(SafeSubscriber, _super);
+    function SafeSubscriber(_parentSubscriber, observerOrNext, error, complete) {
+        var _this = _super.call(this) || this;
+        _this._parentSubscriber = _parentSubscriber;
+        var next;
+        var context = _this;
+        if (isFunction(observerOrNext)) {
+            next = observerOrNext;
+        }
+        else if (observerOrNext) {
+            next = observerOrNext.next;
+            error = observerOrNext.error;
+            complete = observerOrNext.complete;
+            if (observerOrNext !== empty) {
+                context = Object.create(observerOrNext);
+                if (isFunction(context.unsubscribe)) {
+                    _this.add(context.unsubscribe.bind(context));
+                }
+                context.unsubscribe = _this.unsubscribe.bind(_this);
+            }
+        }
+        _this._context = context;
+        _this._next = next;
+        _this._error = error;
+        _this._complete = complete;
+        return _this;
+    }
+    SafeSubscriber.prototype.next = function (value) {
+        if (!this.isStopped && this._next) {
+            var _parentSubscriber = this._parentSubscriber;
+            if (!config.useDeprecatedSynchronousErrorHandling || !_parentSubscriber.syncErrorThrowable) {
+                this.__tryOrUnsub(this._next, value);
+            }
+            else if (this.__tryOrSetError(_parentSubscriber, this._next, value)) {
+                this.unsubscribe();
+            }
+        }
+    };
+    SafeSubscriber.prototype.error = function (err) {
+        if (!this.isStopped) {
+            var _parentSubscriber = this._parentSubscriber;
+            var useDeprecatedSynchronousErrorHandling = config.useDeprecatedSynchronousErrorHandling;
+            if (this._error) {
+                if (!useDeprecatedSynchronousErrorHandling || !_parentSubscriber.syncErrorThrowable) {
+                    this.__tryOrUnsub(this._error, err);
+                    this.unsubscribe();
+                }
+                else {
+                    this.__tryOrSetError(_parentSubscriber, this._error, err);
+                    this.unsubscribe();
+                }
+            }
+            else if (!_parentSubscriber.syncErrorThrowable) {
+                this.unsubscribe();
+                if (useDeprecatedSynchronousErrorHandling) {
+                    throw err;
+                }
+                hostReportError(err);
+            }
+            else {
+                if (useDeprecatedSynchronousErrorHandling) {
+                    _parentSubscriber.syncErrorValue = err;
+                    _parentSubscriber.syncErrorThrown = true;
+                }
+                else {
+                    hostReportError(err);
+                }
+                this.unsubscribe();
+            }
+        }
+    };
+    SafeSubscriber.prototype.complete = function () {
+        var _this = this;
+        if (!this.isStopped) {
+            var _parentSubscriber = this._parentSubscriber;
+            if (this._complete) {
+                var wrappedComplete = function () { return _this._complete.call(_this._context); };
+                if (!config.useDeprecatedSynchronousErrorHandling || !_parentSubscriber.syncErrorThrowable) {
+                    this.__tryOrUnsub(wrappedComplete);
+                    this.unsubscribe();
+                }
+                else {
+                    this.__tryOrSetError(_parentSubscriber, wrappedComplete);
+                    this.unsubscribe();
+                }
+            }
+            else {
+                this.unsubscribe();
+            }
+        }
+    };
+    SafeSubscriber.prototype.__tryOrUnsub = function (fn, value) {
+        try {
+            fn.call(this._context, value);
+        }
+        catch (err) {
+            this.unsubscribe();
+            if (config.useDeprecatedSynchronousErrorHandling) {
+                throw err;
+            }
+            else {
+                hostReportError(err);
+            }
+        }
+    };
+    SafeSubscriber.prototype.__tryOrSetError = function (parent, fn, value) {
+        if (!config.useDeprecatedSynchronousErrorHandling) {
+            throw new Error('bad call');
+        }
+        try {
+            fn.call(this._context, value);
+        }
+        catch (err) {
+            if (config.useDeprecatedSynchronousErrorHandling) {
+                parent.syncErrorValue = err;
+                parent.syncErrorThrown = true;
+                return true;
+            }
+            else {
+                hostReportError(err);
+                return true;
+            }
+        }
+        return false;
+    };
+    SafeSubscriber.prototype._unsubscribe = function () {
+        var _parentSubscriber = this._parentSubscriber;
+        this._context = null;
+        this._parentSubscriber = null;
+        _parentSubscriber.unsubscribe();
+    };
+    return SafeSubscriber;
+}(Subscriber));
+
+/** PURE_IMPORTS_START _Subscriber PURE_IMPORTS_END */
+function canReportError(observer) {
+    while (observer) {
+        var _a = observer, closed_1 = _a.closed, destination = _a.destination, isStopped = _a.isStopped;
+        if (closed_1 || isStopped) {
+            return false;
+        }
+        else if (destination && destination instanceof Subscriber) {
+            observer = destination;
+        }
+        else {
+            observer = null;
+        }
+    }
+    return true;
+}
+
+/** PURE_IMPORTS_START _Subscriber,_symbol_rxSubscriber,_Observer PURE_IMPORTS_END */
+function toSubscriber(nextOrObserver, error, complete) {
+    if (nextOrObserver) {
+        if (nextOrObserver instanceof Subscriber) {
+            return nextOrObserver;
+        }
+        if (nextOrObserver[rxSubscriber]) {
+            return nextOrObserver[rxSubscriber]();
+        }
+    }
+    if (!nextOrObserver && !error && !complete) {
+        return new Subscriber(empty);
+    }
+    return new Subscriber(nextOrObserver, error, complete);
+}
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+var observable = /*@__PURE__*/ (function () { return typeof Symbol === 'function' && Symbol.observable || '@@observable'; })();
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+function identity(x) {
+    return x;
+}
+
+/** PURE_IMPORTS_START _identity PURE_IMPORTS_END */
+function pipeFromArray(fns) {
+    if (fns.length === 0) {
+        return identity;
+    }
+    if (fns.length === 1) {
+        return fns[0];
+    }
+    return function piped(input) {
+        return fns.reduce(function (prev, fn) { return fn(prev); }, input);
+    };
+}
+
+/** PURE_IMPORTS_START _util_canReportError,_util_toSubscriber,_symbol_observable,_util_pipe,_config PURE_IMPORTS_END */
+var Observable = /*@__PURE__*/ (function () {
+    function Observable(subscribe) {
+        this._isScalar = false;
+        if (subscribe) {
+            this._subscribe = subscribe;
+        }
+    }
+    Observable.prototype.lift = function (operator) {
+        var observable = new Observable();
+        observable.source = this;
+        observable.operator = operator;
+        return observable;
+    };
+    Observable.prototype.subscribe = function (observerOrNext, error, complete) {
+        var operator = this.operator;
+        var sink = toSubscriber(observerOrNext, error, complete);
+        if (operator) {
+            sink.add(operator.call(sink, this.source));
+        }
+        else {
+            sink.add(this.source || (config.useDeprecatedSynchronousErrorHandling && !sink.syncErrorThrowable) ?
+                this._subscribe(sink) :
+                this._trySubscribe(sink));
+        }
+        if (config.useDeprecatedSynchronousErrorHandling) {
+            if (sink.syncErrorThrowable) {
+                sink.syncErrorThrowable = false;
+                if (sink.syncErrorThrown) {
+                    throw sink.syncErrorValue;
+                }
+            }
+        }
+        return sink;
+    };
+    Observable.prototype._trySubscribe = function (sink) {
+        try {
+            return this._subscribe(sink);
+        }
+        catch (err) {
+            if (config.useDeprecatedSynchronousErrorHandling) {
+                sink.syncErrorThrown = true;
+                sink.syncErrorValue = err;
+            }
+            if (canReportError(sink)) {
+                sink.error(err);
+            }
+            else {
+                console.warn(err);
+            }
+        }
+    };
+    Observable.prototype.forEach = function (next, promiseCtor) {
+        var _this = this;
+        promiseCtor = getPromiseCtor(promiseCtor);
+        return new promiseCtor(function (resolve, reject) {
+            var subscription;
+            subscription = _this.subscribe(function (value) {
+                try {
+                    next(value);
+                }
+                catch (err) {
+                    reject(err);
+                    if (subscription) {
+                        subscription.unsubscribe();
+                    }
+                }
+            }, reject, resolve);
+        });
+    };
+    Observable.prototype._subscribe = function (subscriber) {
+        var source = this.source;
+        return source && source.subscribe(subscriber);
+    };
+    Observable.prototype[observable] = function () {
+        return this;
+    };
+    Observable.prototype.pipe = function () {
+        var operations = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            operations[_i] = arguments[_i];
+        }
+        if (operations.length === 0) {
+            return this;
+        }
+        return pipeFromArray(operations)(this);
+    };
+    Observable.prototype.toPromise = function (promiseCtor) {
+        var _this = this;
+        promiseCtor = getPromiseCtor(promiseCtor);
+        return new promiseCtor(function (resolve, reject) {
+            var value;
+            _this.subscribe(function (x) { return value = x; }, function (err) { return reject(err); }, function () { return resolve(value); });
+        });
+    };
+    Observable.create = function (subscribe) {
+        return new Observable(subscribe);
+    };
+    return Observable;
+}());
+function getPromiseCtor(promiseCtor) {
+    if (!promiseCtor) {
+        promiseCtor = Promise;
+    }
+    if (!promiseCtor) {
+        throw new Error('no Promise impl found');
+    }
+    return promiseCtor;
+}
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+var ObjectUnsubscribedErrorImpl = /*@__PURE__*/ (function () {
+    function ObjectUnsubscribedErrorImpl() {
+        Error.call(this);
+        this.message = 'object unsubscribed';
+        this.name = 'ObjectUnsubscribedError';
+        return this;
+    }
+    ObjectUnsubscribedErrorImpl.prototype = /*@__PURE__*/ Object.create(Error.prototype);
+    return ObjectUnsubscribedErrorImpl;
+})();
+var ObjectUnsubscribedError = ObjectUnsubscribedErrorImpl;
+
+/** PURE_IMPORTS_START tslib,_Subscription PURE_IMPORTS_END */
+var SubjectSubscription = /*@__PURE__*/ (function (_super) {
+    __extends(SubjectSubscription, _super);
+    function SubjectSubscription(subject, subscriber) {
+        var _this = _super.call(this) || this;
+        _this.subject = subject;
+        _this.subscriber = subscriber;
+        _this.closed = false;
+        return _this;
+    }
+    SubjectSubscription.prototype.unsubscribe = function () {
+        if (this.closed) {
+            return;
+        }
+        this.closed = true;
+        var subject = this.subject;
+        var observers = subject.observers;
+        this.subject = null;
+        if (!observers || observers.length === 0 || subject.isStopped || subject.closed) {
+            return;
+        }
+        var subscriberIndex = observers.indexOf(this.subscriber);
+        if (subscriberIndex !== -1) {
+            observers.splice(subscriberIndex, 1);
+        }
+    };
+    return SubjectSubscription;
+}(Subscription));
+
+/** PURE_IMPORTS_START tslib,_Observable,_Subscriber,_Subscription,_util_ObjectUnsubscribedError,_SubjectSubscription,_internal_symbol_rxSubscriber PURE_IMPORTS_END */
+var SubjectSubscriber = /*@__PURE__*/ (function (_super) {
+    __extends(SubjectSubscriber, _super);
+    function SubjectSubscriber(destination) {
+        var _this = _super.call(this, destination) || this;
+        _this.destination = destination;
+        return _this;
+    }
+    return SubjectSubscriber;
+}(Subscriber));
+var Subject = /*@__PURE__*/ (function (_super) {
+    __extends(Subject, _super);
+    function Subject() {
+        var _this = _super.call(this) || this;
+        _this.observers = [];
+        _this.closed = false;
+        _this.isStopped = false;
+        _this.hasError = false;
+        _this.thrownError = null;
+        return _this;
+    }
+    Subject.prototype[rxSubscriber] = function () {
+        return new SubjectSubscriber(this);
+    };
+    Subject.prototype.lift = function (operator) {
+        var subject = new AnonymousSubject(this, this);
+        subject.operator = operator;
+        return subject;
+    };
+    Subject.prototype.next = function (value) {
+        if (this.closed) {
+            throw new ObjectUnsubscribedError();
+        }
+        if (!this.isStopped) {
+            var observers = this.observers;
+            var len = observers.length;
+            var copy = observers.slice();
+            for (var i = 0; i < len; i++) {
+                copy[i].next(value);
+            }
+        }
+    };
+    Subject.prototype.error = function (err) {
+        if (this.closed) {
+            throw new ObjectUnsubscribedError();
+        }
+        this.hasError = true;
+        this.thrownError = err;
+        this.isStopped = true;
+        var observers = this.observers;
+        var len = observers.length;
+        var copy = observers.slice();
+        for (var i = 0; i < len; i++) {
+            copy[i].error(err);
+        }
+        this.observers.length = 0;
+    };
+    Subject.prototype.complete = function () {
+        if (this.closed) {
+            throw new ObjectUnsubscribedError();
+        }
+        this.isStopped = true;
+        var observers = this.observers;
+        var len = observers.length;
+        var copy = observers.slice();
+        for (var i = 0; i < len; i++) {
+            copy[i].complete();
+        }
+        this.observers.length = 0;
+    };
+    Subject.prototype.unsubscribe = function () {
+        this.isStopped = true;
+        this.closed = true;
+        this.observers = null;
+    };
+    Subject.prototype._trySubscribe = function (subscriber) {
+        if (this.closed) {
+            throw new ObjectUnsubscribedError();
+        }
+        else {
+            return _super.prototype._trySubscribe.call(this, subscriber);
+        }
+    };
+    Subject.prototype._subscribe = function (subscriber) {
+        if (this.closed) {
+            throw new ObjectUnsubscribedError();
+        }
+        else if (this.hasError) {
+            subscriber.error(this.thrownError);
+            return Subscription.EMPTY;
+        }
+        else if (this.isStopped) {
+            subscriber.complete();
+            return Subscription.EMPTY;
+        }
+        else {
+            this.observers.push(subscriber);
+            return new SubjectSubscription(this, subscriber);
+        }
+    };
+    Subject.prototype.asObservable = function () {
+        var observable = new Observable();
+        observable.source = this;
+        return observable;
+    };
+    Subject.create = function (destination, source) {
+        return new AnonymousSubject(destination, source);
+    };
+    return Subject;
+}(Observable));
+var AnonymousSubject = /*@__PURE__*/ (function (_super) {
+    __extends(AnonymousSubject, _super);
+    function AnonymousSubject(destination, source) {
+        var _this = _super.call(this) || this;
+        _this.destination = destination;
+        _this.source = source;
+        return _this;
+    }
+    AnonymousSubject.prototype.next = function (value) {
+        var destination = this.destination;
+        if (destination && destination.next) {
+            destination.next(value);
+        }
+    };
+    AnonymousSubject.prototype.error = function (err) {
+        var destination = this.destination;
+        if (destination && destination.error) {
+            this.destination.error(err);
+        }
+    };
+    AnonymousSubject.prototype.complete = function () {
+        var destination = this.destination;
+        if (destination && destination.complete) {
+            this.destination.complete();
+        }
+    };
+    AnonymousSubject.prototype._subscribe = function (subscriber) {
+        var source = this.source;
+        if (source) {
+            return this.source.subscribe(subscriber);
+        }
+        else {
+            return Subscription.EMPTY;
+        }
+    };
+    return AnonymousSubject;
+}(Subject));
+
+/** PURE_IMPORTS_START tslib,_Subscription PURE_IMPORTS_END */
+var Action = /*@__PURE__*/ (function (_super) {
+    __extends(Action, _super);
+    function Action(scheduler, work) {
+        return _super.call(this) || this;
+    }
+    Action.prototype.schedule = function (state, delay) {
+        return this;
+    };
+    return Action;
+}(Subscription));
+
+/** PURE_IMPORTS_START tslib,_Action PURE_IMPORTS_END */
+var AsyncAction = /*@__PURE__*/ (function (_super) {
+    __extends(AsyncAction, _super);
+    function AsyncAction(scheduler, work) {
+        var _this = _super.call(this, scheduler, work) || this;
+        _this.scheduler = scheduler;
+        _this.work = work;
+        _this.pending = false;
+        return _this;
+    }
+    AsyncAction.prototype.schedule = function (state, delay) {
+        if (delay === void 0) {
+            delay = 0;
+        }
+        if (this.closed) {
+            return this;
+        }
+        this.state = state;
+        var id = this.id;
+        var scheduler = this.scheduler;
+        if (id != null) {
+            this.id = this.recycleAsyncId(scheduler, id, delay);
+        }
+        this.pending = true;
+        this.delay = delay;
+        this.id = this.id || this.requestAsyncId(scheduler, this.id, delay);
+        return this;
+    };
+    AsyncAction.prototype.requestAsyncId = function (scheduler, id, delay) {
+        if (delay === void 0) {
+            delay = 0;
+        }
+        return setInterval(scheduler.flush.bind(scheduler, this), delay);
+    };
+    AsyncAction.prototype.recycleAsyncId = function (scheduler, id, delay) {
+        if (delay === void 0) {
+            delay = 0;
+        }
+        if (delay !== null && this.delay === delay && this.pending === false) {
+            return id;
+        }
+        clearInterval(id);
+        return undefined;
+    };
+    AsyncAction.prototype.execute = function (state, delay) {
+        if (this.closed) {
+            return new Error('executing a cancelled action');
+        }
+        this.pending = false;
+        var error = this._execute(state, delay);
+        if (error) {
+            return error;
+        }
+        else if (this.pending === false && this.id != null) {
+            this.id = this.recycleAsyncId(this.scheduler, this.id, null);
+        }
+    };
+    AsyncAction.prototype._execute = function (state, delay) {
+        var errored = false;
+        var errorValue = undefined;
+        try {
+            this.work(state);
+        }
+        catch (e) {
+            errored = true;
+            errorValue = !!e && e || new Error(e);
+        }
+        if (errored) {
+            this.unsubscribe();
+            return errorValue;
+        }
+    };
+    AsyncAction.prototype._unsubscribe = function () {
+        var id = this.id;
+        var scheduler = this.scheduler;
+        var actions = scheduler.actions;
+        var index = actions.indexOf(this);
+        this.work = null;
+        this.state = null;
+        this.pending = false;
+        this.scheduler = null;
+        if (index !== -1) {
+            actions.splice(index, 1);
+        }
+        if (id != null) {
+            this.id = this.recycleAsyncId(scheduler, id, null);
+        }
+        this.delay = null;
+    };
+    return AsyncAction;
+}(Action));
+
+/** PURE_IMPORTS_START tslib,_AsyncAction PURE_IMPORTS_END */
+var QueueAction = /*@__PURE__*/ (function (_super) {
+    __extends(QueueAction, _super);
+    function QueueAction(scheduler, work) {
+        var _this = _super.call(this, scheduler, work) || this;
+        _this.scheduler = scheduler;
+        _this.work = work;
+        return _this;
+    }
+    QueueAction.prototype.schedule = function (state, delay) {
+        if (delay === void 0) {
+            delay = 0;
+        }
+        if (delay > 0) {
+            return _super.prototype.schedule.call(this, state, delay);
+        }
+        this.delay = delay;
+        this.state = state;
+        this.scheduler.flush(this);
+        return this;
+    };
+    QueueAction.prototype.execute = function (state, delay) {
+        return (delay > 0 || this.closed) ?
+            _super.prototype.execute.call(this, state, delay) :
+            this._execute(state, delay);
+    };
+    QueueAction.prototype.requestAsyncId = function (scheduler, id, delay) {
+        if (delay === void 0) {
+            delay = 0;
+        }
+        if ((delay !== null && delay > 0) || (delay === null && this.delay > 0)) {
+            return _super.prototype.requestAsyncId.call(this, scheduler, id, delay);
+        }
+        return scheduler.flush(this);
+    };
+    return QueueAction;
+}(AsyncAction));
+
+var Scheduler = /*@__PURE__*/ (function () {
+    function Scheduler(SchedulerAction, now) {
+        if (now === void 0) {
+            now = Scheduler.now;
+        }
+        this.SchedulerAction = SchedulerAction;
+        this.now = now;
+    }
+    Scheduler.prototype.schedule = function (work, delay, state) {
+        if (delay === void 0) {
+            delay = 0;
+        }
+        return new this.SchedulerAction(this, work).schedule(state, delay);
+    };
+    Scheduler.now = function () { return Date.now(); };
+    return Scheduler;
+}());
+
+/** PURE_IMPORTS_START tslib,_Scheduler PURE_IMPORTS_END */
+var AsyncScheduler = /*@__PURE__*/ (function (_super) {
+    __extends(AsyncScheduler, _super);
+    function AsyncScheduler(SchedulerAction, now) {
+        if (now === void 0) {
+            now = Scheduler.now;
+        }
+        var _this = _super.call(this, SchedulerAction, function () {
+            if (AsyncScheduler.delegate && AsyncScheduler.delegate !== _this) {
+                return AsyncScheduler.delegate.now();
+            }
+            else {
+                return now();
+            }
+        }) || this;
+        _this.actions = [];
+        _this.active = false;
+        _this.scheduled = undefined;
+        return _this;
+    }
+    AsyncScheduler.prototype.schedule = function (work, delay, state) {
+        if (delay === void 0) {
+            delay = 0;
+        }
+        if (AsyncScheduler.delegate && AsyncScheduler.delegate !== this) {
+            return AsyncScheduler.delegate.schedule(work, delay, state);
+        }
+        else {
+            return _super.prototype.schedule.call(this, work, delay, state);
+        }
+    };
+    AsyncScheduler.prototype.flush = function (action) {
+        var actions = this.actions;
+        if (this.active) {
+            actions.push(action);
+            return;
+        }
+        var error;
+        this.active = true;
+        do {
+            if (error = action.execute(action.state, action.delay)) {
+                break;
+            }
+        } while (action = actions.shift());
+        this.active = false;
+        if (error) {
+            while (action = actions.shift()) {
+                action.unsubscribe();
+            }
+            throw error;
+        }
+    };
+    return AsyncScheduler;
+}(Scheduler));
+
+/** PURE_IMPORTS_START tslib,_AsyncScheduler PURE_IMPORTS_END */
+var QueueScheduler = /*@__PURE__*/ (function (_super) {
+    __extends(QueueScheduler, _super);
+    function QueueScheduler() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return QueueScheduler;
+}(AsyncScheduler));
+
+/** PURE_IMPORTS_START _QueueAction,_QueueScheduler PURE_IMPORTS_END */
+var queueScheduler = /*@__PURE__*/ new QueueScheduler(QueueAction);
+var queue = queueScheduler;
+
+/** PURE_IMPORTS_START _Observable PURE_IMPORTS_END */
+var EMPTY = /*@__PURE__*/ new Observable(function (subscriber) { return subscriber.complete(); });
+function empty$1(scheduler) {
+    return scheduler ? emptyScheduled(scheduler) : EMPTY;
+}
+function emptyScheduled(scheduler) {
+    return new Observable(function (subscriber) { return scheduler.schedule(function () { return subscriber.complete(); }); });
+}
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+function isScheduler(value) {
+    return value && typeof value.schedule === 'function';
+}
+
+/** PURE_IMPORTS_START  PURE_IMPORTS_END */
+var subscribeToArray = function (array) {
+    return function (subscriber) {
+        for (var i = 0, len = array.length; i < len && !subscriber.closed; i++) {
+            subscriber.next(array[i]);
+        }
+        subscriber.complete();
+    };
+};
+
+/** PURE_IMPORTS_START _Observable,_Subscription PURE_IMPORTS_END */
+function scheduleArray(input, scheduler) {
+    return new Observable(function (subscriber) {
+        var sub = new Subscription();
+        var i = 0;
+        sub.add(scheduler.schedule(function () {
+            if (i === input.length) {
+                subscriber.complete();
+                return;
+            }
+            subscriber.next(input[i++]);
+            if (!subscriber.closed) {
+                sub.add(this.schedule());
+            }
+        }));
+        return sub;
+    });
+}
+
+/** PURE_IMPORTS_START _Observable,_util_subscribeToArray,_scheduled_scheduleArray PURE_IMPORTS_END */
+function fromArray(input, scheduler) {
+    if (!scheduler) {
+        return new Observable(subscribeToArray(input));
+    }
+    else {
+        return scheduleArray(input, scheduler);
+    }
+}
+
+/** PURE_IMPORTS_START _util_isScheduler,_fromArray,_scheduled_scheduleArray PURE_IMPORTS_END */
+function of() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    var scheduler = args[args.length - 1];
+    if (isScheduler(scheduler)) {
+        args.pop();
+        return scheduleArray(args, scheduler);
+    }
+    else {
+        return fromArray(args);
+    }
+}
+
+/** PURE_IMPORTS_START _Observable PURE_IMPORTS_END */
+function throwError(error, scheduler) {
+    if (!scheduler) {
+        return new Observable(function (subscriber) { return subscriber.error(error); });
+    }
+    else {
+        return new Observable(function (subscriber) { return scheduler.schedule(dispatch, 0, { error: error, subscriber: subscriber }); });
+    }
+}
+function dispatch(_a) {
+    var error = _a.error, subscriber = _a.subscriber;
+    subscriber.error(error);
+}
+
+/** PURE_IMPORTS_START _observable_empty,_observable_of,_observable_throwError PURE_IMPORTS_END */
+var Notification = /*@__PURE__*/ (function () {
+    function Notification(kind, value, error) {
+        this.kind = kind;
+        this.value = value;
+        this.error = error;
+        this.hasValue = kind === 'N';
+    }
+    Notification.prototype.observe = function (observer) {
+        switch (this.kind) {
+            case 'N':
+                return observer.next && observer.next(this.value);
+            case 'E':
+                return observer.error && observer.error(this.error);
+            case 'C':
+                return observer.complete && observer.complete();
+        }
+    };
+    Notification.prototype.do = function (next, error, complete) {
+        var kind = this.kind;
+        switch (kind) {
+            case 'N':
+                return next && next(this.value);
+            case 'E':
+                return error && error(this.error);
+            case 'C':
+                return complete && complete();
+        }
+    };
+    Notification.prototype.accept = function (nextOrObserver, error, complete) {
+        if (nextOrObserver && typeof nextOrObserver.next === 'function') {
+            return this.observe(nextOrObserver);
+        }
+        else {
+            return this.do(nextOrObserver, error, complete);
+        }
+    };
+    Notification.prototype.toObservable = function () {
+        var kind = this.kind;
+        switch (kind) {
+            case 'N':
+                return of(this.value);
+            case 'E':
+                return throwError(this.error);
+            case 'C':
+                return empty$1();
+        }
+        throw new Error('unexpected notification kind value');
+    };
+    Notification.createNext = function (value) {
+        if (typeof value !== 'undefined') {
+            return new Notification('N', value);
+        }
+        return Notification.undefinedValueNotification;
+    };
+    Notification.createError = function (err) {
+        return new Notification('E', undefined, err);
+    };
+    Notification.createComplete = function () {
+        return Notification.completeNotification;
+    };
+    Notification.completeNotification = new Notification('C');
+    Notification.undefinedValueNotification = new Notification('N', undefined);
+    return Notification;
+}());
+
+/** PURE_IMPORTS_START tslib,_Subscriber,_Notification PURE_IMPORTS_END */
+var ObserveOnSubscriber = /*@__PURE__*/ (function (_super) {
+    __extends(ObserveOnSubscriber, _super);
+    function ObserveOnSubscriber(destination, scheduler, delay) {
+        if (delay === void 0) {
+            delay = 0;
+        }
+        var _this = _super.call(this, destination) || this;
+        _this.scheduler = scheduler;
+        _this.delay = delay;
+        return _this;
+    }
+    ObserveOnSubscriber.dispatch = function (arg) {
+        var notification = arg.notification, destination = arg.destination;
+        notification.observe(destination);
+        this.unsubscribe();
+    };
+    ObserveOnSubscriber.prototype.scheduleMessage = function (notification) {
+        var destination = this.destination;
+        destination.add(this.scheduler.schedule(ObserveOnSubscriber.dispatch, this.delay, new ObserveOnMessage(notification, this.destination)));
+    };
+    ObserveOnSubscriber.prototype._next = function (value) {
+        this.scheduleMessage(Notification.createNext(value));
+    };
+    ObserveOnSubscriber.prototype._error = function (err) {
+        this.scheduleMessage(Notification.createError(err));
+        this.unsubscribe();
+    };
+    ObserveOnSubscriber.prototype._complete = function () {
+        this.scheduleMessage(Notification.createComplete());
+        this.unsubscribe();
+    };
+    return ObserveOnSubscriber;
+}(Subscriber));
+var ObserveOnMessage = /*@__PURE__*/ (function () {
+    function ObserveOnMessage(notification, destination) {
+        this.notification = notification;
+        this.destination = destination;
+    }
+    return ObserveOnMessage;
+}());
+
+/** PURE_IMPORTS_START tslib,_Subject,_scheduler_queue,_Subscription,_operators_observeOn,_util_ObjectUnsubscribedError,_SubjectSubscription PURE_IMPORTS_END */
+var ReplaySubject = /*@__PURE__*/ (function (_super) {
+    __extends(ReplaySubject, _super);
+    function ReplaySubject(bufferSize, windowTime, scheduler) {
+        if (bufferSize === void 0) {
+            bufferSize = Number.POSITIVE_INFINITY;
+        }
+        if (windowTime === void 0) {
+            windowTime = Number.POSITIVE_INFINITY;
+        }
+        var _this = _super.call(this) || this;
+        _this.scheduler = scheduler;
+        _this._events = [];
+        _this._infiniteTimeWindow = false;
+        _this._bufferSize = bufferSize < 1 ? 1 : bufferSize;
+        _this._windowTime = windowTime < 1 ? 1 : windowTime;
+        if (windowTime === Number.POSITIVE_INFINITY) {
+            _this._infiniteTimeWindow = true;
+            _this.next = _this.nextInfiniteTimeWindow;
+        }
+        else {
+            _this.next = _this.nextTimeWindow;
+        }
+        return _this;
+    }
+    ReplaySubject.prototype.nextInfiniteTimeWindow = function (value) {
+        if (!this.isStopped) {
+            var _events = this._events;
+            _events.push(value);
+            if (_events.length > this._bufferSize) {
+                _events.shift();
+            }
+        }
+        _super.prototype.next.call(this, value);
+    };
+    ReplaySubject.prototype.nextTimeWindow = function (value) {
+        if (!this.isStopped) {
+            this._events.push(new ReplayEvent(this._getNow(), value));
+            this._trimBufferThenGetEvents();
+        }
+        _super.prototype.next.call(this, value);
+    };
+    ReplaySubject.prototype._subscribe = function (subscriber) {
+        var _infiniteTimeWindow = this._infiniteTimeWindow;
+        var _events = _infiniteTimeWindow ? this._events : this._trimBufferThenGetEvents();
+        var scheduler = this.scheduler;
+        var len = _events.length;
+        var subscription;
+        if (this.closed) {
+            throw new ObjectUnsubscribedError();
+        }
+        else if (this.isStopped || this.hasError) {
+            subscription = Subscription.EMPTY;
+        }
+        else {
+            this.observers.push(subscriber);
+            subscription = new SubjectSubscription(this, subscriber);
+        }
+        if (scheduler) {
+            subscriber.add(subscriber = new ObserveOnSubscriber(subscriber, scheduler));
+        }
+        if (_infiniteTimeWindow) {
+            for (var i = 0; i < len && !subscriber.closed; i++) {
+                subscriber.next(_events[i]);
+            }
+        }
+        else {
+            for (var i = 0; i < len && !subscriber.closed; i++) {
+                subscriber.next(_events[i].value);
+            }
+        }
+        if (this.hasError) {
+            subscriber.error(this.thrownError);
+        }
+        else if (this.isStopped) {
+            subscriber.complete();
+        }
+        return subscription;
+    };
+    ReplaySubject.prototype._getNow = function () {
+        return (this.scheduler || queue).now();
+    };
+    ReplaySubject.prototype._trimBufferThenGetEvents = function () {
+        var now = this._getNow();
+        var _bufferSize = this._bufferSize;
+        var _windowTime = this._windowTime;
+        var _events = this._events;
+        var eventsCount = _events.length;
+        var spliceCount = 0;
+        while (spliceCount < eventsCount) {
+            if ((now - _events[spliceCount].time) < _windowTime) {
+                break;
+            }
+            spliceCount++;
+        }
+        if (eventsCount > _bufferSize) {
+            spliceCount = Math.max(spliceCount, eventsCount - _bufferSize);
+        }
+        if (spliceCount > 0) {
+            _events.splice(0, spliceCount);
+        }
+        return _events;
+    };
+    return ReplaySubject;
+}(Subject));
+var ReplayEvent = /*@__PURE__*/ (function () {
+    function ReplayEvent(time, value) {
+        this.time = time;
+        this.value = value;
+    }
+    return ReplayEvent;
+}());
+
+let WebviewService = class WebviewService {
+    constructor(loggerService, eventService) {
+        this.loggerService = loggerService;
+        this.eventService = eventService;
+        /**
+         * Contains the routeTo eventName
+         * @type {string}
+         * @private
+         */
+        this.routeToEventName = container.resolve('alt.webview.routeTo.eventName');
+        /**
+         * Current cursor count
+         *
+         * @type {number}
+         * @private
+         */
+        this.cursorCount = 0;
+        /**
+         * Contains the events for webview
+         *
+         * @type {WebviewEventModel[]}
+         * @private
+         */
+        this.events = [];
+        /**
+         * Contains the ready subject for webview
+         *
+         * @type {Subject<boolean>}
+         * @private
+         */
+        this.webviewReadySubject$ = new ReplaySubject();
+        /**
+         * The event name for sending from webview to server
+         *
+         * e.g: gui:emit:server
+         *
+         * @type {string}
+         * @private
+         */
+        this.webviewToServerEventName = FrameworkEvent.EventService.GuiEmitServer;
+        /**
+         * Contains webview url
+         *
+         * @type {string}
+         * @private
+         */
+        this.url = container.resolve('alt.webview.url');
+        this.createInstance();
+    }
+    /**
+     * Add event to events array
+     *
+     * @param {string} eventName
+     * @param {string} targetName
+     * @param {string} methodName
+     */
+    add(eventName, targetName, methodName) {
+        const event = new WebviewEventModel().cast({ eventName, targetName, methodName });
+        this.events.push(event);
+    }
+    /**
+     * Return the webview  instance
+     *
+     * @returns {WebView}
+     */
+    getWebView() {
+        return this.webview;
+    }
+    /**
+     * Emit the route change to webview
+     *
+     * @param {string} route
+     * @param args
+     */
+    routeTo(route, ...args) {
+        this.webview.emit(this.routeToEventName, route, ...args);
+        return this;
+    }
+    /**
+     * Show cursor
+     */
+    showCursor() {
+        showCursor(true);
+        this.cursorCount = this.cursorCount + 1;
+        return this;
+    }
+    /**
+     * Remove Cursor
+     */
+    removeCursor() {
+        if (this.cursorCount > 0) {
+            showCursor(false);
+            this.cursorCount = this.cursorCount - 1;
+        }
+        return this;
+    }
+    /**
+     * Remove all cursors
+     */
+    removeAllCursors() {
+        for (let i = 0; i < this.cursorCount; i++) {
+            showCursor(false);
+        }
+        this.cursorCount = 0;
+        return this;
+    }
+    /**
+     * Start event loop
+     *
+     * @ToDo Fragwürdig warum das da ist???
+     */
+    start() {
+        this.events.forEach((event) => {
+            const instance = container.resolve(event.targetName);
+            const method = instance[event.methodName].bind(instance);
+            this.webview.on(event.eventName, method);
+        });
+    }
+    /**
+     * AutoStart webview service
+     * @param {Function} done
+     */
+    autoStart(done) {
+        UtilsService.log('Starting ~y~WebviewService~w~');
+        this.initialize()
+            .subscribe(() => {
+            UtilsService.log('Started ~lg~WebviewService~w~');
+            done();
+        });
+    }
+    /**
+     * Emit event to webview
+     *
+     * @param {string} eventName
+     * @param args
+     */
+    emit(eventName, ...args) {
+        this.webview.emit(eventName, ...args);
+        return this;
+    }
+    /**
+     * Listen to event from webview
+     *
+     * @param {string} eventName
+     * @param {(...args: any[]) => void} listener
+     */
+    on(eventName, listener) {
+        this.webview.on(eventName, listener);
+    }
+    /**
+     * Destroy the webview instance
+     */
+    destroy() {
+        this.webview.destroy();
+    }
+    /**
+     * Set webview in focus
+     *
+     * @return {WebviewService}
+     */
+    focus() {
+        this.webview.focus();
+        return this;
+    }
+    /**
+     * Set webview in focus
+     *
+     * @return {WebviewService}
+     */
+    unfocus() {
+        this.webview.unfocus();
+        return this;
+    }
+    /**
+     * Return the webview ready subject as observable
+     *
+     * @returns {Observable<boolean>}
+     * @private
+     */
+    initialize() {
+        return this.webviewReadySubject$;
+    }
+    /**
+     * Create new webview instance
+     *
+     * @private
+     */
+    createInstance() {
+        this.webview = new WebView(this.url, false);
+        this.listenReadyEvent();
+        this.sendEventToServer();
+        this.listenGuiOnEvent();
+        this.listenToServerSendGuiEvent();
+    }
+    /**
+     * Listen for ready event and complete subscription
+     *
+     * @private
+     */
+    listenReadyEvent() {
+        this.webview.on('load', () => {
+            this.webviewReadySubject$.next(true);
+            this.webviewReadySubject$.complete();
+        });
+    }
+    /**
+     * Send event to server from webview
+     *
+     * @private
+     */
+    sendEventToServer() {
+        this.webview.on(this.webviewToServerEventName, (eventName, ...args) => {
+            this.eventService.emitServer(eventName, ...args);
+        });
+    }
+    /**
+     * Listen to events from decorator
+     *
+     * @private
+     */
+    listenGuiOnEvent() {
+        this.eventService.on(FrameworkEvent.EventService.GuiOn, (eventName, listener) => {
+            this.webview.on(eventName, listener);
+        });
+    }
+    /**
+     * Emit event from server to gui use client as bridge
+     *
+     * @private
+     */
+    listenToServerSendGuiEvent() {
+        this.eventService.onServer(FrameworkEvent.EventService.ServerEmitGui, (eventName, ...args) => {
+            UtilsService.nextTick(() => {
+                this.webview.emit(eventName, ...args);
+            });
+        });
+    }
+};
+WebviewService = __decorate([
+    StringResolver,
+    singleton(),
+    __metadata("design:paramtypes", [LoggerService,
+        EventService])
+], WebviewService);
+
+class KeyEventModel extends JsonEntityModel {
+}
+__decorate([
+    Cast({ from: castToString() }),
+    __metadata("design:type", String)
+], KeyEventModel.prototype, "target", void 0);
+__decorate([
+    Cast({ from: castToString() }),
+    __metadata("design:type", String)
+], KeyEventModel.prototype, "methodName", void 0);
+__decorate([
+    Cast({ from: castToString() }),
+    __metadata("design:type", String)
+], KeyEventModel.prototype, "type", void 0);
+__decorate([
+    Cast({ from: castToNumber() }),
+    __metadata("design:type", Number)
+], KeyEventModel.prototype, "key", void 0);
+
+let KeyEventService = class KeyEventService {
+    constructor(eventService) {
+        this.eventService = eventService;
+        /**
+         * Contains all key events
+         *
+         * @type {Map<string, KeyEventModel>}
+         */
+        this.events = new Map();
+    }
+    /**
+     * Start the event loop
+     */
+    start() {
+        if (this.eventTypeExist('keyup')) {
+            this.eventService.on('keyup', this.keyup.bind(this));
+        }
+        if (this.eventTypeExist('keydown')) {
+            this.eventService.on('keydown', this.keydown.bind(this));
+        }
+    }
+    /**
+     * Autostart key event service
+     *
+     * @param {Function} done
+     */
+    autoStart(done) {
+        if (this.eventTypeExist('keyup') || this.eventTypeExist('keydown')) {
+            UtilsService.log('Starting ~y~KeyEventService Decorator~w~');
+            this.start();
+            UtilsService.log('Started ~lg~KeyEventService Decorator~w~');
+        }
+        done();
+    }
+    /**
+     * Add event to events array
+     *
+     * @param {string} type
+     * @param key
+     * @param target
+     * @param {string} methodName
+     */
+    add(type, key, target, methodName) {
+        const keyUnique = `${type}_${key}`;
+        if (this.events.has(keyUnique)) {
+            return;
+        }
+        const event = new KeyEventModel().cast({ key, type, target, methodName });
+        this.events.set(keyUnique, event);
+    }
+    /**
+     * Run key events
+     *
+     * @param {string} keyUnique
+     */
+    run(keyUnique) {
+        const event = this.events.get(keyUnique);
+        if (event) {
+            const instances = container.resolveAll(event.target);
+            instances.forEach(async (instance) => {
+                if (instance[event.methodName]) {
+                    const method = instance[event.methodName].bind(instance);
+                    await method();
+                }
+            });
+        }
+    }
+    /**
+     * Check if given key exists in events array
+     *
+     * @param {"keyup" | "keydown"} type
+     * @return {boolean}
+     * @private
+     */
+    eventTypeExist(type) {
+        return !!Array.from(this.events.values()).filter((event) => event.type === type).length;
+    }
+    /**
+     * Run keyup event
+     *
+     * @param {number} key
+     * @private
+     */
+    keyup(key) {
+        this.run(`keyup_${key}`);
+    }
+    /**
+     * Run keydown event
+     *
+     * @param {number} key
+     * @private
+     */
+    keydown(key) {
+        this.run(`keydown_${key}`);
+    }
+};
+KeyEventService = __decorate([
+    StringResolver,
+    singleton(),
+    __metadata("design:paramtypes", [EventService])
+], KeyEventService);
+
+let PlayerWorker = class PlayerWorker {
+    constructor(eventService) {
+        this.eventService = eventService;
+        this.handleRealTime();
+    }
+    /**
+     * Handle ms per game minute
+     * @private
+     */
+    handleRealTime() {
+        this.eventService.onServer(FrameworkEvent.Player.SetRealTime, (msPerGameMinute) => {
+            setMsPerGameMinute(msPerGameMinute);
+        });
+    }
+};
+PlayerWorker = __decorate([
+    singleton(),
+    __metadata("design:paramtypes", [EventService])
+], PlayerWorker);
+
+container.resolve(PlayerWorker);
+const loaderService = container.resolve(LoaderService);
+container.register('EventService', { useValue: container.resolve(EventService) });
+container.afterResolution(KeyEventService, () => {
+    loaderService.add('afterBootstrap', 'autoStart', 'KeyEventService');
+}, { frequency: 'Once' });
+container.afterResolution(WebviewService, () => {
+    loaderService.add('before', 'autoStart', 'WebviewService');
+}, { frequency: 'Once' });
+
+/**
+ * Add onServer event listener
+ *
+ * @param {string} name
+ * @returns {MethodDecorator}
+ * @constructor
+ */
+const OnServer = (name) => {
+    return (target, propertyKey, descriptor) => {
+        const eventName = name || propertyKey;
+        const options = new ValidateOptionsModel().cast({ name: eventName });
+        return validateEventExistsAndPush(target, 'onServer', propertyKey, descriptor, options);
+    };
+};
+/**
+ * Add onceServer event listener
+ *
+ * @param {string} name
+ * @returns {MethodDecorator}
+ * @constructor
+ */
+const OnceServer = (name) => {
+    return (target, propertyKey, descriptor) => {
+        const eventName = name || propertyKey;
+        const options = new ValidateOptionsModel().cast({ name: eventName });
+        return validateEventExistsAndPush(target, 'onceServer', propertyKey, descriptor, options);
+    };
+};
+/**
+ * Add onGui event listener
+ *
+ * @param {string} name
+ * @returns {MethodDecorator}
+ * @constructor
+ */
+const OnGui = (name) => {
+    return (target, propertyKey, descriptor) => {
+        const eventName = name || propertyKey;
+        const options = new ValidateOptionsModel().cast({ name: eventName });
+        return validateEventExistsAndPush(target, 'onGui', propertyKey, descriptor, options);
+    };
+};
+/**
+ * GameEntityCreate Decorator
+ *
+ * @param {BaseObjectType} entityType
+ * @returns {MethodDecorator}
+ * @constructor
+ */
+const GameEntityCreate = (entityType) => {
+    return (target, propertyKey, descriptor) => {
+        const options = new ValidateOptionsModel().cast({ entity: entityType, eventAddTo: 'gameEntity' });
+        return validateEventExistsAndPush(target, 'gameEntityCreate', propertyKey, descriptor, options);
+    };
+};
+/**
+ * GameEntityDestroy Decorator
+ *
+ * @param {BaseObjectType} entityType
+ * @returns {MethodDecorator}
+ * @constructor
+ */
+const GameEntityDestroy = (entityType) => {
+    return (target, propertyKey, descriptor) => {
+        const options = new ValidateOptionsModel().cast({ entity: entityType, eventAddTo: 'gameEntity' });
+        return validateEventExistsAndPush(target, 'gameEntityDestroy', propertyKey, descriptor, options);
+    };
+};
+/**
+ * Decorate streamSyncedMetaChange event to prevent multiple instance for same event listener
+ *
+ * @param {BaseObjectType} entityType
+ * @param {string} metaKey
+ * @return {MethodDecorator}
+ * @constructor
+ */
+const StreamSyncedMetaChange = (entityType, metaKey) => {
+    return (target, propertyKey, descriptor) => {
+        const options = new ValidateOptionsModel().cast({ entity: entityType, metaKey, eventAddTo: 'metaChange' });
+        return validateEventExistsAndPush(target, 'streamSyncedMetaChange', propertyKey, descriptor, options);
+    };
+};
+/**
+ * Decorate syncedMetaChange event to prevent multiple instance for same event listener
+ *
+ * @param {BaseObjectType} entityType
+ * @param {string} metaKey
+ * @return {MethodDecorator}
+ * @constructor
+ */
+const SyncedMetaChange = (entityType, metaKey) => {
+    return (target, propertyKey, descriptor) => {
+        const options = new ValidateOptionsModel().cast({ entity: entityType, metaKey, eventAddTo: 'metaChange' });
+        return validateEventExistsAndPush(target, 'syncedMetaChange', propertyKey, descriptor, options);
+    };
+};
+
+/**
+ * KeyUp Decorator
+ *
+ * @param {number | string} key
+ * @returns {MethodDecorator}
+ * @constructor
+ */
+const KeyUp = (key) => createDecorator(key, 'keyup');
+/**
+ * KeyDown Decorator
+ *
+ * @param {number | string} key
+ * @returns {MethodDecorator}
+ * @constructor
+ */
+const KeyDown = (key) => createDecorator(key, 'keydown');
+/**
+ * Helper for creating key event decorator
+ *
+ * @param {number | string} key
+ * @param {string} type
+ * @returns {MethodDecorator}
+ */
+function createDecorator(key, type) {
+    return (target, propertyKey, descriptor) => {
+        const keyEventService = container.resolve(KeyEventService);
+        const original = descriptor.value;
+        descriptor.value = function (...args) {
+            return original.apply(this, args);
+        };
+        key = typeof key === 'string' ? key.charCodeAt(0) : key;
+        keyEventService.add(type, key, target.constructor.name, propertyKey);
+        return descriptor;
+    };
+}
+
+WebView.prototype.routeTo = (route, ...args) => {
+    const webviewService = container.resolve(WebviewService);
+    webviewService.routeTo(route, ...args);
+};
+
+export { EventService, GameEntityCreate, GameEntityDestroy, KeyDown, KeyEventService, KeyUp, OnGui, OnServer, OnceServer, StreamSyncedMetaChange, SyncedMetaChange, WebviewService };

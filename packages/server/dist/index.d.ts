@@ -1,6 +1,6 @@
 /// <reference types="types-server" />
 /// <reference types="node" />
-import { BaseEventService, EntityHandleModel, DiscordConfigModel, AccessTokenModel, DiscordUserModel } from '@abstractFlo/shared';
+import { BaseEventService, EntityHandleModel, DiscordConfigModel, AccessTokenModel, DiscordUserModel } from '@abstractflo/shared';
 import { Player, Colshape, Entity, ColShapeType, BaseObjectType } from 'alt-server';
 import { URLSearchParams } from 'url';
 import { Observable } from 'rxjs';

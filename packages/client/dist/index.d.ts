@@ -1,4 +1,4 @@
-import { BaseEventService, EntityHandleModel, LoggerService, JsonEntityModel } from '@abstractFlo/shared';
+import { BaseEventService, EntityHandleModel, LoggerService, JsonEntityModel } from '@abstractflo/shared';
 import { WebView, BaseObjectType } from 'alt-client';
 
 declare class EventService extends BaseEventService {
