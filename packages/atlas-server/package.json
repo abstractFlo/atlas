@@ -1,0 +1,29 @@
+{
+  "name": "@abstractflo/atlas-server",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Florian Uhlrich <florian.uhlrich@rsu-reifen.de>",
+  "homepage": "",
+  "license": "ISC",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "start": "tsc -w --preserveWatchOutput"
+  },
+  "peerDependencies": {
+    "@abraham/reflection": "^0.7.0",
+    "@abstractflo/atlas-shared": "0.0.0",
+    "tsyringe": "^4.4.0"
+  },
+  "devDependencies": {
+    "@abstractflo/atlas-shared": "0.0.0",
+    "@types/fs-extra": "^9.0.7",
+    "fs-extra": "^9.1.0",
+    "tsyringe": "^4.4.0"
+  }
+}

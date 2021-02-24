@@ -1,5 +1,14 @@
 {
+  "exclude": [
+    "node_modules",
+    "dist",
+    "lib",
+    "__tests__",
+    "**/*.spec"
+  ],
+  "files": [],
   "compilerOptions": {
+    "skipLibCheck": false,
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
@@ -7,33 +16,41 @@
       "es6",
       "esnext"
     ],
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/@altv"
-    ],
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "rootDir": ".",
+    "outDir": "dist",
+    "strict": true,
     "removeComments": false,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "preserveConstEnums": true,
-    "noImplicitAny": true,
-    "sourceMap": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./packages",
-    "declaration": true,
-    "declarationDir": "dist/types",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "allowJs": true,
+    "baseUrl": ".",
     "paths": {
-      "@abstractflo/atlas-shared": [
-        "shared/src"
+      "@abstractflo/shared/*": [
+        "packages/shared/src/*"
       ]
-    }
+    },
+    "composite": true,
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false
   },
-  "include": [
-    "packages/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
+  "references": [
+    {
+      "path": "packages/atlas-server"
+    },
+    {
+      "path": "packages/atlas-client"
+    },
+    {
+      "path": "packages/atlas-shared"
+    }
   ]
 }
