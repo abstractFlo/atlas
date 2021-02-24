@@ -4,21 +4,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm run clean",
     "prebuild": "npm run clean",
-    "start": "tsc --build --watch",
-    "build": "tsc --build",
-    "clean": "rimraf packages/*/{tsconfig.tsbuildinfo,lib,dist}"
+    "postbuild": "npm run generate:typings",
+    "build": "lerna run --parallel build",
+    "generate:typings": "lerna run --parallel generate:typings",
+
+    "clean": "rimraf packages/*/{dist}"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@abraham/reflection": "^0.7.0",
+    "@rollup/plugin-typescript": "^8.2.0",
+    "dts-bundle": "^0.7.3",
+    "dts-bundle-generator": "^5.7.0",
     "jscodeshift": "^0.11.0",
     "lerna": "^3.22.1",
     "npm-run-all": "^4.1.5",
     "rimraf": "^2.7.1",
+    "rollup": "^2.39.1",
+    "rollup-plugin-typescript2": "^0.30.0",
     "tsyringe": "^4.4.0",
     "typescript": "^4.2.2"
   }

@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "start": "tsc -w --preserveWatchOutput"
+    "build": "rollup -c",
+    "generate:typings": "dts-bundle-generator --config dts-generator.cjs"
   },
   "peerDependencies": {
     "@abraham/reflection": "^0.7.0",

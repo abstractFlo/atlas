@@ -2,13 +2,8 @@
   "extends": "../../tsconfig.json",
   "include": ["src"],
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "typings",
     "rootDir": "src",
-    "baseUrl": "."
-  },
-  "references": [
-    {
-      "path": "../atlas-shared"
-    }
-  ]
+    "baseUrl": ".",
+  }
 }

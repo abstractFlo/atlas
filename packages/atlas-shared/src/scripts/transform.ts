@@ -63,7 +63,7 @@ function convert(code: string, modules: string[] = []) {
         Object.keys(moduleMap).forEach(key => {
           if (!moduleMap[key].includes(calleeName)) return;
 
-          mPath.value.callee.name = `${snakeToCamel(key)}+${calleeName}`;
+          mPath.value.callee.name = `${snakeToCamel(key)}.${calleeName}`;
         });
       });
 
@@ -75,7 +75,7 @@ function convert(code: string, modules: string[] = []) {
         Object.keys(moduleMap).forEach(key => {
           if (!moduleMap[key].includes(calleeName)) return;
 
-          mPath.value.callee.name = `${snakeToCamel(key)}+${calleeName}`;
+          mPath.value.callee.name = `${snakeToCamel(key)}.${calleeName}`;
         });
       });
 

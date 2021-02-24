@@ -6,7 +6,6 @@
     "__tests__",
     "**/*.spec"
   ],
-  "files": [],
   "compilerOptions": {
     "skipLibCheck": false,
     "target": "esnext",
@@ -25,7 +24,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    "importHelpers": false,
+    "esModuleInterop": false,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
@@ -37,20 +37,8 @@
         "packages/shared/src/*"
       ]
     },
-    "composite": true,
-    "declaration": true,
+    "declaration": false,
     "declarationMap": false,
     "sourceMap": false
-  },
-  "references": [
-    {
-      "path": "packages/atlas-server"
-    },
-    {
-      "path": "packages/atlas-client"
-    },
-    {
-      "path": "packages/atlas-shared"
-    }
-  ]
+  }
 }
