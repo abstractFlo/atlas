@@ -8,7 +8,7 @@ import { GameResourceInterface, RollupConfigInterface } from '../interfaces';
 
 //@ts-ignore
 import autoExternal from 'rollup-plugin-auto-external';
-import convertNamedImports from '../scripts/transform.js';
+import convertNamedImports from './transform';
 import { config } from 'dotenv';
 
 config();

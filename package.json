@@ -8,7 +8,6 @@
     "postbuild": "npm run generate:typings",
     "build": "lerna run --parallel build",
     "generate:typings": "lerna run --parallel generate:typings",
-
     "clean": "rimraf packages/*/{dist}"
   },
   "keywords": [],
@@ -16,6 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "@abraham/reflection": "^0.7.0",
+    "@altv/types-server": "^1.7.2",
     "@rollup/plugin-typescript": "^8.2.0",
     "dts-bundle": "^0.7.3",
     "dts-bundle-generator": "^5.7.0",
