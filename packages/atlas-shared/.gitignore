@@ -6,3 +6,6 @@
 node_modules
 
 lerna-debug.log
+
+resource-manager.js
+resource-manager.d.ts

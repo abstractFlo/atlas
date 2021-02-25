@@ -8,7 +8,7 @@
     "postbuild": "npm run generate:typings",
     "build": "lerna run --parallel build",
     "generate:typings": "lerna run --parallel generate:typings",
-    "clean": "rimraf packages/*/{dist}"
+    "clean": "rimraf packages/*/{dist,resource-manager.js,resource-manager.d.ts,index.js,index.d.ts}"
   },
   "keywords": [],
   "author": "",

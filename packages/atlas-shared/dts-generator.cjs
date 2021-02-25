@@ -8,12 +8,8 @@ module.exports = {
       outFile: './dist/index.d.ts'
     },
     {
-      filePath: './src/helpers.ts',
-      outFile: './dist/helpers.d.ts'
-    },
-    {
       filePath: './src/build/resource-manager.ts',
-      outFile: './dist/resource-manager.d.ts'
+      outFile: './resource-manager.d.ts'
     }
   ]
 };

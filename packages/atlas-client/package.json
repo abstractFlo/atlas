@@ -1,16 +1,13 @@
 {
   "name": "@abstractflo/atlas-client",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
   "keywords": [],
-  "author": "Florian Uhlrich <florian.uhlrich@rsu-reifen.de>",
+  "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
   "license": "ISC",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "rollup -c",
