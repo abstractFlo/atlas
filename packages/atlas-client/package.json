@@ -15,12 +15,14 @@
   },
   "peerDependencies": {
     "@abraham/reflection": "^0.7.0",
-    "@abstractflo/atlas-shared": "0.0.0",
+    "@abstractflo/atlas-shared": "^0.0.0",
+    "@altv/types-client": "^1.5.2",
     "tsyringe": "^4.4.0"
   },
   "devDependencies": {
-    "@abstractflo/atlas-shared": "0.0.0",
+    "@abstractflo/atlas-shared": "^0.0.0",
     "@types/fs-extra": "^9.0.7",
+    "@types/node": "^14.14.31",
     "fs-extra": "^9.1.0",
     "tsyringe": "^4.4.0"
   }

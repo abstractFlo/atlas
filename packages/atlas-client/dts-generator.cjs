@@ -1,6 +1,6 @@
 module.exports = {
   compilationOptions: {
-    preferredConfigPath: './tsconfig.json',
+    preferredConfigPath: './tsconfig.typings.json'
   },
   entries: [
     {

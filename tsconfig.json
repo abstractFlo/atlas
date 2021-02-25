@@ -1,45 +1,9 @@
 {
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "skipLibCheck": false,
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "lib": [
-      "es6",
-      "esnext"
-    ],
     "typeRoots": [
-      "node_modules/@types",
-      "node_modules/@altv"
+      "./node_modules/@types",
+      "./node_modules/@altv"
     ],
-    "rootDir": ".",
-    "outDir": "dist",
-    "strict": false,
-    "removeComments": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true,
-    "importHelpers": false,
-    "esModuleInterop": false,
-    "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowJs": true,
-    "baseUrl": ".",
-    "paths": {
-      "@abstractflo/shared/*": [
-        "packages/shared/src/*"
-      ]
-    },
-    "declaration": false,
-    "declarationMap": false,
-    "sourceMap": false
   }
 }

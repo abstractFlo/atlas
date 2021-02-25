@@ -70,7 +70,7 @@ export class ResourceManager {
 
         const serverConfig = this.createServerConfig(
             path.resolve(`${resource}/server/index.ts`),
-            path.resolve(outputPath + '/' + pkg.name + '/server.js'),
+            path.resolve(`${outputPath}/${pkg.name}/server.js`),
             externals,
             convertedModules
         );
@@ -81,7 +81,7 @@ export class ResourceManager {
       if (hasClientFolder) {
         const clientConfig = this.createClientConfig(
             path.resolve(`${resource}/client/index.ts`),
-            path.resolve(outputPath + '/' + pkg.name + '/client.js')
+            path.resolve(`${outputPath}/${pkg.name}/client.js`)
         );
 
         this.config.push(clientConfig);
@@ -112,7 +112,7 @@ export class ResourceManager {
     const modulesForConvert = [
       ...Object.keys(pkg.devDependencies || {}),
       ...Object.keys(pkg.dependencies || {})
-    ].filter(name => name !== '@abstractflo/atlas-shared');
+    ].filter(name => !name.startsWith('@abstractflo'));
 
     const plugins = [
       nodeResolve(),
