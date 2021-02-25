@@ -3,10 +3,17 @@ import { container } from 'tsyringe';
 import { CommandService } from '../services';
 import { CommandModel } from '../models/command.model';
 
+/**
+ * Register new console command
+ *
+ * @param {string} name
+ * @return {MethodDecorator}
+ * @constructor
+ */
 export const Cmd = (name?: string): MethodDecorator => {
-  return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor): PropertyDescriptor {
+  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
 
-    const commandName = name || String(propertyKey);
+    const commandName = name || propertyKey;
     const original = descriptor.value;
     const config = new CommandModel().cast({
       name: commandName,

@@ -1,26 +1,54 @@
-import { CommandModel } from '../models/command.model';
-import { KEYS } from '../constants/decorator.constants';
+import { CommandModel } from '../models';
+import { KEYS } from '../constants';
 import { container, singleton } from 'tsyringe';
-//@ts-ignore
-import * as alt from 'alt-server';
 
 @singleton()
 export class CommandService {
 
+  /**
+   * Contains all commands
+   *
+   * @type {Map<string, CommandModel>}
+   * @private
+   */
   private commands: Map<string, CommandModel> = new Map<string, CommandModel>();
 
-
+  /**
+   * Contains the arguments for command
+   *
+   * @type {string[]}
+   * @private
+   */
   private cmdArgs: string[] = [];
 
+  /**
+   * Contains the command prefix
+   *
+   * @type {string}
+   * @private
+   */
   private prefix: string = '/';
 
+  /**
+   * Start the command handler
+   */
   public start(): void {
     this.load();
-    alt.on('consoleCommand', this.consoleCommand.bind(this));
+
+    if (this.commands.size === 0) return;
+
+    const listener: CallableFunction = container.resolve('alt.on');
+    listener('consoleCommand', this.consoleCommand.bind(this));
   }
 
+  /**
+   * Load the commands at runtime from decorated meta data
+   *
+   * @private
+   */
   private load(): void {
-    const commands = this.getCommandsFromMeta();
+    const commands: CommandModel[] = Reflect.getMetadata(KEYS.COMMANDS, this) || [];
+
     commands.forEach((command: CommandModel) => {
       this.add(command);
     });
@@ -39,24 +67,33 @@ export class CommandService {
   }
 
   /**
-   * Return the command models from meta data
+   * Setup command arguments
    *
-   * @return {CommandModel[]}
+   * @param args
    * @private
    */
-  private getCommandsFromMeta(): CommandModel[] {
-    return Reflect.getMetadata(KEYS.COMMANDS, this) || [];
-  }
-
   private setArguments(args: any): void {
     this.cmdArgs = args;
   }
 
+  /**
+   * Process the console command
+   *
+   * @param {string} cmd
+   * @param args
+   * @private
+   */
   private consoleCommand(cmd: string, ...args: any[]): void {
     this.setArguments(args);
     this.run(cmd);
   }
 
+  /**
+   * Search for command and process if exists
+   *
+   * @param {string} cmd
+   * @private
+   */
   private run(cmd: string) {
     const command = cmd.slice(this.prefix.length);
     const commandEntry = this.commands.get(command);

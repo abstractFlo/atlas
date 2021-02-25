@@ -15,8 +15,10 @@
   "license": "ISC",
   "devDependencies": {
     "@abraham/reflection": "^0.7.0",
+    "@altv/types-client": "^1.5.2",
     "@altv/types-server": "^1.7.2",
     "@rollup/plugin-typescript": "^8.2.0",
+    "builtin-modules": "^3.2.0",
     "dts-bundle": "^0.7.3",
     "dts-bundle-generator": "^5.7.0",
     "jscodeshift": "^0.11.0",
