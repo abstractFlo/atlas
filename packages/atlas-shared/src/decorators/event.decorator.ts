@@ -1,7 +1,7 @@
 import { EventModel } from '../models';
 import { container } from 'tsyringe';
-import { BaseEventService } from '../services';
 import { EventConstants } from '../constants';
+import { EventServiceInterface } from '../interfaces';
 
 /**
  * Register @On decorator
@@ -76,7 +76,7 @@ export function registerDescriptor(
  * @param {Partial<EventModel>} data
  */
 export function setReflectMetaData(key: string, data: Partial<EventModel>): void {
-  const eventService = container.resolve(BaseEventService);
+  const eventService = container.resolve<EventServiceInterface>('EventService');
   const config: EventModel[] = Reflect.getMetadata(key, eventService) || [];
   const eventModel = new EventModel().cast(data);
 

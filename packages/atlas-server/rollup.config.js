@@ -13,6 +13,7 @@ export default [
       typescript(),
     ],
     external: [
+      'alt-server',
       'rxjs/operators',
       ...builtinModules,
       ...Object.keys(pkg.devDependencies || {}),

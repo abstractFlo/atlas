@@ -1,5 +1,7 @@
 import '@abraham/reflection';
-import './bootstrap';
+import './setup';
 
+export * from './helpers';
 
 export * from './decorators';
+export * from './services';

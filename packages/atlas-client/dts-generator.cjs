@@ -1,11 +1,11 @@
 module.exports = {
   compilationOptions: {
-    preferredConfigPath: './tsconfig.typings.json'
+    preferredConfigPath: './tsconfig.typings.json',
   },
   entries: [
     {
       filePath: './src/index.ts',
-      outFile: './dist/index.d.ts'
-    }
-  ]
+      outFile: './dist/index.d.ts',
+    },
+  ],
 };
