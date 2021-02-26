@@ -4,7 +4,20 @@ import { ValidateOptionsModel } from './validate-options.model';
 export class EventModel extends JsonEntityModel {
 
   @Cast({ from: castToString() })
-  type: string;
+  type:
+      'on' |
+      'once' |
+      'onClient' |
+      'onceClient' |
+      'onServer' |
+      'onceServer' |
+      'onGui' |
+      'syncedMetaChange' |
+      'streamSyncedMetaChange' |
+      'gameEntityCreate' |
+      'gameEntityDestroy' |
+      'entityEnterColShape' |
+      'entityLeaveColShape';
 
   @Cast({ from: castToString() })
   eventName: string;

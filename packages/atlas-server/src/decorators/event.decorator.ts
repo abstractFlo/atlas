@@ -1,4 +1,4 @@
-import { KEYS, registerDescriptor, setReflectMetaData } from '@abstractflo/atlas-shared';
+import { EventConstants, registerDescriptor, setReflectMetaData } from '@abstractflo/atlas-shared';
 import { BaseObjectType, ColShapeType } from 'alt-server';
 
 /**
@@ -12,7 +12,7 @@ export const OnClient = (name?: string): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(KEYS.EVENTS_ON_CLIENT, {
+    setReflectMetaData(EventConstants.ON_CLIENT, {
       type: 'onClient',
       eventName,
       methodName: propertyKey,
@@ -37,7 +37,7 @@ export const OnceClient = (name?: string): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(KEYS.EVENTS_ONCE_CLIENT, {
+    setReflectMetaData(EventConstants.ONCE_CLIENT, {
       type: 'onceClient',
       eventName,
       methodName: propertyKey,
@@ -64,7 +64,7 @@ export const EntityEnterColShape = (colShapeType: ColShapeType, name?: string, e
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(KEYS.EVENTS_ENTITY_ENTER_COLSHAPE, {
+    setReflectMetaData(EventConstants.ENTITY_ENTER_COLSHAPE, {
       type: 'entityEnterColShape',
       eventName,
       methodName: propertyKey,
@@ -94,7 +94,7 @@ export const EntityLeaveColShape = (colShapeType: ColShapeType, name?: string, e
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(KEYS.EVENTS_ENTITY_LEAVE_COLSHAPE, {
+    setReflectMetaData(EventConstants.ENTITY_LEAVE_COLSHAPE, {
       type: 'entityLeaveColShape',
       eventName,
       methodName: propertyKey,

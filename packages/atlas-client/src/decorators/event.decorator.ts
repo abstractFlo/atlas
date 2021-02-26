@@ -1,4 +1,4 @@
-import { KEYS, registerDescriptor, setReflectMetaData } from '@abstractflo/atlas-shared';
+import { EventConstants, registerDescriptor, setReflectMetaData } from '@abstractflo/atlas-shared';
 import { BaseObjectType } from 'alt-client';
 
 /**
@@ -12,7 +12,7 @@ export const OnServer = (name?: string): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(KEYS.EVENTS_ON_SERVER, {
+    setReflectMetaData(EventConstants.ON_SERVER, {
       type: 'onServer',
       eventName,
       methodName: propertyKey,
@@ -37,7 +37,7 @@ export const OnceServer = (name?: string): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(KEYS.EVENTS_ONCE_SERVER, {
+    setReflectMetaData(EventConstants.ONCE_SERVER, {
       type: 'onceServer',
       eventName,
       methodName: propertyKey,
@@ -62,7 +62,7 @@ export const OnGui = (name?: string): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(KEYS.EVENTS_ON_GUI, {
+    setReflectMetaData(EventConstants.ON_GUI, {
       type: 'onGui',
       eventName,
       methodName: propertyKey,
@@ -85,7 +85,7 @@ export const OnGui = (name?: string): MethodDecorator => {
  */
 export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    setReflectMetaData(KEYS.EVENTS_GAME_ENTITY_CREATE, {
+    setReflectMetaData(EventConstants.GAME_ENTITY_CREATE, {
       type: 'gameEntityCreate',
       methodName: propertyKey,
       targetName: target.constructor.name,
@@ -108,7 +108,7 @@ export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator =>
  */
 export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    setReflectMetaData(KEYS.EVENTS_GAME_ENTITY_DESTROY, {
+    setReflectMetaData(EventConstants.GAME_ENTITY_DESTROY, {
       type: 'gameEntityCreate',
       methodName: propertyKey,
       targetName: target.constructor.name,
@@ -132,7 +132,7 @@ export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator =
  */
 export const StreamSyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    setReflectMetaData(KEYS.EVENTS_STREAM_SYNCED_META_CHANGE, {
+    setReflectMetaData(EventConstants.STREAM_SYNCED_META_CHANGE, {
       type: 'streamSyncedMetaChange',
       methodName: propertyKey,
       targetName: target.constructor.name,
@@ -157,7 +157,7 @@ export const StreamSyncedMetaChange = (entityType: BaseObjectType, metaKey?: str
  */
 export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    setReflectMetaData(KEYS.EVENTS_SYNCED_META_CHANGE, {
+    setReflectMetaData(EventConstants.SYNCED_META_CHANGE, {
       type: 'syncedMetaChange',
       methodName: propertyKey,
       targetName: target.constructor.name,

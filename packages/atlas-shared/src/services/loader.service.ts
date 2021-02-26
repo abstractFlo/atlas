@@ -1,6 +1,6 @@
 import { container, InjectionToken, singleton } from 'tsyringe';
 import { LoaderServiceQueueItemModel, LoaderServiceQueueModel } from '../models';
-import { KEYS } from '../constants';
+import { LoaderServiceConstants } from '../constants';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeLast } from 'rxjs/operators';
 import { UtilsService } from './utils.service';
@@ -25,17 +25,51 @@ export class LoaderService {
   private readonly: LoaderServiceQueueModel = new LoaderServiceQueueModel();
 
   /**
-   * Queue Count Observables
+   * Contains the count for frameworkBeforeBoot
    *
    * @type {Observable<number>}
    * @private
    */
   private readonly frameworkBeforeBootCount$: Observable<number> = this.queue.frameworkBeforeBootCount.asObservable();
+
+  /**
+   * Contains the count for frameworkAfterBoot
+   *
+   * @type {Observable<number>}
+   * @private
+   */
   private readonly frameworkAfterBootCount$: Observable<number> = this.queue.frameworkAfterBootCount.asObservable();
+
+  /**
+   * Contains the count for before
+   *
+   * @type {Observable<number>}
+   * @private
+   */
   private readonly beforeCount$: Observable<number> = this.queue.beforeCount.asObservable();
+
+  /**
+   * Contains the count for after
+   *
+   * @type {Observable<number>}
+   * @private
+   */
   private readonly afterCount$: Observable<number> = this.queue.afterCount.asObservable();
 
+  /**
+   * The subject for starting the loading system and queue
+   *
+   * @type {Subject<boolean>}
+   * @private
+   */
   private readonly startingSubject$: Subject<boolean> = new Subject<boolean>();
+
+  /**
+   * The subject if the loading finished and queue is empty
+   *
+   * @type {Subject<boolean>}
+   * @private
+   */
   private readonly finishSubject$: Subject<boolean> = new Subject<boolean>();
 
   /**
@@ -210,7 +244,11 @@ export class LoaderService {
    * @private
    */
   private resolveMetaDataAndAdd(): void {
-    const queueItems: LoaderServiceQueueItemModel[] = Reflect.getMetadata(KEYS.LOADER_QUEUE_ITEM, this) || [];
+    const queueItems: LoaderServiceQueueItemModel[] = Reflect.getMetadata(
+        LoaderServiceConstants.QUEUE_ITEM,
+        this
+    ) || [];
+
     queueItems.forEach((queueItem: LoaderServiceQueueItemModel) => this.add(queueItem));
   }
 

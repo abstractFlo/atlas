@@ -1,6 +1,6 @@
 import { CommandModel } from '../models';
-import { KEYS } from '../constants';
 import { container, singleton } from 'tsyringe';
+import { CommandConstants } from '../constants';
 
 @singleton()
 export class CommandService {
@@ -47,7 +47,7 @@ export class CommandService {
    * @private
    */
   private load(): void {
-    const commands: CommandModel[] = Reflect.getMetadata(KEYS.COMMANDS, this) || [];
+    const commands: CommandModel[] = Reflect.getMetadata(CommandConstants.CONSOLE_COMMAND, this) || [];
 
     commands.forEach((command: CommandModel) => {
       this.add(command);

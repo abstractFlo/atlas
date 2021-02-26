@@ -1,4 +1,4 @@
-import { KEYS } from '../constants/decorator.constants';
+import { CommandConstants } from '../constants/command.constants';
 import { container } from 'tsyringe';
 import { CommandService } from '../services';
 import { CommandModel } from '../models/command.model';
@@ -22,7 +22,10 @@ export const Cmd = (name?: string): MethodDecorator => {
     });
 
     const commandService = container.resolve(CommandService);
-    const propertiesConfig: CommandModel[] = Reflect.getMetadata(KEYS.COMMANDS, commandService) || [];
+    const propertiesConfig: CommandModel[] = Reflect.getMetadata(
+        CommandConstants.CONSOLE_COMMAND,
+        commandService
+    ) || [];
 
     propertiesConfig.push(config);
 
@@ -30,7 +33,7 @@ export const Cmd = (name?: string): MethodDecorator => {
       return original.apply(this, args);
     };
 
-    Reflect.defineMetadata(KEYS.COMMANDS, propertiesConfig, commandService);
+    Reflect.defineMetadata(CommandConstants.CONSOLE_COMMAND, propertiesConfig, commandService);
 
     return descriptor;
   };

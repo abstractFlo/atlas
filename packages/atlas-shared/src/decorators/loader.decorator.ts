@@ -1,6 +1,6 @@
-import { AutoloaderConstants, KEYS } from '../constants';
-import { LoaderServiceQueueItemModel } from '../models';
-import { LoaderService } from '../services';
+import { AutoloaderConstants, LoaderServiceConstants } from '../constants';
+import { LoaderServiceQueueItemModel } from '../models/loader-service-queue-item.model';
+import { LoaderService } from '../services/loader.service';
 import { container } from 'tsyringe';
 
 /**
@@ -24,7 +24,10 @@ export const Autoload = (
     options?: AutoloadOptionsInterface) => {
   return (target: any) => {
     const loaderService = container.resolve(LoaderService);
-    const config: LoaderServiceQueueItemModel[] = Reflect.getMetadata(KEYS.LOADER_QUEUE_ITEM, loaderService) || [];
+    const config: LoaderServiceQueueItemModel[] = Reflect.getMetadata(
+        LoaderServiceConstants.QUEUE_ITEM,
+        loaderService
+    ) || [];
 
     const defaultOptions = {
       methodName: 'autoStart',
@@ -40,7 +43,7 @@ export const Autoload = (
 
     config.push(queueItemModel);
 
-    Reflect.defineMetadata(KEYS.LOADER_QUEUE_ITEM, config, loaderService);
+    Reflect.defineMetadata(LoaderServiceConstants.QUEUE_ITEM, config, loaderService);
 
     return target;
   };
