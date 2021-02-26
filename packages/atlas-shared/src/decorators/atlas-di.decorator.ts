@@ -16,7 +16,7 @@ export interface ModuleOptionsDecoratorInterface {
  * @returns {ClassDecorator}
  * @constructor
  */
-export function Module(): (targetConstructor: constructor<any>) => void {
+export function Module(options?: ModuleOptionsDecoratorInterface): (targetConstructor: constructor<any>) => void {
   return function (targetConstructor: constructor<any>) {
     registerAsSingletonAndString(targetConstructor);
   };
@@ -31,7 +31,7 @@ export function Module(): (targetConstructor: constructor<any>) => void {
  * @constructor
  */
 export function Component(targetConstructor: constructor<any>) {
-  registerAsSingletonAndString(targetConstructor);
+  return registerAsSingletonAndString(targetConstructor);
 }
 
 /**
@@ -40,11 +40,13 @@ export function Component(targetConstructor: constructor<any>) {
  * @param {constructor<any>} targetConstructor
  * @return {constructor<any>}
  */
-function registerAsSingletonAndString(targetConstructor: constructor<any>): void {
+function registerAsSingletonAndString(targetConstructor: constructor<any>): constructor<any> {
+  singleton()(targetConstructor);
+
   container.register(
       targetConstructor.name,
       { useFactory: instanceCachingFactory(c => c.resolve(targetConstructor)) }
   );
 
-  singleton()(targetConstructor);
+  return targetConstructor;
 }
