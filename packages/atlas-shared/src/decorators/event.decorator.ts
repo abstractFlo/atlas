@@ -18,7 +18,10 @@ export const On = (name?: string): MethodDecorator => {
       type: 'on',
       eventName,
       methodName: propertyKey,
-      targetName: target.constructor.name
+      targetName: target.constructor.name,
+      validateOptions: {
+        name: eventName
+      }
     });
 
     return registerDescriptor(descriptor);

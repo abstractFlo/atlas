@@ -16,4 +16,7 @@ export enum KEYS {
   EVENTS_SYNCED_META_CHANGE = 'atlas-shared:events:syncedMetaChange',
   EVENTS_ENTITY_ENTER_COLSHAPE = 'atlas-shared:events:entityEnterColShape',
   EVENTS_ENTITY_LEAVE_COLSHAPE = 'atlas-shared:events:entityLeaveColShape',
+
+  // LoaderService
+  LOADER_QUEUE_ITEM = 'atlas-shared:loaderService:queueItem'
 }
