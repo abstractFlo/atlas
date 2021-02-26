@@ -13,6 +13,7 @@ export default [
       typescript(),
     ],
     external: [
+      'rxjs/operators',
       ...builtinModules,
       ...Object.keys(pkg.devDependencies || {}),
       ...Object.keys(pkg.dependencies || {}),

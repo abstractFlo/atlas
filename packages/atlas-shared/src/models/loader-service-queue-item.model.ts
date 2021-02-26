@@ -1,6 +1,6 @@
 import { Cast, castToNumber, castToString, JsonEntityModel } from '../libs/json-entity';
-import { InjectionToken } from 'tsyringe';
 import { LoaderServiceQueueType } from '../constants';
+import { constructor } from '../types';
 
 export class LoaderServiceQueueItemModel extends JsonEntityModel {
 
@@ -8,7 +8,7 @@ export class LoaderServiceQueueItemModel extends JsonEntityModel {
   type: LoaderServiceQueueType;
 
   @Cast()
-  target: string | InjectionToken;
+  target: string | constructor<any>;
 
   @Cast({ from: castToString() })
   methodName: string;

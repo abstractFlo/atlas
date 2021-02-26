@@ -110,6 +110,7 @@ export class ResourceManager {
 
     const pkg = this.readPackageJson(process.cwd()) as any;
     const modulesForConvert = [
+      'rxjs/operators',
       ...Object.keys(pkg.devDependencies || {}),
       ...Object.keys(pkg.dependencies || {})
     ].filter(name => !name.startsWith('@abstractflo'));

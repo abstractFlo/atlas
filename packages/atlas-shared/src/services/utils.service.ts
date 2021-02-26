@@ -8,13 +8,26 @@ export class UtilsService {
    * @param {Function} listener
    * @param {number} duration
    */
-  public static setTimeout(listener: CallableFunction, duration: number): void {
-    const setTimeoutFn = container.resolve<CallableFunction>('alt.setTimeout');
+  public static autoClearSetTimeout(listener: CallableFunction, duration: number): void {
     const clearTimeoutFn = container.resolve<CallableFunction>('alt.clearTimeout');
 
-    const timeout = setTimeoutFn(async () => {
+    const timeout = UtilsService.setTimeout(async () => {
       await listener();
       clearTimeoutFn(timeout);
+    }, duration);
+  }
+
+  /**
+   * Run a setTimeout
+   *
+   * @param {Function} listener
+   * @param {number} duration
+   */
+  public static setTimeout(listener: CallableFunction, duration: number): number {
+    const setTimeoutFn = container.resolve<CallableFunction>('alt.setTimeout');
+
+    return setTimeoutFn(async () => {
+      await listener();
     }, duration);
   }
 
