@@ -2,6 +2,7 @@ import { EventModel } from '../models';
 import { container } from 'tsyringe';
 import { EventEnum } from '../constants';
 import { EventServiceInterface } from '../interfaces';
+import { constructor } from '../types';
 
 /**
  * Register @On decorator
@@ -14,7 +15,7 @@ export const On = (name?: string): MethodDecorator => {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(EventEnum.ON, {
+    setEventServiceReflectMetaData(EventEnum.ON, {
       type: 'on',
       eventName,
       methodName: propertyKey,
@@ -39,12 +40,43 @@ export const Once = (name?: string): MethodDecorator => {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(EventEnum.ONCE, {
+    setEventServiceReflectMetaData(EventEnum.ONCE, {
       type: 'once',
       eventName,
       methodName: propertyKey,
       targetName: target.constructor.name
     });
+
+    return registerDescriptor(descriptor);
+  };
+};
+
+/**
+ * Register new console command
+ *
+ * @param {string} name
+ * @return {MethodDecorator}
+ * @constructor
+ */
+export const Cmd = (name?: string): MethodDecorator => {
+  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+
+    const commandName = name || propertyKey;
+
+    const events = getEventServiceReflectMetaData<EventModel[]>(EventEnum.CONSOLE_COMMAND, []);
+    const alreadyExists = events.find((event: EventModel) => event.eventName === commandName);
+
+    if (!alreadyExists) {
+      setEventServiceReflectMetaData(EventEnum.CONSOLE_COMMAND, {
+        type: 'consoleCommand',
+        eventName: commandName,
+        methodName: propertyKey,
+        targetName: target.constructor.name,
+        validateOptions: {
+          name: commandName
+        }
+      });
+    }
 
     return registerDescriptor(descriptor);
   };
@@ -75,7 +107,7 @@ export function registerDescriptor(
  * @param {string} key
  * @param {Partial<EventModel>} data
  */
-export function setReflectMetaData(key: string, data: Partial<EventModel>): void {
+export function setEventServiceReflectMetaData(key: string, data: Partial<EventModel>): void {
   const eventService = container.resolve<EventServiceInterface>('EventService');
   const config: EventModel[] = Reflect.getMetadata(key, eventService) || [];
   const eventModel = new EventModel().cast(data);
@@ -85,3 +117,17 @@ export function setReflectMetaData(key: string, data: Partial<EventModel>): void
   Reflect.defineMetadata(key, config, eventService);
 }
 
+/**
+ * Return the MetaData for given target
+ * @param {string} key
+ * @param {constructor<any>} target
+ * @param {T} defaultValue
+ * @return {typeof defaultValue}
+ */
+export function getEventServiceReflectMetaData<T>(
+    key: string,
+    defaultValue: T
+): typeof defaultValue {
+  const target = container.resolve<EventServiceInterface>('EventService');
+  return Reflect.getMetadata(key, target) || defaultValue;
+}

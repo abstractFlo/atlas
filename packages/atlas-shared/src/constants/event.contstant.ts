@@ -12,4 +12,7 @@ export enum EventEnum {
   SYNCED_META_CHANGE = 'atlas-shared:events:syncedMetaChange',
   ENTITY_ENTER_COLSHAPE = 'atlas-shared:events:entityEnterColShape',
   ENTITY_LEAVE_COLSHAPE = 'atlas-shared:events:entityLeaveColShape',
+  CONSOLE_COMMAND = 'atlas-shared:events:consoleCommand',
+  KEY_UP = 'atlas-shared:events:keyUp',
+  KEY_DOWN = 'atlas-shared:events:keyDown',
 }

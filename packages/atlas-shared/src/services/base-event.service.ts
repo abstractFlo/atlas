@@ -1,12 +1,15 @@
-import { container } from 'tsyringe';
+import { container, singleton } from 'tsyringe';
 import { EventModel } from '../models';
 import { EventEnum } from '../constants';
 import { constructor } from '../types';
 import { EventServiceInterface } from '../interfaces';
 import { UtilsService } from './utils.service';
 import { Entity } from 'alt-server';
+import { CommandService } from './command.service';
 
-export abstract class BaseEventService implements EventServiceInterface {
+@singleton()
+export class BaseEventService implements EventServiceInterface {
+
 
   /**
    * Contains all events where first param is an entity
@@ -30,7 +33,6 @@ export abstract class BaseEventService implements EventServiceInterface {
     EventEnum.ENTITY_ENTER_COLSHAPE,
     EventEnum.ENTITY_LEAVE_COLSHAPE
   ];
-
   /**
    * Contains all base event keys
    *
@@ -46,6 +48,10 @@ export abstract class BaseEventService implements EventServiceInterface {
     EventEnum.ONCE_SERVER,
     EventEnum.ON_GUI
   ];
+
+  constructor(
+      private readonly commandService: CommandService
+  ) {}
 
   /**
    * Emit event server/client
@@ -116,6 +122,14 @@ export abstract class BaseEventService implements EventServiceInterface {
             this.entityChangeEvents,
             'EntityChangeEvents',
             this.startMetaChangeEvents.bind(this)
+        )
+    );
+
+    UtilsService.nextTick(() =>
+        this.resolveAndLoadEvents(
+            [EventEnum.CONSOLE_COMMAND],
+            'ConsoleCommandEvents',
+            this.startConsoleCommandEvents.bind(this)
         )
     );
   }
@@ -240,5 +254,20 @@ export abstract class BaseEventService implements EventServiceInterface {
     this.on(eventType, (entity: T, key?: string, value?: any, oldValue?: any) => {
       this.handleMetaChangeEvents(events, entity, key, value, oldValue);
     });
+  }
+
+  /**
+   * Handle all consoleCommands
+   *
+   * @param {EventModel[]} events
+   * @private
+   */
+  private startConsoleCommandEvents(events: EventModel[]): void {
+    this.commandService.setupCommands(events);
+
+    this.on(
+        'consoleCommand',
+        this.commandService.run.bind(this.commandService)
+    );
   }
 }

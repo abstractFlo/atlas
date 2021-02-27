@@ -1,4 +1,4 @@
-import { EventEnum, registerDescriptor, setReflectMetaData } from '@abstractflo/atlas-shared';
+import { EventEnum, registerDescriptor, setEventServiceReflectMetaData } from '@abstractflo/atlas-shared';
 import { BaseObjectType, ColShapeType } from 'alt-server';
 
 /**
@@ -12,7 +12,7 @@ export const OnClient = (name?: string): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(EventEnum.ON_CLIENT, {
+    setEventServiceReflectMetaData(EventEnum.ON_CLIENT, {
       type: 'onClient',
       eventName,
       methodName: propertyKey,
@@ -37,7 +37,7 @@ export const OnceClient = (name?: string): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(EventEnum.ONCE_CLIENT, {
+    setEventServiceReflectMetaData(EventEnum.ONCE_CLIENT, {
       type: 'onceClient',
       eventName,
       methodName: propertyKey,
@@ -61,7 +61,7 @@ export const OnceClient = (name?: string): MethodDecorator => {
  */
 export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    setReflectMetaData(EventEnum.SYNCED_META_CHANGE, {
+    setEventServiceReflectMetaData(EventEnum.SYNCED_META_CHANGE, {
       type: 'syncedMetaChange',
       methodName: propertyKey,
       targetName: target.constructor.name,
@@ -89,7 +89,7 @@ export const EntityEnterColShape = (colShapeType: ColShapeType, name?: string, e
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(EventEnum.ENTITY_ENTER_COLSHAPE, {
+    setEventServiceReflectMetaData(EventEnum.ENTITY_ENTER_COLSHAPE, {
       type: 'entityEnterColShape',
       eventName,
       methodName: propertyKey,
@@ -119,7 +119,7 @@ export const EntityLeaveColShape = (colShapeType: ColShapeType, name?: string, e
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(EventEnum.ENTITY_LEAVE_COLSHAPE, {
+    setEventServiceReflectMetaData(EventEnum.ENTITY_LEAVE_COLSHAPE, {
       type: 'entityLeaveColShape',
       eventName,
       methodName: propertyKey,

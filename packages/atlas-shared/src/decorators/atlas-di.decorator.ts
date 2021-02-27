@@ -81,14 +81,13 @@ function registerAsSingletonAndString(targetConstructor: constructor<any>): cons
  * @param {constructor<any>} config
  * @param {constructor<any>} target
  */
-function createOrUpdateMetaData(key: string, config: constructor<any>, target: any): void {
+function createOrUpdateMetaData(key: string, newProperty: constructor<any>, target: any): void {
   const properties: constructor<any>[] = Reflect.getMetadata(key, target) || [];
-  const alreadyExists = properties.filter((property: constructor<any>) => property === config);
+  const alreadyExists = properties.find((property: constructor<any>) => property === newProperty);
 
-  if (alreadyExists.length) return;
+  if (alreadyExists) return;
 
-  properties.push(config);
+  properties.push(newProperty);
 
   Reflect.defineMetadata(key, properties, target);
-
 }
