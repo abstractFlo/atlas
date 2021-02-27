@@ -1,10 +1,38 @@
-import { Autoload, AutoloaderEnums, BaseEventService, FrameworkEvent } from '@abstractflo/atlas-shared';
+import {
+  Autoload,
+  AutoloaderEnums,
+  BaseEventService,
+  CommandService,
+  EventEnum,
+  EventModel,
+  FrameworkEvent,
+  UtilsService
+} from '@abstractflo/atlas-shared';
 import { singleton } from 'tsyringe';
 import { emit, emitServer, offServer, onceServer, onServer } from 'alt-client';
+import { KeyEventService } from './key-event.service';
 
 @Autoload(AutoloaderEnums.AFTER_BOOT, { methodName: 'loadEvents' })
 @singleton()
 export class EventService extends BaseEventService {
+
+  /**
+   * Contains all key event keys
+   *
+   * @type {string[]}
+   * @private
+   */
+  private keyEvents: string[] = [
+    EventEnum.KEY_DOWN,
+    EventEnum.KEY_UP
+  ];
+
+  constructor(
+      protected readonly commandService: CommandService,
+      private readonly keyEventService: KeyEventService
+  ) {
+    super(commandService);
+  }
 
   /**
    * Emit event to server
@@ -54,5 +82,37 @@ export class EventService extends BaseEventService {
    */
   public onGui(eventName: string, listener: (...args: any[]) => void): void {
     emit(FrameworkEvent.EventService.GuiOn, eventName, listener);
+  }
+
+  /**
+   * Override startEventListener
+   *
+   * @protected
+   */
+  protected startEventListeners() {
+    super.startEventListeners();
+
+    UtilsService.nextTick(() => {
+      this.resolveAndLoadEvents(
+          this.keyEvents,
+          'KeyEvents',
+          this.startKeyEvents.bind(this)
+      );
+    });
+  }
+
+  /**
+   * Start the key event resolver
+   *
+   * @param {EventModel[]} events
+   * @private
+   */
+  private startKeyEvents(events: EventModel[]): void {
+    const eventType = events[0].type;
+    this.keyEventService.setupCommands(events);
+
+    this.on(eventType, (key: number) => {
+      this.keyEventService.run(key, eventType);
+    });
   }
 }

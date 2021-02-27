@@ -67,8 +67,7 @@ export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): 
       targetName: target.constructor.name,
       validateOptions: {
         entity: entityType,
-        metaKey,
-        eventAddTo: 'metaChange'
+        metaKey
       }
     });
 
@@ -97,8 +96,7 @@ export const EntityEnterColShape = (colShapeType: ColShapeType, name?: string, e
       validateOptions: {
         colShapeType,
         name,
-        entity,
-        eventAddTo: 'colShape'
+        entity
       }
     });
 
@@ -127,8 +125,7 @@ export const EntityLeaveColShape = (colShapeType: ColShapeType, name?: string, e
       validateOptions: {
         colShapeType,
         name,
-        entity,
-        eventAddTo: 'colShape'
+        entity
       }
     });
 

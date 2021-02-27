@@ -51,7 +51,7 @@ export class BaseEventService implements EventServiceInterface {
   ];
 
   constructor(
-      private readonly commandService: CommandService
+      protected readonly commandService: CommandService
   ) {}
 
   /**

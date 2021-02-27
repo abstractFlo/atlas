@@ -90,8 +90,7 @@ export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator =>
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        entity: entityType,
-        eventAddTo: 'gameEntity'
+        entity: entityType
       }
     });
 
@@ -113,8 +112,7 @@ export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator =
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        entity: entityType,
-        eventAddTo: 'gameEntity'
+        entity: entityType
       }
     });
 
@@ -138,8 +136,7 @@ export const StreamSyncedMetaChange = (entityType: BaseObjectType, metaKey?: str
       targetName: target.constructor.name,
       validateOptions: {
         entity: entityType,
-        metaKey,
-        eventAddTo: 'metaChange'
+        metaKey
       }
     });
 
@@ -163,8 +160,7 @@ export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): 
       targetName: target.constructor.name,
       validateOptions: {
         entity: entityType,
-        metaKey,
-        eventAddTo: 'metaChange'
+        metaKey
       }
     });
 

@@ -3,7 +3,6 @@ import { container } from 'tsyringe';
 import { EventEnum } from '../constants';
 import { EventServiceInterface } from '../interfaces';
 import { getAtlasMetaData, registerDescriptor } from './helpers';
-import { getMetadata } from '@abraham/reflection';
 
 /**
  * Register @On decorator
@@ -63,7 +62,7 @@ export const Cmd = (name?: string): MethodDecorator => {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const commandName = name || propertyKey;
 
-    const events = getMetadata<EventModel[]>(EventEnum.CONSOLE_COMMAND, eventServiceTarget());
+    const events = getAtlasMetaData<EventModel[]>(EventEnum.CONSOLE_COMMAND, eventServiceTarget());
 
     const alreadyExists = events.find((event: EventModel) => event.eventName === commandName);
 
@@ -105,6 +104,6 @@ export function setEventServiceReflectMetaData(key: string, data: Partial<EventM
  *
  * @return {EventServiceInterface}
  */
-function eventServiceTarget(): EventServiceInterface {
+export function eventServiceTarget(): EventServiceInterface {
   return container.resolve<EventServiceInterface>('EventService');
 }
