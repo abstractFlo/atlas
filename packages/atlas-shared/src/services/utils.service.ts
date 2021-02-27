@@ -186,6 +186,7 @@ export class UtilsService {
    * @param {number} length
    */
   public static logRegisteredHandlers(name: string, length: number): void {
+    if (UtilsService.isProduction()) return;
     UtilsService.log(`Registered all handlers for ~lg~${name}~w~ - ~y~[${length}]~w~`);
   }
 
@@ -231,6 +232,23 @@ export class UtilsService {
   public static eventEmit(eventName: string, ...args: any[]): void {
     const eventHandler = container.resolve<CallableFunction>('alt.emit');
     eventHandler(eventName, ...args);
+  }
+
+  /**
+   * Return debugMode enabled for server
+   *
+   * @return {boolean}
+   */
+  public static isProduction(): boolean {
+    let isProduction: boolean;
+
+    try {
+      isProduction = container.resolve<boolean>('isProductionMode');
+    } catch (e) {
+      isProduction = false;
+    }
+
+    return isProduction;
   }
 
 }
