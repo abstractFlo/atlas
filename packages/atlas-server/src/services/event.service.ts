@@ -1,6 +1,6 @@
 import {
   Autoload,
-  AutoloaderConstants,
+  AutoloaderEnums,
   BaseEventService,
   constructor,
   EventModel,
@@ -10,7 +10,7 @@ import {
 import { container, singleton } from 'tsyringe';
 import { Colshape, emitClient, Entity, offClient, onceClient, onClient, Player } from 'alt-server';
 
-@Autoload(AutoloaderConstants.AFTER_BOOT, { methodName: 'loadEvents' })
+@Autoload(AutoloaderEnums.AFTER_BOOT, { methodName: 'loadEvents' })
 @singleton()
 export class EventService extends BaseEventService {
 

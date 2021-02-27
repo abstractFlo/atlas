@@ -1,4 +1,4 @@
-export enum EventConstants {
+export enum EventEnum {
   ON = 'atlas-shared:events:on',
   ONCE = 'atlas-shared:events:once',
   ON_SERVER = 'atlas-shared:events:onServer',

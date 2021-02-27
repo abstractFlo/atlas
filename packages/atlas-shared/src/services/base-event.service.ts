@@ -1,6 +1,6 @@
 import { container } from 'tsyringe';
 import { EventModel } from '../models';
-import { EventConstants } from '../constants';
+import { EventEnum } from '../constants';
 import { constructor } from '../types';
 import { EventServiceInterface } from '../interfaces';
 import { UtilsService } from './utils.service';
@@ -15,10 +15,10 @@ export abstract class BaseEventService implements EventServiceInterface {
    * @protected
    */
   protected entityChangeEvents: string[] = [
-    EventConstants.STREAM_SYNCED_META_CHANGE,
-    EventConstants.SYNCED_META_CHANGE,
-    EventConstants.GAME_ENTITY_CREATE,
-    EventConstants.GAME_ENTITY_DESTROY
+    EventEnum.STREAM_SYNCED_META_CHANGE,
+    EventEnum.SYNCED_META_CHANGE,
+    EventEnum.GAME_ENTITY_CREATE,
+    EventEnum.GAME_ENTITY_DESTROY
   ];
   /**
    * Contains all colShape keys
@@ -27,8 +27,8 @@ export abstract class BaseEventService implements EventServiceInterface {
    * @protected
    */
   protected colShapeEvents: string[] = [
-    EventConstants.ENTITY_ENTER_COLSHAPE,
-    EventConstants.ENTITY_LEAVE_COLSHAPE
+    EventEnum.ENTITY_ENTER_COLSHAPE,
+    EventEnum.ENTITY_LEAVE_COLSHAPE
   ];
 
   /**
@@ -38,13 +38,13 @@ export abstract class BaseEventService implements EventServiceInterface {
    * @private
    */
   private baseEvents: string[] = [
-    EventConstants.ON,
-    EventConstants.ONCE,
-    EventConstants.ON_CLIENT,
-    EventConstants.ONCE_CLIENT,
-    EventConstants.ON_SERVER,
-    EventConstants.ONCE_SERVER,
-    EventConstants.ON_GUI
+    EventEnum.ON,
+    EventEnum.ONCE,
+    EventEnum.ON_CLIENT,
+    EventEnum.ONCE_CLIENT,
+    EventEnum.ON_SERVER,
+    EventEnum.ONCE_SERVER,
+    EventEnum.ON_GUI
   ];
 
   /**

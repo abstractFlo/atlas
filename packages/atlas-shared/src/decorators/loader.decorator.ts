@@ -1,4 +1,4 @@
-import { AutoloaderConstants, LoaderServiceConstants } from '../constants';
+import { AutoloaderEnums, LoaderServiceEnum } from '../constants';
 import { LoaderServiceQueueItemModel } from '../models/loader-service-queue-item.model';
 import { LoaderService } from '../services/loader.service';
 import { container } from 'tsyringe';
@@ -14,18 +14,18 @@ export interface AutoloadOptionsInterface {
 /**
  * Register @Autoload decorator to mark a class as autoload
  *
- * @param {AutoloaderConstants} type
+ * @param {AutoloaderEnums} type
  * @param {AutoloadOptionsInterface} options
  * @return {MethodDecorator}
  * @constructor
  */
 export const Autoload = (
-    type: AutoloaderConstants,
+    type: AutoloaderEnums,
     options?: AutoloadOptionsInterface) => {
   return (target: any) => {
     const loaderService = container.resolve(LoaderService);
     const config: LoaderServiceQueueItemModel[] = Reflect.getMetadata(
-        LoaderServiceConstants.QUEUE_ITEM,
+        LoaderServiceEnum.QUEUE_ITEM,
         loaderService
     ) || [];
 
@@ -43,7 +43,7 @@ export const Autoload = (
 
     config.push(queueItemModel);
 
-    Reflect.defineMetadata(LoaderServiceConstants.QUEUE_ITEM, config, loaderService);
+    Reflect.defineMetadata(LoaderServiceEnum.QUEUE_ITEM, config, loaderService);
 
     return target;
   };

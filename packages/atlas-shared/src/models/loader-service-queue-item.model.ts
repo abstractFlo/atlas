@@ -1,11 +1,11 @@
 import { Cast, castToNumber, castToString, JsonEntityModel } from '../libs/json-entity';
-import { LoaderServiceQueueType } from '../constants';
+import { LoaderServiceQueueTypeEnum } from '../constants';
 import { constructor } from '../types';
 
 export class LoaderServiceQueueItemModel extends JsonEntityModel {
 
   @Cast({ from: castToString() })
-  type: LoaderServiceQueueType;
+  type: LoaderServiceQueueTypeEnum;
 
   @Cast()
   target: string | constructor<any>;

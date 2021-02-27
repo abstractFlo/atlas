@@ -1,6 +1,6 @@
-import { CommandConstants } from '../constants/command.constants';
+import { CommandEnums } from '../constants/command.constant';
 import { container } from 'tsyringe';
-import { CommandService } from '../services';
+import { CommandService } from '../services/command.service';
 import { CommandModel } from '../models/command.model';
 
 /**
@@ -23,7 +23,7 @@ export const Cmd = (name?: string): MethodDecorator => {
 
     const commandService = container.resolve(CommandService);
     const propertiesConfig: CommandModel[] = Reflect.getMetadata(
-        CommandConstants.CONSOLE_COMMAND,
+        CommandEnums.CONSOLE_COMMAND,
         commandService
     ) || [];
 
@@ -33,7 +33,7 @@ export const Cmd = (name?: string): MethodDecorator => {
       return original.apply(this, args);
     };
 
-    Reflect.defineMetadata(CommandConstants.CONSOLE_COMMAND, propertiesConfig, commandService);
+    Reflect.defineMetadata(CommandEnums.CONSOLE_COMMAND, propertiesConfig, commandService);
 
     return descriptor;
   };

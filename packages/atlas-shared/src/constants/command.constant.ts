@@ -1,3 +1,3 @@
-export enum CommandConstants {
+export enum CommandEnums {
   CONSOLE_COMMAND = 'atlas-shared:consoleCommand',
 }

@@ -1,6 +1,6 @@
 import { EventModel } from '../models';
 import { container } from 'tsyringe';
-import { EventConstants } from '../constants';
+import { EventEnum } from '../constants';
 import { EventServiceInterface } from '../interfaces';
 
 /**
@@ -14,7 +14,7 @@ export const On = (name?: string): MethodDecorator => {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(EventConstants.ON, {
+    setReflectMetaData(EventEnum.ON, {
       type: 'on',
       eventName,
       methodName: propertyKey,
@@ -39,7 +39,7 @@ export const Once = (name?: string): MethodDecorator => {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const eventName = name || propertyKey;
 
-    setReflectMetaData(EventConstants.ONCE, {
+    setReflectMetaData(EventEnum.ONCE, {
       type: 'once',
       eventName,
       methodName: propertyKey,

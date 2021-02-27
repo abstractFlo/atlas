@@ -1,10 +1,10 @@
 import { CommandModel } from '../models';
 import { container, singleton } from 'tsyringe';
-import { AutoloaderConstants, CommandConstants } from '../constants';
+import { AutoloaderEnums, CommandEnums } from '../constants';
 import { Autoload } from '../decorators/loader.decorator';
 import { UtilsService } from './utils.service';
 
-@Autoload(AutoloaderConstants.AFTER_BOOT, { methodName: 'start' })
+@Autoload(AutoloaderEnums.AFTER_BOOT, { methodName: 'start' })
 @singleton()
 export class CommandService {
 
@@ -53,7 +53,7 @@ export class CommandService {
    * @private
    */
   private load(): void {
-    const commands: CommandModel[] = Reflect.getMetadata(CommandConstants.CONSOLE_COMMAND, this) || [];
+    const commands: CommandModel[] = Reflect.getMetadata(CommandEnums.CONSOLE_COMMAND, this) || [];
 
     commands.forEach((command: CommandModel) => {
       this.add(command);

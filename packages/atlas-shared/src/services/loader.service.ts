@@ -1,6 +1,6 @@
 import { container, InjectionToken, singleton } from 'tsyringe';
 import { LoaderServiceQueueItemModel, LoaderServiceQueueModel } from '../models';
-import { LoaderServiceConstants } from '../constants';
+import { LoaderServiceEnum } from '../constants';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeLast } from 'rxjs/operators';
 import { UtilsService } from './utils.service';
@@ -253,7 +253,7 @@ export class LoaderService {
    */
   private resolveMetaDataAndAdd(): void {
     const queueItems: LoaderServiceQueueItemModel[] = Reflect.getMetadata(
-        LoaderServiceConstants.QUEUE_ITEM,
+        LoaderServiceEnum.QUEUE_ITEM,
         this
     ) || [];
 

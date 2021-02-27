@@ -1,8 +1,8 @@
-import { Autoload, AutoloaderConstants, BaseEventService, FrameworkEvent } from '@abstractflo/atlas-shared';
+import { Autoload, AutoloaderEnums, BaseEventService, FrameworkEvent } from '@abstractflo/atlas-shared';
 import { singleton } from 'tsyringe';
 import { emit, emitServer, offServer, onceServer, onServer } from 'alt-client';
 
-@Autoload(AutoloaderConstants.AFTER_BOOT, { methodName: 'loadEvents' })
+@Autoload(AutoloaderEnums.AFTER_BOOT, { methodName: 'loadEvents' })
 @singleton()
 export class EventService extends BaseEventService {
 
