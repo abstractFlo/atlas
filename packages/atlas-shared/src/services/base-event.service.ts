@@ -4,18 +4,21 @@ import { EventConstants } from '../constants';
 import { constructor } from '../types';
 import { EventServiceInterface } from '../interfaces';
 import { UtilsService } from './utils.service';
+import { Entity } from 'alt-server';
 
 export abstract class BaseEventService implements EventServiceInterface {
 
   /**
-   * Contains all meta change keys
+   * Contains all events where first param is an entity
    *
    * @type {string[]}
    * @protected
    */
-  protected metaChangeEvents: string[] = [
+  protected entityChangeEvents: string[] = [
     EventConstants.STREAM_SYNCED_META_CHANGE,
-    EventConstants.SYNCED_META_CHANGE
+    EventConstants.SYNCED_META_CHANGE,
+    EventConstants.GAME_ENTITY_CREATE,
+    EventConstants.GAME_ENTITY_DESTROY
   ];
   /**
    * Contains all colShape keys
@@ -27,16 +30,7 @@ export abstract class BaseEventService implements EventServiceInterface {
     EventConstants.ENTITY_ENTER_COLSHAPE,
     EventConstants.ENTITY_LEAVE_COLSHAPE
   ];
-  /**
-   * Contains all game entity keys
-   *
-   * @type {string[]}
-   * @protected
-   */
-  protected gameEntityEvents: string[] = [
-    EventConstants.GAME_ENTITY_CREATE,
-    EventConstants.GAME_ENTITY_DESTROY
-  ];
+
   /**
    * Contains all base event keys
    *
@@ -94,6 +88,39 @@ export abstract class BaseEventService implements EventServiceInterface {
   }
 
   /**
+   * Load up the event service with all needed parts
+   *
+   * @param {Function} done
+   */
+  public loadEvents(done: CallableFunction): void {
+    this.startEventListeners();
+    done();
+  }
+
+  /**
+   * Start needed event listeners
+   *
+   * @protected
+   */
+  protected startEventListeners(): void {
+    UtilsService.nextTick(() => {
+      this.resolveAndLoadEvents(
+          this.baseEvents,
+          'BaseEvents',
+          this.startBaseMethod.bind(this)
+      );
+    });
+
+    UtilsService.nextTick(() =>
+        this.resolveAndLoadEvents(
+            this.entityChangeEvents,
+            'EntityChangeEvents',
+            this.startMetaChangeEvents.bind(this)
+        )
+    );
+  }
+
+  /**
    * Return all event models for given key
    *
    * @param {string} key
@@ -113,10 +140,10 @@ export abstract class BaseEventService implements EventServiceInterface {
    * @param {any} oldValue
    * @protected
    */
-  protected handleMetaChangeEvents<T extends { type: number }>(events: EventModel[], entity: T, key: string, value: any, oldValue: any) {
+  protected handleMetaChangeEvents<T extends { type: number }>(events: EventModel[], entity: T, key?: string, value?: any, oldValue?: any) {
     events.forEach((event: EventModel) => {
 
-      // stop if not the same type
+      // stop if not same type
       if (!this.isEntityType(entity.type, event.validateOptions.entity)) return;
 
       const hasMetaKey = event.validateOptions.metaKey !== undefined && key === event.validateOptions.metaKey;
@@ -151,28 +178,30 @@ export abstract class BaseEventService implements EventServiceInterface {
   }
 
   /**
-   * Load and start all base evens
+   * Resolve and load events
    *
-   * @private
+   * @param {string[]} keys
+   * @param {string} eventCategoryName
+   * @param {Function} callback
+   * @protected
    */
-  protected loadBaseEvents(done: CallableFunction): void {
+  protected resolveAndLoadEvents(keys: string[], eventCategoryName: string, callback: CallableFunction): void {
     let loaded = false;
-    this.baseEvents.forEach((key: string) => {
+
+    keys.forEach((key: string) => {
       const events = this.getMetaData(key);
 
       if (!events.length) return;
 
-      this.startBaseMethod(events);
+      callback(events);
 
       UtilsService.logRegisteredHandlers(events[0].type, events.length);
       loaded = true;
     });
 
     if (loaded) {
-      UtilsService.logLoaded('BaseEvents');
+      UtilsService.logLoaded(eventCategoryName);
     }
-
-    done();
   }
 
   /**
@@ -196,6 +225,20 @@ export abstract class BaseEventService implements EventServiceInterface {
 
         await method();
       });
+    });
+  }
+
+  /**
+   * Start the meta change event listener
+   *
+   * @param {EventModel[]} events
+   * @private
+   */
+  private startMetaChangeEvents<T extends { type: number }>(events: EventModel[]): void {
+    const eventType = events[0].type;
+
+    this.on(eventType, (entity: T, key?: string, value?: any, oldValue?: any) => {
+      this.handleMetaChangeEvents(events, entity, key, value, oldValue);
     });
   }
 }

@@ -1,7 +1,10 @@
 import { CommandModel } from '../models';
 import { container, singleton } from 'tsyringe';
-import { CommandConstants } from '../constants';
+import { AutoloaderConstants, CommandConstants } from '../constants';
+import { Autoload } from '../decorators/loader.decorator';
+import { UtilsService } from './utils.service';
 
+@Autoload(AutoloaderConstants.AFTER_BOOT, { methodName: 'start' })
 @singleton()
 export class CommandService {
 
@@ -32,13 +35,16 @@ export class CommandService {
   /**
    * Start the command handler
    */
-  public start(): void {
+  public start(done: CallableFunction): void {
     this.load();
 
-    if (this.commands.size === 0) return;
+    if (this.commands.size === 0) return done();
 
-    const listener: CallableFunction = container.resolve('alt.on');
-    listener('consoleCommand', this.consoleCommand.bind(this));
+    UtilsService.eventOn('consoleCommand', this.consoleCommand.bind(this));
+    UtilsService.logRegisteredHandlers('consoleCommand', this.commands.size);
+    UtilsService.logLoaded('CommandService');
+
+    done();
   }
 
   /**

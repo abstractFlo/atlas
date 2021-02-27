@@ -10,9 +10,7 @@ import {
 import { container, singleton } from 'tsyringe';
 import { Colshape, emitClient, Entity, offClient, onceClient, onClient, Player } from 'alt-server';
 
-@Autoload(AutoloaderConstants.AFTER_BOOT, { methodName: 'loadBaseEvents' })
-@Autoload(AutoloaderConstants.AFTER_BOOT, { methodName: 'loadMetaChangeEvents' })
-@Autoload(AutoloaderConstants.AFTER_BOOT, { methodName: 'loadColShapeEvents' })
+@Autoload(AutoloaderConstants.AFTER_BOOT, { methodName: 'loadEvents' })
 @singleton()
 export class EventService extends BaseEventService {
 
@@ -68,74 +66,18 @@ export class EventService extends BaseEventService {
     onceClient(eventName, listener);
   }
 
-  /**
-   * Load all metaChange events from reflection and start listen
-   *
-   * @param {Function} done
-   * @protected
-   */
-  protected loadMetaChangeEvents(done: CallableFunction): void {
-    let loaded = false;
+  protected startEventListeners() {
+    super.startEventListeners();
 
-    this.metaChangeEvents.forEach((key: string) => {
-      const events = this.getMetaData(key);
-
-      if (!events.length) return;
-      this.startMetaChangeEvents(events);
-
-      UtilsService.logRegisteredHandlers(events[0].type, events.length);
-
-      loaded = true;
-    });
-
-    if (loaded) {
-      UtilsService.logLoaded('MetaChangeEvents');
-    }
-
-
-    done();
+    UtilsService.nextTick(() =>
+        this.resolveAndLoadEvents(
+            this.colShapeEvents,
+            'ColShapeEvents',
+            this.startColShapeEvents.bind(this)
+        ));
   }
 
-  /**
-   * Load all colShape events from reflection an start listen
-   *
-   * @param {Function} done
-   * @protected
-   */
-  protected loadColShapeEvents(done: CallableFunction): void {
-    let loaded = false;
 
-    this.colShapeEvents.forEach((key: string) => {
-      const events = this.getMetaData(key);
-
-      if (!events.length) return;
-
-      this.startColShapeEvents(events);
-      UtilsService.logRegisteredHandlers(events[0].type, events.length);
-
-      loaded = true;
-    });
-
-    if (loaded) {
-      UtilsService.logLoaded('ColShapeEvents');
-    }
-
-    done();
-  }
-
-  /**
-   * Start the meta change event listener
-   *
-   * @param {EventModel[]} events
-   * @private
-   */
-  private startMetaChangeEvents(events: EventModel[]): void {
-    const eventType = events[0].type;
-
-    this.on(eventType, (entity: Entity, key: string, value: any, oldValue: any) => {
-      this.handleMetaChangeEvents(events, entity, key, value, oldValue);
-    });
-  }
 
   /**
    * Start the meta change event listener
