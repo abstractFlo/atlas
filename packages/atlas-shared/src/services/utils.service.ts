@@ -180,6 +180,16 @@ export class UtilsService {
   }
 
   /**
+   * Log registered handler with length
+   *
+   * @param {string} name
+   * @param {number} length
+   */
+  public static logRegisteredHandlers(name: string, length: number): void {
+    UtilsService.log(`Registered all handlers for ~lg~${name}~w~ - ~y~[${length}]~w~`);
+  }
+
+  /**
    * Receive on event helper
    *
    * @param {string} eventName

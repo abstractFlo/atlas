@@ -1,5 +1,6 @@
 import { constructor } from '../types';
-import { container, instanceCachingFactory, singleton } from 'tsyringe';
+import { singleton } from 'tsyringe';
+import { StringResolver } from './string-resolver.decorator';
 
 /**
  * Interface for all module decorator options
@@ -42,11 +43,7 @@ export function Component(targetConstructor: constructor<any>) {
  */
 function registerAsSingletonAndString(targetConstructor: constructor<any>): constructor<any> {
   singleton()(targetConstructor);
-
-  container.register(
-      targetConstructor.name,
-      { useFactory: instanceCachingFactory(c => c.resolve(targetConstructor)) }
-  );
+  StringResolver(targetConstructor);
 
   return targetConstructor;
 }

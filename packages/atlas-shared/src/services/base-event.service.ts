@@ -8,6 +8,36 @@ import { UtilsService } from './utils.service';
 export abstract class BaseEventService implements EventServiceInterface {
 
   /**
+   * Contains all meta change keys
+   *
+   * @type {string[]}
+   * @protected
+   */
+  protected metaChangeEvents: string[] = [
+    EventConstants.STREAM_SYNCED_META_CHANGE,
+    EventConstants.SYNCED_META_CHANGE
+  ];
+  /**
+   * Contains all colShape keys
+   *
+   * @type {string[]}
+   * @protected
+   */
+  protected colShapeEvents: string[] = [
+    EventConstants.ENTITY_ENTER_COLSHAPE,
+    EventConstants.ENTITY_LEAVE_COLSHAPE
+  ];
+  /**
+   * Contains all game entity keys
+   *
+   * @type {string[]}
+   * @protected
+   */
+  protected gameEntityEvents: string[] = [
+    EventConstants.GAME_ENTITY_CREATE,
+    EventConstants.GAME_ENTITY_DESTROY
+  ];
+  /**
    * Contains all base event keys
    *
    * @type {string[]}
@@ -21,39 +51,6 @@ export abstract class BaseEventService implements EventServiceInterface {
     EventConstants.ON_SERVER,
     EventConstants.ONCE_SERVER,
     EventConstants.ON_GUI
-  ];
-
-  /**
-   * Contains all meta change keys
-   *
-   * @type {string[]}
-   * @private
-   */
-  private metaChangeEvents: string[] = [
-    EventConstants.STREAM_SYNCED_META_CHANGE,
-    EventConstants.SYNCED_META_CHANGE
-  ];
-
-  /**
-   * Contains all colShape keys
-   *
-   * @type {string[]}
-   * @private
-   */
-  private colShapeEvents: string[] = [
-    EventConstants.ENTITY_ENTER_COLSHAPE,
-    EventConstants.ENTITY_LEAVE_COLSHAPE
-  ];
-
-  /**
-   * Contains all game entity keys
-   *
-   * @type {string[]}
-   * @private
-   */
-  private gameEntityEvents: string[] = [
-    EventConstants.GAME_ENTITY_CREATE,
-    EventConstants.GAME_ENTITY_DESTROY
   ];
 
   /**
@@ -97,14 +94,60 @@ export abstract class BaseEventService implements EventServiceInterface {
   }
 
   /**
-   * Load up all events
+   * Return all event models for given key
    *
-   * @param {Function} done
+   * @param {string} key
+   * @return {EventModel[]}
+   * @private
    */
-  public load(done: CallableFunction): void {
-    this.loadBaseEvents();
+  protected getMetaData(key: string): EventModel[] {
+    return Reflect.getMetadata(key, this) || [];
+  }
 
-    done();
+  /**
+   * Handle all meta change events
+   * @param {EventModel[]} events
+   * @param {Entity} entity
+   * @param {string} key
+   * @param {any} value
+   * @param {any} oldValue
+   * @protected
+   */
+  protected handleMetaChangeEvents<T extends { type: number }>(events: EventModel[], entity: T, key: string, value: any, oldValue: any) {
+    events.forEach((event: EventModel) => {
+
+      // stop if not the same type
+      if (!this.isEntityType(entity.type, event.validateOptions.entity)) return;
+
+      const hasMetaKey = event.validateOptions.metaKey !== undefined && key === event.validateOptions.metaKey;
+      const instances = container.resolveAll<constructor<any>>(event.targetName);
+
+      const args = [key, value, oldValue];
+
+      if (hasMetaKey) {
+        args.shift();
+      }
+
+      instances.forEach(async (instance: constructor<any>) => {
+        const instanceMethod = instance[event.methodName];
+        if (!instanceMethod) return;
+
+        const method = instanceMethod.bind(instance);
+
+        await method(entity, ...args);
+      });
+    });
+  }
+
+  /**
+   * Check if given entity has given type
+   *
+   * @param {number} entityType
+   * @param {string} type
+   * @protected
+   */
+  protected isEntityType(entityType: number, type: number): boolean {
+    return entityType === type;
   }
 
   /**
@@ -112,7 +155,7 @@ export abstract class BaseEventService implements EventServiceInterface {
    *
    * @private
    */
-  private loadBaseEvents(): void {
+  protected loadBaseEvents(done: CallableFunction): void {
     let loaded = false;
     this.baseEvents.forEach((key: string) => {
       const events = this.getMetaData(key);
@@ -120,12 +163,16 @@ export abstract class BaseEventService implements EventServiceInterface {
       if (!events.length) return;
 
       this.startBaseMethod(events);
+
+      UtilsService.logRegisteredHandlers(events[0].type, events.length);
       loaded = true;
     });
 
     if (loaded) {
       UtilsService.logLoaded('BaseEvents');
     }
+
+    done();
   }
 
   /**
@@ -150,16 +197,5 @@ export abstract class BaseEventService implements EventServiceInterface {
         await method();
       });
     });
-  }
-
-  /**
-   * Return all event models for given key
-   *
-   * @param {string} key
-   * @return {EventModel[]}
-   * @private
-   */
-  private getMetaData(key: string): EventModel[] {
-    return Reflect.getMetadata(key, this) || [];
   }
 }

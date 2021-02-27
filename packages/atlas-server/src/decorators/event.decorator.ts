@@ -52,6 +52,31 @@ export const OnceClient = (name?: string): MethodDecorator => {
 };
 
 /**
+ * Register @SyncedMetaChange decorator
+ *
+ * @param {BaseObjectType} entityType
+ * @param {string} metaKey
+ * @return {MethodDecorator}
+ * @constructor
+ */
+export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    setReflectMetaData(EventConstants.SYNCED_META_CHANGE, {
+      type: 'syncedMetaChange',
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        entity: entityType,
+        metaKey,
+        eventAddTo: 'metaChange'
+      }
+    });
+
+    return registerDescriptor(descriptor);
+  };
+};
+
+/**
  * Register @EntityEnterColShape decorator
  *
  * @param {ColShapeType} colShapeType

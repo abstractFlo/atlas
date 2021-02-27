@@ -2,7 +2,7 @@ import { Autoload, AutoloaderConstants, BaseEventService, FrameworkEvent } from 
 import { singleton } from 'tsyringe';
 import { emit, emitServer, offServer, onceServer, onServer } from 'alt-client';
 
-@Autoload(AutoloaderConstants.AFTER_BOOT, { methodName: 'load' })
+@Autoload(AutoloaderConstants.AFTER_BOOT, { methodName: 'loadBaseEvents' })
 @singleton()
 export class EventService extends BaseEventService {
 

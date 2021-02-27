@@ -92,22 +92,27 @@ export class LoaderService {
 
     this.frameworkBeforeBootCount$
         .pipe(takeLast(1))
-        .subscribe(() => this.processQueue(this.queue.before, this.queue.beforeCount));
+        .subscribe(() => UtilsService.nextTick(() => this.processQueue(this.queue.before, this.queue.beforeCount)));
 
     this.beforeCount$
         .pipe(takeLast(1))
-        .subscribe(() => this.processQueue(this.queue.after, this.queue.afterCount));
+        .subscribe(() => UtilsService.nextTick(() => this.processQueue(this.queue.after, this.queue.afterCount)));
 
     this.afterCount$
         .pipe(takeLast(1))
-        .subscribe(() => this.processQueue(this.queue.frameworkAfterBoot, this.queue.frameworkAfterBootCount));
+        .subscribe(() => UtilsService.nextTick(() => this.processQueue(
+            this.queue.frameworkAfterBoot,
+            this.queue.frameworkAfterBootCount
+        )));
 
     this.frameworkAfterBootCount$
         .pipe(takeLast(1))
-        .subscribe(() => {
-          this.finishUpBooting(target);
-          container.resolve(target);
-        });
+        .subscribe(() =>
+            UtilsService.nextTick(() => {
+              this.finishUpBooting(target);
+              container.resolve(target);
+            })
+        );
 
     this.startingSubject$
         .asObservable()
@@ -115,7 +120,10 @@ export class LoaderService {
             takeLast(1),
             filter((value: boolean) => value)
         )
-        .subscribe(() => this.processQueue(this.queue.frameworkBeforeBoot, this.queue.frameworkBeforeBootCount));
+        .subscribe(() => UtilsService.nextTick(() => this.processQueue(
+            this.queue.frameworkBeforeBoot,
+            this.queue.frameworkBeforeBootCount
+        )));
 
 
     this.setupQueueCounts();
