@@ -1,8 +1,8 @@
 import { constructor } from '../types';
 import { container, singleton } from 'tsyringe';
-import { StringResolver } from './string-resolver.decorator';
 import { ModuleLoaderService } from '../services/module-loader.service';
 import { ModuleLoaderEnum } from '../constants/module-loader.constant';
+import { getAtlasMetaData, StringResolver } from './helpers';
 
 /**
  * Interface for all module decorator options
@@ -26,20 +26,12 @@ export function Module(options?: ModuleOptionsDecoratorInterface): (targetConstr
 
     if (options.components) {
       options.components.forEach((component: constructor<any>) =>
-          createOrUpdateMetaData(
-              ModuleLoaderEnum.COMPONENTS,
-              component,
-              moduleLoaderService
-          ));
+          addMetaData(ModuleLoaderEnum.COMPONENTS, component, moduleLoaderService));
     }
 
     if (options.imports) {
       options.imports.forEach((importedModule: constructor<any>) =>
-          createOrUpdateMetaData(
-              ModuleLoaderEnum.IMPORTS,
-              importedModule,
-              moduleLoaderService
-          ));
+          addMetaData(ModuleLoaderEnum.IMPORTS, importedModule, moduleLoaderService));
     }
   }
 
@@ -78,16 +70,17 @@ function registerAsSingletonAndString(targetConstructor: constructor<any>): cons
  * Create or update reflect metadata for given key
  *
  * @param {string} key
- * @param {constructor<any>} config
+ * @param newProperty
  * @param {constructor<any>} target
  */
-function createOrUpdateMetaData(key: string, newProperty: constructor<any>, target: any): void {
-  const properties: constructor<any>[] = Reflect.getMetadata(key, target) || [];
+function addMetaData(key: string, newProperty: constructor<any>, target: any): void {
+  const properties = getAtlasMetaData<constructor<any>[]>(key, target);
   const alreadyExists = properties.find((property: constructor<any>) => property === newProperty);
 
   if (alreadyExists) return;
 
   properties.push(newProperty);
 
-  Reflect.defineMetadata(key, properties, target);
+  Reflect.defineMetadata<constructor<any>[]>(key, properties, target);
 }
+

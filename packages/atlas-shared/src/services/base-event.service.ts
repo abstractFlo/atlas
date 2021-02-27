@@ -6,6 +6,7 @@ import { EventServiceInterface } from '../interfaces';
 import { UtilsService } from './utils.service';
 import { Entity } from 'alt-server';
 import { CommandService } from './command.service';
+import { getAtlasMetaData } from '../decorators';
 
 @singleton()
 export class BaseEventService implements EventServiceInterface {
@@ -135,17 +136,6 @@ export class BaseEventService implements EventServiceInterface {
   }
 
   /**
-   * Return all event models for given key
-   *
-   * @param {string} key
-   * @return {EventModel[]}
-   * @private
-   */
-  protected getMetaData(key: string): EventModel[] {
-    return Reflect.getMetadata(key, this) || [];
-  }
-
-  /**
    * Handle all meta change events
    * @param {EventModel[]} events
    * @param {Entity} entity
@@ -203,7 +193,7 @@ export class BaseEventService implements EventServiceInterface {
     let loaded = false;
 
     keys.forEach((key: string) => {
-      const events = this.getMetaData(key);
+      const events = getAtlasMetaData<EventModel[]>(key, this);
 
       if (!events.length) return;
 

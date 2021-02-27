@@ -2,7 +2,8 @@ import { EventModel } from '../models';
 import { container } from 'tsyringe';
 import { EventEnum } from '../constants';
 import { EventServiceInterface } from '../interfaces';
-import { constructor } from '../types';
+import { getAtlasMetaData, registerDescriptor } from './helpers';
+import { getMetadata } from '@abraham/reflection';
 
 /**
  * Register @On decorator
@@ -60,10 +61,10 @@ export const Once = (name?: string): MethodDecorator => {
  */
 export const Cmd = (name?: string): MethodDecorator => {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
-
     const commandName = name || propertyKey;
 
-    const events = getEventServiceReflectMetaData<EventModel[]>(EventEnum.CONSOLE_COMMAND, []);
+    const events = getMetadata<EventModel[]>(EventEnum.CONSOLE_COMMAND, eventServiceTarget());
+
     const alreadyExists = events.find((event: EventModel) => event.eventName === commandName);
 
     if (!alreadyExists) {
@@ -82,24 +83,6 @@ export const Cmd = (name?: string): MethodDecorator => {
   };
 };
 
-/**
- * Register the override descriptor
- *
- * @param {PropertyDescriptor} descriptor
- * @return {PropertyDescriptor}
- */
-export function registerDescriptor(
-    descriptor: PropertyDescriptor
-): PropertyDescriptor {
-
-  const original = descriptor.value;
-
-  descriptor.value = function (...args: any[]) {
-    return original.apply(this, args);
-  };
-
-  return descriptor;
-}
 
 /**
  * Setup metaData
@@ -108,26 +91,20 @@ export function registerDescriptor(
  * @param {Partial<EventModel>} data
  */
 export function setEventServiceReflectMetaData(key: string, data: Partial<EventModel>): void {
-  const eventService = container.resolve<EventServiceInterface>('EventService');
-  const config: EventModel[] = Reflect.getMetadata(key, eventService) || [];
+  const target = eventServiceTarget();
+  const config = getAtlasMetaData<EventModel[]>(key, target);
   const eventModel = new EventModel().cast(data);
 
   config.push(eventModel);
 
-  Reflect.defineMetadata(key, config, eventService);
+  Reflect.defineMetadata<EventModel[]>(key, config, target);
 }
 
 /**
- * Return the MetaData for given target
- * @param {string} key
- * @param {constructor<any>} target
- * @param {T} defaultValue
- * @return {typeof defaultValue}
+ * Return the EventService
+ *
+ * @return {EventServiceInterface}
  */
-export function getEventServiceReflectMetaData<T>(
-    key: string,
-    defaultValue: T
-): typeof defaultValue {
-  const target = container.resolve<EventServiceInterface>('EventService');
-  return Reflect.getMetadata(key, target) || defaultValue;
+function eventServiceTarget(): EventServiceInterface {
+  return container.resolve<EventServiceInterface>('EventService');
 }

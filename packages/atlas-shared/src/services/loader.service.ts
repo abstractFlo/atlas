@@ -4,6 +4,7 @@ import { LoaderServiceEnum } from '../constants';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeLast } from 'rxjs/operators';
 import { UtilsService } from './utils.service';
+import { getAtlasMetaData } from '../decorators/helpers';
 
 @singleton()
 export class LoaderService {
@@ -92,18 +93,23 @@ export class LoaderService {
 
     this.frameworkBeforeBootCount$
         .pipe(takeLast(1))
-        .subscribe(() => UtilsService.nextTick(() => this.processQueue(this.queue.before, this.queue.beforeCount)));
+        .subscribe(() =>
+            UtilsService.nextTick(() => this.processQueue(this.queue.before, this.queue.beforeCount))
+        );
 
     this.beforeCount$
         .pipe(takeLast(1))
-        .subscribe(() => UtilsService.nextTick(() => this.processQueue(this.queue.after, this.queue.afterCount)));
+        .subscribe(() =>
+            UtilsService.nextTick(() => this.processQueue(this.queue.after, this.queue.afterCount))
+        );
 
     this.afterCount$
         .pipe(takeLast(1))
-        .subscribe(() => UtilsService.nextTick(() => this.processQueue(
-            this.queue.frameworkAfterBoot,
-            this.queue.frameworkAfterBootCount
-        )));
+        .subscribe(() =>
+            UtilsService.nextTick(() =>
+                this.processQueue(this.queue.frameworkAfterBoot, this.queue.frameworkAfterBootCount)
+            )
+        );
 
     this.frameworkAfterBootCount$
         .pipe(takeLast(1))
@@ -214,7 +220,7 @@ export class LoaderService {
       const instanceMethod = instance[nextItem.methodName];
 
       if (!instanceMethod) {
-        UtilsService.log(`~lb~[Module: ${moduleName}]~w~ - ~r~{Method: ${methodName}} does not exists~w~`);
+        UtilsService.log(`~lb~[Class: ${moduleName}]~w~ - ~r~{Method: ${methodName}} does not exists~w~`);
         return;
       }
 
@@ -252,10 +258,7 @@ export class LoaderService {
    * @private
    */
   private resolveMetaDataAndAdd(): void {
-    const queueItems: LoaderServiceQueueItemModel[] = Reflect.getMetadata(
-        LoaderServiceEnum.QUEUE_ITEM,
-        this
-    ) || [];
+    const queueItems = getAtlasMetaData<LoaderServiceQueueItemModel[]>(LoaderServiceEnum.QUEUE_ITEM, this);
 
     queueItems.forEach((queueItem: LoaderServiceQueueItemModel) => this.add(queueItem));
   }
