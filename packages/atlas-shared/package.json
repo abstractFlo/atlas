@@ -10,7 +10,9 @@
   "types": "dist/index.d.ts",
   "files": [
     "resource-manager.js",
-    "resource-manager.d.ts"
+    "resource-manager.d.ts",
+    "helpers.js",
+    "helpers.d.ts"
   ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",

@@ -1,4 +1,12 @@
 import { container, InjectionToken } from 'tsyringe';
+import { UtilsService } from '@abstractflo/atlas-shared';
+import * as alt from 'alt-server';
+
+// @ts-ignore
+import { registerAltLib } from '@abstractflo/atlas-shared/helpers';
+
+registerAltLib(alt);
+
 
 /**
  * Register path to config file
@@ -25,4 +33,16 @@ export function registerDatabaseEntities(entities: InjectionToken[]): void {
  */
 export function registerDiscordApiServerPort(port: number) {
   container.register<number>('discord.express.port', { useValue: port });
+}
+
+/**
+ * Global Error Handler
+ */
+export function defaultErrorHandling(): void {
+  process.on('uncaughtException', (err) => {
+    UtilsService.logError(err.stack);
+    UtilsService.logError(err.message);
+    UtilsService.logError(err.name);
+    UtilsService.log('~r~Please close the server and fix the problem~w~');
+  });
 }

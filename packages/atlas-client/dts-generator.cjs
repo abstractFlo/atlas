@@ -7,5 +7,9 @@ module.exports = {
       filePath: './src/index.ts',
       outFile: './dist/index.d.ts',
     },
+    {
+      filePath: './src/helpers.ts',
+      outFile: './helpers.d.ts',
+    },
   ],
 };

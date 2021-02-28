@@ -8,6 +8,10 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "helpers.js",
+    "helpers.d.ts"
+  ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "rollup -c",

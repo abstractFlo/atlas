@@ -35,6 +35,9 @@
     "paths": {
       "@abstractflo/atlas-shared": [
         "packages/atlas-shared/src"
+      ],
+      "@abstractflo/atlas-shared/helpers": [
+        "packages/atlas-shared/src/helpers"
       ]
     },
     "declaration": false,

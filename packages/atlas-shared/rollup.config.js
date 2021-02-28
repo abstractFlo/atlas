@@ -21,9 +21,9 @@ export default [
     ],
   },
   {
-    input: ['src/build/resource-manager.ts'],
+    input: ['src/build/resource-manager.ts', 'src/helpers.ts'],
     output: {
-      file: 'resource-manager.js',
+      dir: './',
       format: 'esm',
     },
     plugins: [

@@ -5,11 +5,15 @@ module.exports = {
   entries: [
     {
       filePath: './src/index.ts',
-      outFile: './dist/index.d.ts'
+      outFile: './dist/index.d.ts',
     },
     {
       filePath: './src/build/resource-manager.ts',
-      outFile: './resource-manager.d.ts'
-    }
-  ]
+      outFile: './resource-manager.d.ts',
+    },
+    {
+      filePath: './src/helpers.ts',
+      outFile: './helpers.d.ts',
+    },
+  ],
 };

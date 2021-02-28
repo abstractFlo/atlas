@@ -1,5 +1,10 @@
 import { container } from 'tsyringe';
 import { Player } from 'alt-client';
+import * as alt from 'alt-client'
+
+// @ts-ignore
+import { registerAltLib } from '@abstractflo/atlas-shared/helpers';
+registerAltLib(alt);
 
 /**
  * Register webview url and routeToEventName

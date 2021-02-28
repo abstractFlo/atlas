@@ -21,4 +21,23 @@ export default [
       ...Object.keys(pkg.peerDependencies || {}),
     ],
   },
+
+  {
+    input: ['src/helpers.ts'],
+    output: {
+      dir: './',
+      format: 'esm',
+    },
+    plugins: [
+      typescript(),
+    ],
+    external: [
+      'alt-server',
+      'rxjs/operators',
+      ...builtinModules,
+      ...Object.keys(pkg.devDependencies || {}),
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {}),
+    ],
+  },
 ];
