@@ -81,6 +81,8 @@ export class LoaderService {
    */
   private isBootstrapped: boolean = false;
 
+  private currentNextTick: number | null = null;
+
   /**
    * Bootstrap the framework
    *
@@ -94,21 +96,19 @@ export class LoaderService {
     this.frameworkBeforeBootCount$
         .pipe(takeLast(1))
         .subscribe(() =>
-            UtilsService.nextTick(() => this.processQueue(this.queue.before, this.queue.beforeCount))
+            this.processQueue(this.queue.before, this.queue.beforeCount)
         );
 
     this.beforeCount$
         .pipe(takeLast(1))
         .subscribe(() =>
-            UtilsService.nextTick(() => this.processQueue(this.queue.after, this.queue.afterCount))
+            this.processQueue(this.queue.after, this.queue.afterCount)
         );
 
     this.afterCount$
         .pipe(takeLast(1))
         .subscribe(() =>
-            UtilsService.nextTick(() =>
-                this.processQueue(this.queue.frameworkAfterBoot, this.queue.frameworkAfterBootCount)
-            )
+            this.processQueue(this.queue.frameworkAfterBoot, this.queue.frameworkAfterBootCount)
         );
 
     this.frameworkAfterBootCount$
@@ -126,10 +126,7 @@ export class LoaderService {
             takeLast(1),
             filter((value: boolean) => value)
         )
-        .subscribe(() => UtilsService.nextTick(() => this.processQueue(
-            this.queue.frameworkBeforeBoot,
-            this.queue.frameworkBeforeBootCount
-        )));
+        .subscribe(() => this.processQueue(this.queue.frameworkBeforeBoot, this.queue.frameworkBeforeBootCount));
 
 
     this.setupQueueCounts();
@@ -167,6 +164,11 @@ export class LoaderService {
       doneCheckIntervalId?: number
   ): void {
 
+    if (this.currentNextTick) {
+      UtilsService.clearNextTick(this.currentNextTick);
+      this.currentNextTick = null;
+    }
+
     if (doneCheckIntervalId) {
       UtilsService.clearInterval(doneCheckIntervalId);
     }
@@ -191,7 +193,7 @@ export class LoaderService {
    */
   private processQueue(property: Map<string, LoaderServiceQueueItemModel>, propertyCount: Subject<number>): void {
     if (property.size === 0) {
-      this.doneCallback(property, propertyCount);
+      this.currentNextTick = UtilsService.nextTick(() => this.doneCallback(property, propertyCount));
     } else {
       propertyCount
           .pipe(filter((size: number) => size !== 0))
@@ -208,29 +210,32 @@ export class LoaderService {
    * @param {Subject<number>} propertyCount
    * @private
    */
-  private async processQueueItem(property: Map<string, LoaderServiceQueueItemModel>, propertyCount: Subject<number>): Promise<void> {
+  private processQueueItem(property: Map<string, LoaderServiceQueueItemModel>, propertyCount: Subject<number>): void {
     const nextItem: LoaderServiceQueueItemModel = property.values().next().value;
     const nextKey = property.keys().next().value as string;
 
     if (nextItem !== undefined) {
-      const instance = container.resolve(nextItem.target);
-      const checkTimeoutDuration = nextItem.doneCheckTimeout;
-      const [moduleName, methodName] = nextKey.split('_');
+      this.currentNextTick = UtilsService.nextTick(async () => {
+        const instance = container.resolve(nextItem.target);
+        const checkTimeoutDuration = nextItem.doneCheckTimeout;
+        const [moduleName, methodName] = nextKey.split('_');
 
-      const instanceMethod = instance[nextItem.methodName];
+        const instanceMethod = instance[nextItem.methodName];
 
-      if (!instanceMethod) {
-        UtilsService.log(`~lb~[Class: ${moduleName}]~w~ - ~r~{Method: ${methodName}} does not exists~w~`);
-        return;
-      }
+        if (!instanceMethod) {
+          UtilsService.log(`~lb~[Class: ${moduleName}]~w~ - ~r~{Method: ${methodName}} does not exists~w~`);
+          return;
+        }
 
-      const doneCheckTimeoutId = UtilsService.setTimeout(() => {
-        this.setupDoneTimeout(moduleName, methodName, checkTimeoutDuration, doneCheckTimeoutId);
-      }, checkTimeoutDuration);
+        const doneCheckTimeoutId = UtilsService.setTimeout(() => {
+          this.setupDoneTimeout(moduleName, methodName, checkTimeoutDuration, doneCheckTimeoutId);
+        }, checkTimeoutDuration);
 
-      const doneCallback = this.doneCallback.bind(this, property, propertyCount, nextKey, doneCheckTimeoutId);
-      const method = instanceMethod.bind(instance, doneCallback);
-      await method();
+        const doneCallback = this.doneCallback.bind(this, property, propertyCount, nextKey, doneCheckTimeoutId);
+        const method = instanceMethod.bind(instance, doneCallback);
+
+        await method();
+      });
     }
 
   }
