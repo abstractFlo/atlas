@@ -38,7 +38,9 @@ export function registerDiscordApiServerPort(port: number) {
 /**
  * Global Error Handler
  */
-export function defaultErrorHandling(): void {
+export function defaultErrorHandling(enable: boolean = false): void {
+  if (!enable) return;
+
   process.on('uncaughtException', (err) => {
     UtilsService.logError(err.stack);
     UtilsService.logError(err.message);
