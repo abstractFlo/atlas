@@ -192,7 +192,15 @@ export class ResourceManager {
    * @private
    */
   private createRollupConfig(
-      input: string, output: string, external: string[] = [], plugins: Plugin[] = []): RollupConfigInterface {
+      input: string, output: string, external: string[] = [], plugins: Plugin[] = []
+  ): RollupConfigInterface {
+    const nodeResolveModules = nodeResolve({
+      dedupe: ['alt-server', 'alt-client', 'native', '@abstractflo/atlas-shared', '@abstractflo/atlas-server', '@abstractflo/atlas-client']
+    });
+
+    plugins.push(nodeResolveModules);
+
+
     if (this.isProduction) {
       const terserPlugin = terser({
         keep_classnames: true,
