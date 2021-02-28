@@ -1,8 +1,8 @@
+import alt from 'alt-server';
 import { container, instanceCachingFactory } from 'tsyringe';
+import { registerAltLib } from '@abstractflo/atlas-shared/helpers';
 import { EventService } from './services/event.service';
 import { EventServiceInterface } from '@abstractflo/atlas-shared';
-import { registerAltLib } from '@abstractflo/atlas-shared/helpers';
-import alt from 'alt-server';
 
 registerAltLib(alt);
 

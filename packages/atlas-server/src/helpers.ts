@@ -1,12 +1,6 @@
-import { container, InjectionToken } from 'tsyringe';
-
-// @ts-ignore
-import { isProduction as setProductionMode } from '@abstractflo/atlas-shared/helpers';
+import { container, InjectionToken, instanceCachingFactory } from 'tsyringe';
 import { UtilsService } from '@abstractflo/atlas-shared';
-
-
-export { setProductionMode };
-
+import { LoaderService } from './services/loader.service';
 
 /**
  * Register path to config file
@@ -45,4 +39,8 @@ export function defaultErrorHandling(): void {
     UtilsService.logError(err.name);
     UtilsService.log('~r~Please close the server and fix the problem~w~');
   });
+}
+
+export function setupSeverSide(): void {
+  container.register('LoaderService', { useFactory: instanceCachingFactory(c => c.resolve(LoaderService)) });
 }

@@ -16,7 +16,7 @@ export { StringResolver, getAtlasMetaData, registerDescriptor } from './decorato
 
 export { UtilsService } from './services/utils.service';
 export { ModuleLoaderService } from './services/module-loader.service';
-export { LoaderService } from './services/loader.service';
+export { BaseLoaderService } from './services/base-loader.service';
 export { BaseEventService } from './services/base-event.service';
 export { CommandService } from './services/command.service';
 export { LoggerService } from './services/logger.service';
@@ -40,3 +40,4 @@ export {
   HasMany,
   Cast
 } from './libs/json-entity';
+

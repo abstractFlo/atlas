@@ -197,7 +197,16 @@ export class ResourceManager {
       input: string, output: string, external: string[] = [], plugins: Plugin[] = []
   ): RollupConfigInterface {
     const nodeResolveModules = nodeResolve({
-      dedupe: ['alt-server', 'alt-client', 'native', '@abstractflo/atlas-shared', '@abstractflo/atlas-server', '@abstractflo/atlas-client']
+      dedupe: [
+        'alt-server',
+        'alt-client',
+        'native',
+        '@abraham/reflection',
+        'reflect-metadata',
+        '@abstractflo/atlas-shared',
+        '@abstractflo/atlas-server',
+        '@abstractflo/atlas-client'
+      ]
     });
 
     plugins.push(nodeResolveModules);

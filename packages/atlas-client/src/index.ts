@@ -18,3 +18,5 @@ export { KeyUp, KeyDown } from './decorators/key-event.decorator';
 
 export { EventService } from './services/event.service';
 export { WebviewService } from './services/webview.service';
+export { LoaderService } from './services/loader.service';
+

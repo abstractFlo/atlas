@@ -8,55 +8,7 @@ import { LoaderServiceEnum } from '../constants/loader-service.constant';
 import { LoaderServiceQueueItemModel } from '../models/loader-service-queue-item.model';
 
 @singleton()
-export class LoaderService {
-
-  /**
-   * Contains the complete queue
-   *
-   * @type {LoaderServiceQueueModel}
-   * @private
-   */
-  private queue: LoaderServiceQueueModel = new LoaderServiceQueueModel();
-
-  /**
-   * Contains the complete loading queue
-   *
-   * @type {LoaderServiceQueueModel}
-   * @private
-   */
-  private readonly: LoaderServiceQueueModel = new LoaderServiceQueueModel();
-
-  /**
-   * Contains the count for frameworkBeforeBoot
-   *
-   * @type {Observable<number>}
-   * @private
-   */
-  private readonly frameworkBeforeBootCount$: Observable<number> = this.queue.frameworkBeforeBootCount.asObservable();
-
-  /**
-   * Contains the count for frameworkAfterBoot
-   *
-   * @type {Observable<number>}
-   * @private
-   */
-  private readonly frameworkAfterBootCount$: Observable<number> = this.queue.frameworkAfterBootCount.asObservable();
-
-  /**
-   * Contains the count for before
-   *
-   * @type {Observable<number>}
-   * @private
-   */
-  private readonly beforeCount$: Observable<number> = this.queue.beforeCount.asObservable();
-
-  /**
-   * Contains the count for after
-   *
-   * @type {Observable<number>}
-   * @private
-   */
-  private readonly afterCount$: Observable<number> = this.queue.afterCount.asObservable();
+export class BaseLoaderService {
 
   /**
    * The subject for starting the loading system and queue
@@ -64,8 +16,49 @@ export class LoaderService {
    * @type {Subject<boolean>}
    * @private
    */
-  private readonly startingSubject$: Subject<boolean> = new Subject<boolean>();
-
+  protected startingSubject$: Subject<boolean> = new Subject<boolean>();
+  /**
+   * Contains the complete queue
+   *
+   * @type {LoaderServiceQueueModel}
+   * @private
+   */
+  private queue: LoaderServiceQueueModel = new LoaderServiceQueueModel();
+  /**
+   * Contains the complete loading queue
+   *
+   * @type {LoaderServiceQueueModel}
+   * @private
+   */
+  private readonly: LoaderServiceQueueModel = new LoaderServiceQueueModel();
+  /**
+   * Contains the count for frameworkBeforeBoot
+   *
+   * @type {Observable<number>}
+   * @private
+   */
+  private readonly frameworkBeforeBootCount$: Observable<number> = this.queue.frameworkBeforeBootCount.asObservable();
+  /**
+   * Contains the count for frameworkAfterBoot
+   *
+   * @type {Observable<number>}
+   * @private
+   */
+  private readonly frameworkAfterBootCount$: Observable<number> = this.queue.frameworkAfterBootCount.asObservable();
+  /**
+   * Contains the count for before
+   *
+   * @type {Observable<number>}
+   * @private
+   */
+  private readonly beforeCount$: Observable<number> = this.queue.beforeCount.asObservable();
+  /**
+   * Contains the count for after
+   *
+   * @type {Observable<number>}
+   * @private
+   */
+  private readonly afterCount$: Observable<number> = this.queue.afterCount.asObservable();
   /**
    * The subject if the loading finished and queue is empty
    *
@@ -88,9 +81,9 @@ export class LoaderService {
    * Bootstrap the framework
    *
    * @param {InjectionToken} target
-   * @return {LoaderService}
+   * @return {BaseLoaderService}
    */
-  public bootstrap(target: InjectionToken): LoaderService {
+  public bootstrap(target: InjectionToken): BaseLoaderService {
     if (this.isBootstrapped) return this;
     this.resolveMetaDataAndAdd();
 
@@ -148,6 +141,13 @@ export class LoaderService {
         .pipe(filter((isFinished: boolean) => isFinished))
         .subscribe(callback);
   }
+
+  /**
+   * Start the loading service
+   *
+   * @private
+   */
+  protected startLoading(): void {}
 
   /**
    * Done callback handler for all queue decorated methods
@@ -264,22 +264,12 @@ export class LoaderService {
    * @private
    */
   private resolveMetaDataAndAdd(): void {
-    const queueItems = getAtlasMetaData<LoaderServiceQueueItemModel[]>(LoaderServiceEnum.QUEUE_ITEM, this);
+    const queueItems = getAtlasMetaData<LoaderServiceQueueItemModel[]>(
+        LoaderServiceEnum.QUEUE_ITEM,
+        container.resolve(BaseLoaderService)
+    );
 
     queueItems.forEach((queueItem: LoaderServiceQueueItemModel) => this.add(queueItem));
-  }
-
-  /**
-   * Start the loading service
-   *
-   * @private
-   */
-  private startLoading(): void {
-    UtilsService.autoClearSetTimeout(() => {
-      UtilsService.log('~lg~Start booting => ~w~Please wait...');
-      this.startingSubject$.next(true);
-      this.startingSubject$.complete();
-    }, 125);
   }
 
   /**

@@ -1,11 +1,7 @@
-import { container, DependencyContainer, instanceCachingFactory } from 'tsyringe';
+import { container, instanceCachingFactory } from 'tsyringe';
+import { constructor } from './types/constructor';
+import { StringResolver } from './decorators/helpers';
 
-/**
- * Export a child container from tsyringe
- *
- * @type {DependencyContainer}
- */
-export const atlasContainer: DependencyContainer = container.createChildContainer();
 
 /**
  * Register all alt:V related functions from both sides in container for reuse from it
@@ -61,4 +57,6 @@ export function isProduction(isProduction: boolean): void {
   container.register<boolean>('isProductionMode', { useValue: isProduction });
 }
 
-
+export function registerLoaderService(target: constructor<any>): void {
+  StringResolver(target);
+}

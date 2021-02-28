@@ -8,10 +8,8 @@ import { EventServiceInterface } from '../interfaces/event-service.interface';
 import { getAtlasMetaData } from '../decorators/helpers';
 import { constructor } from '../types/constructor';
 
-
 @singleton()
 export class BaseEventService implements EventServiceInterface {
-
 
   /**
    * Contains all events where first param is an entity
@@ -35,6 +33,7 @@ export class BaseEventService implements EventServiceInterface {
     EventEnum.ENTITY_ENTER_COLSHAPE,
     EventEnum.ENTITY_LEAVE_COLSHAPE
   ];
+
   /**
    * Contains all base event keys
    *
@@ -116,7 +115,7 @@ export class BaseEventService implements EventServiceInterface {
     let loaded = false;
 
     keys.forEach((key: string) => {
-      const events = getAtlasMetaData<EventModel[]>(key, this);
+      const events = getAtlasMetaData<EventModel[]>(key, container.resolve(BaseEventService));
 
       if (!events.length) return;
 
