@@ -7,9 +7,9 @@ export class LoaderService extends BaseLoaderService {
 
   protected async startLoading() {
     const dbService = container.resolve(DatabaseService);
-    try {
-      dbService.setupEntities();
 
+    try {
+      dbService.setupReflectionEntities();
       await dbService.connect();
     } catch (e) {}
 

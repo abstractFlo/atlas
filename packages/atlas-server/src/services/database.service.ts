@@ -1,7 +1,8 @@
 import { container, singleton } from 'tsyringe';
-import { UtilsService } from '@abstractflo/atlas-shared';
+import { constructor, getAtlasMetaData, UtilsService } from '@abstractflo/atlas-shared';
 import { ConnectionOptions, createConnection } from 'typeorm';
 import { ConfigService } from './config.service';
+import { DatabaseEnums } from '../constants/database.constants';
 
 @singleton()
 export class DatabaseService {
@@ -29,17 +30,12 @@ export class DatabaseService {
   ) {}
 
   /**
-   * Setup the database entities from container and reflection
+   * Setup all entities getting from reflection
    *
-   * @private
    */
-  public setupEntities(): void {
-    try {
-      let entities = [];
-      entities = [...entities, ...container.resolve<Function[]>('server.database.entities')];
-      this.config.entities.push(...entities);
-    } catch (e) {}
-
+  public setupReflectionEntities(): void {
+    const reflectionEntities = getAtlasMetaData<constructor<any>[]>(DatabaseEnums.ENTITY_ADD, this);
+    reflectionEntities.forEach((entity: constructor<any>) => this.addIfNotExists(entity));
   }
 
   /**
@@ -54,5 +50,17 @@ export class DatabaseService {
       UtilsService.logLoaded('DatabaseService');
       this.connected = true;
     });
+  }
+
+  /**
+   * Add entity if not exists
+   *
+   * @param {constructor<any>} entity
+   * @private
+   */
+  private addIfNotExists(entity: constructor<any>) {
+    if (!this.config.entities.includes(entity)) {
+      this.config.entities.push(entity);
+    }
   }
 }

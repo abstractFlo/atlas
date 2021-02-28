@@ -1,4 +1,4 @@
-import { container, InjectionToken, instanceCachingFactory } from 'tsyringe';
+import { container, instanceCachingFactory } from 'tsyringe';
 import { UtilsService } from '@abstractflo/atlas-shared';
 import { LoaderService } from './services/loader.service';
 
@@ -9,15 +9,6 @@ import { LoaderService } from './services/loader.service';
  */
 export function registerServerConfigPath(path: string): void {
   container.register<string>('server.config.path.file', { useValue: path });
-}
-
-/**
- * Register database entities for typeorm
- *
- * @param {InjectionToken[]} entities
- */
-export function registerDatabaseEntities(entities: InjectionToken[]): void {
-  container.register<InjectionToken[]>('server.database.entities', { useValue: entities });
 }
 
 /**
