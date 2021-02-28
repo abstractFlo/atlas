@@ -1,5 +1,7 @@
 import '@abraham/reflection';
 import './setup';
+import './worker/player.worker';
+
 
 export * from './helpers';
 
