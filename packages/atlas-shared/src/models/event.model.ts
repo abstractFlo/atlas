@@ -18,7 +18,9 @@ export class EventModel extends JsonEntityModel {
       'gameEntityDestroy' |
       'entityEnterColShape' |
       'entityLeaveColShape' |
-      'consoleCommand';
+      'consoleCommand' |
+      'keyup' |
+      'keydown';
 
   @Cast({ from: castToString() })
   eventName: string;

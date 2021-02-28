@@ -10,4 +10,5 @@ export * from './services';
 export * from './pools/base.pool';
 export * from './interfaces/event-service.interface';
 export * from './models/event.model';
+export * from './models/validate-options.model';
 export * from './libs/json-entity';

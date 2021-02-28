@@ -2,14 +2,14 @@ import { Cast, castToNumber, castToString, JsonEntityModel } from '../libs/json-
 
 export class ValidateOptionsModel extends JsonEntityModel {
 
-  @Cast({ from: castToString() })
-  eventAddTo: 'base' | 'gameEntity' | 'metaChange' | 'colShape' = 'base';
-
   @Cast({ from: castToNumber() })
   entity: number;
 
   @Cast({ from: castToString() })
   metaKey: string;
+
+  @Cast({ from: castToNumber() })
+  keyboardKey: number;
 
   @Cast({ from: castToNumber() })
   colShapeType: number;
