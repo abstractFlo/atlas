@@ -1,10 +1,11 @@
 import { container, InjectionToken, singleton } from 'tsyringe';
-import { LoaderServiceQueueItemModel, LoaderServiceQueueModel } from '../models';
-import { LoaderServiceEnum } from '../constants';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeLast } from 'rxjs/operators';
 import { UtilsService } from './utils.service';
 import { getAtlasMetaData } from '../decorators/helpers';
+import { LoaderServiceQueueModel } from '../models/loader-service-queue.model';
+import { LoaderServiceEnum } from '../constants/loader-service.constant';
+import { LoaderServiceQueueItemModel } from '../models/loader-service-queue-item.model';
 
 @singleton()
 export class LoaderService {

@@ -4,12 +4,14 @@ import { terser } from 'rollup-plugin-terser';
 import { Plugin } from 'rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
-import { GameResourceInterface, RollupConfigInterface } from '../interfaces';
+import { GameResourceInterface } from '../interfaces/game-resource.interface';
+import { RollupConfigInterface } from '../interfaces/rollup-config.interface';
 
 //@ts-ignore
 import autoExternal from 'rollup-plugin-auto-external';
 import convertNamedImports from './transform';
 import { config } from 'dotenv';
+
 
 config();
 

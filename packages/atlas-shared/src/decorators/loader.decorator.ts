@@ -1,8 +1,9 @@
-import { AutoloaderEnums, LoaderServiceEnum, LoaderServiceQueueTypeEnum } from '../constants';
 import { LoaderServiceQueueItemModel } from '../models/loader-service-queue-item.model';
 import { LoaderService } from '../services/loader.service';
 import { container } from 'tsyringe';
 import { getAtlasMetaData, registerDescriptor } from './helpers';
+import { LoaderServiceEnum, LoaderServiceQueueTypeEnum } from '../constants/loader-service.constant';
+import { AutoloaderEnums } from '../constants/autoloader.constant';
 
 /**
  * Define options for autoloader decorator

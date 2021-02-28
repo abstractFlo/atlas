@@ -1,5 +1,5 @@
-import { EventModel } from '../models';
 import { container, singleton } from 'tsyringe';
+import { EventModel } from '../models/event.model';
 
 @singleton()
 export class CommandService {

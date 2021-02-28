@@ -1,6 +1,8 @@
 import { Cast, castToNumber, castToString, JsonEntityModel } from '../libs/json-entity';
-import { AutoloaderEnums, LoaderServiceQueueTypeEnum } from '../constants';
-import { constructor } from '../types';
+import { AutoloaderEnums } from '../constants/autoloader.constant';
+import { LoaderServiceQueueTypeEnum } from '../constants/loader-service.constant';
+import { constructor } from '../types/constructor';
+
 
 export class LoaderServiceQueueItemModel extends JsonEntityModel {
 
