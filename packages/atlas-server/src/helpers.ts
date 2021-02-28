@@ -1,11 +1,11 @@
 import { container, InjectionToken } from 'tsyringe';
-import { UtilsService } from '@abstractflo/atlas-shared';
-import * as alt from 'alt-server';
 
 // @ts-ignore
-import { registerAltLib } from '@abstractflo/atlas-shared/helpers';
+import { isProduction as setProductionMode } from '@abstractflo/atlas-shared/helpers';
+import { UtilsService } from '@abstractflo/atlas-shared';
 
-registerAltLib(alt);
+
+export { setProductionMode };
 
 
 /**
@@ -38,9 +38,7 @@ export function registerDiscordApiServerPort(port: number) {
 /**
  * Global Error Handler
  */
-export function defaultErrorHandling(enable: boolean = false): void {
-  if (!enable) return;
-
+export function defaultErrorHandling(): void {
   process.on('uncaughtException', (err) => {
     UtilsService.logError(err.stack);
     UtilsService.logError(err.message);

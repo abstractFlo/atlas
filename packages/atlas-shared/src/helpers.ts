@@ -45,3 +45,5 @@ export function registerAltLib(lib: any): void {
 export function isProduction(isProduction: boolean): void {
   container.register<boolean>('isProductionMode', { useValue: isProduction });
 }
+
+
