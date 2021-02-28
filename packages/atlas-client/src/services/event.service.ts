@@ -92,13 +92,13 @@ export class EventService extends BaseEventService {
   protected startEventListeners() {
     super.startEventListeners();
 
-    UtilsService.nextTick(() => {
-      this.resolveAndLoadEvents(
-          this.keyEvents,
-          'KeyEvents',
-          this.startKeyEvents.bind(this)
-      );
-    });
+    UtilsService.nextTick(() =>
+        this.resolveAndLoadEvents(
+            this.keyEvents,
+            'KeyEvents',
+            this.startKeyEvents.bind(this)
+        )
+    );
   }
 
   /**

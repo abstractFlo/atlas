@@ -12,7 +12,6 @@ export function registerWebview(url: string, routeToEventName: string): void {
   container.register<string>('alt.webview.routeTo.eventName', { useValue: routeToEventName });
 }
 
-
 /**
  * Helper to get local player
  *

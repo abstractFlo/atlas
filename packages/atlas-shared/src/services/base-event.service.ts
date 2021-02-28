@@ -46,8 +46,7 @@ export class BaseEventService implements EventServiceInterface {
     EventEnum.ON_CLIENT,
     EventEnum.ONCE_CLIENT,
     EventEnum.ON_SERVER,
-    EventEnum.ONCE_SERVER,
-    EventEnum.ON_GUI
+    EventEnum.ONCE_SERVER
   ];
 
   constructor(
@@ -189,7 +188,7 @@ export class BaseEventService implements EventServiceInterface {
    * @param {Function} callback
    * @protected
    */
-  protected resolveAndLoadEvents(keys: string[], eventCategoryName: string, callback: CallableFunction): void {
+  public resolveAndLoadEvents(keys: string[], eventCategoryName: string, callback: CallableFunction): void {
     let loaded = false;
 
     keys.forEach((key: string) => {
