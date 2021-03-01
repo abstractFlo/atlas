@@ -54,14 +54,3 @@ export function registerAltLib(lib: any): void {
 export function isProduction(isProduction: boolean): void {
   container.register<boolean>('isProductionMode', { useValue: isProduction });
 }
-
-/**
- * Helper for environment variables with default value
- *
- * @param {string} key
- * @param defaultValue
- * @return {any}
- */
-export function env(key: string, defaultValue: any = null): any {
-  return process.env[key] || defaultValue;
-}

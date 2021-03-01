@@ -2,7 +2,7 @@ import { singleton } from 'tsyringe';
 import { get, set } from 'lodash';
 import { UtilsService } from '@abstractflo/atlas-shared';
 import path from 'path';
-import { env } from '@abstractflo/atlas-shared/helpers';
+import { env } from '../helpers';
 
 @singleton()
 export class ConfigService {
@@ -15,7 +15,7 @@ export class ConfigService {
    */
   private config: { [id: string]: any };
 
-  private pathToFolder = path.resolve(env('CONFIG_FOLDER', 'config'))
+  private pathToFolder = path.resolve(env('CONFIG_FOLDER', 'config'));
 
   public async init(): Promise<void> {
     UtilsService.log(this.pathToFolder);

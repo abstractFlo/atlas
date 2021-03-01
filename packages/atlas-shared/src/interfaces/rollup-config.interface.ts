@@ -5,13 +5,13 @@ export interface RollupConfigInterface {
   output: RollupConfigOutputInterface;
   external: string[];
   plugins: Plugin[];
-  watch: RollupConfigWatchInterface
+  watch?: RollupConfigWatchInterface
 }
 
 export interface RollupConfigOutputInterface {
   file: string;
   format: string;
-  preserveModules: boolean;
+  preserveModules?: boolean;
 }
 
 export interface RollupConfigWatchInterface {

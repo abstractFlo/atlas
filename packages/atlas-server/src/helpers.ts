@@ -1,15 +1,6 @@
-import { container, instanceCachingFactory } from 'tsyringe';
+import { container } from 'tsyringe';
 import { UtilsService } from '@abstractflo/atlas-shared';
-import { LoaderService } from './services/loader.service';
 
-/**
- * Register path to config file
- *
- * @param {string} path
- */
-export function registerServerConfigPath(path: string): void {
-  container.register<string>('server.config.path.file', { useValue: path });
-}
 
 /**
  * Register the express server port
@@ -32,6 +23,13 @@ export function defaultErrorHandling(): void {
   });
 }
 
-export function setupSeverSide(): void {
-  container.register('LoaderService', { useFactory: instanceCachingFactory(c => c.resolve(LoaderService)) });
+/**
+ * Return the process variable or default
+ *
+ * @param {string} key
+ * @param defaultValue
+ * @return {any}
+ */
+export function env(key: string, defaultValue: any = null): any {
+  return process.env[key] || defaultValue;
 }

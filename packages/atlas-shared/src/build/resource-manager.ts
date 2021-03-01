@@ -4,11 +4,9 @@ import { terser } from 'rollup-plugin-terser';
 import { Plugin } from 'rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
+import multiEntry from '@rollup/plugin-multi-entry';
 import { GameResourceInterface } from '../interfaces/game-resource.interface';
 import { RollupConfigInterface } from '../interfaces/rollup-config.interface';
-
-//@ts-ignore
-import autoExternal from 'rollup-plugin-auto-external';
 import convertNamedImports from './transform';
 
 export class ResourceManager {
@@ -44,8 +42,25 @@ export class ResourceManager {
    */
   private readonly isProduction: boolean = process.env.NODE_ENV === 'production';
 
-  constructor(resourcePath: string) {
-    this.filterAvailableResources(path.resolve(this.__dirname, resourcePath));
+  /**
+   * Contains the path to config folder
+   *
+   * @type {string}
+   * @private
+   */
+  private readonly configFolderPath: string;
+
+  /**
+   * Contains the outputPath for build files
+   *
+   * @type {string}
+   * @private
+   */
+  private readonly outputPath: string;
+
+  constructor(resourcePath: string, pathToConfigFolder: string = 'config') {
+    this.configFolderPath = pathToConfigFolder;
+    this.filterAvailableResources(path.resolve(process.cwd(), resourcePath));
   }
 
   /**
@@ -53,7 +68,11 @@ export class ResourceManager {
    *
    * @returns {any}
    */
-  public getConfig(outputPath: string): RollupConfigInterface[] {
+  public async getConfig(): Promise<RollupConfigInterface[]> {
+    const destination = path.resolve(process.cwd(), process.env.ATLAS_BUILD_OUTPUT || 'dist');
+
+    await this.cleanUpAndCopyStatics();
+
     this.availableResources.forEach((resource: string) => {
       const pkg = this.readPackageJson(resource);
 
@@ -68,7 +87,7 @@ export class ResourceManager {
 
         const serverConfig = this.createServerConfig(
             path.resolve(`${resource}/server/index.ts`),
-            path.resolve(`${outputPath}/${pkg.name}/server.js`),
+            path.resolve(`${destination}/resources/${pkg.name}/server.js`),
             externals,
             convertedModules
         );
@@ -79,15 +98,44 @@ export class ResourceManager {
       if (hasClientFolder) {
         const clientConfig = this.createClientConfig(
             path.resolve(`${resource}/client/index.ts`),
-            path.resolve(`${outputPath}/${pkg.name}/client.js`)
+            path.resolve(`${destination}/resources/${pkg.name}/client.js`)
         );
 
         this.config.push(clientConfig);
       }
-
     });
 
+    const configFolderConfig = this.createConfigFolderConfig(`${destination}/config.js`);
+    this.config.push(configFolderConfig);
+
     return this.config;
+  }
+
+  /**
+   * Cleanup and copy statics
+   *
+   * @return {Promise<void>}
+   */
+  public async cleanUpAndCopyStatics(): Promise<void> {
+    const cwd = process.cwd();
+    const destination = path.resolve(cwd, process.env.ATLAS_BUILD_OUTPUT || 'dist');
+    const retailFolder = path.resolve(cwd, process.env.ATLAS_RETAIL_FOLDER || 'retail');
+    const packageJsonPath = path.resolve(cwd, 'package.json');
+    const filesAndFolders = await fs.readdir(retailFolder);
+
+    await fs.emptyDir(destination);
+    console.log(`Cleanup ${destination}`);
+
+    for (const content of filesAndFolders.filter((c => !c.startsWith('.') && !c.startsWith('_')))) {
+      const contentFolderPath = path.resolve(retailFolder, content);
+      const destinationFolderPath = path.resolve(destination, content);
+      await fs.copy(contentFolderPath, destinationFolderPath);
+      console.log(`Successfully copied ${contentFolderPath} => ${destinationFolderPath}`);
+    }
+
+    await fs.copy(packageJsonPath, path.resolve(destination, 'package.json'));
+    console.log(`Successfully copied ${packageJsonPath} => ${path.resolve(destination, 'package.json')}`);
+
   }
 
   /**
@@ -245,6 +293,42 @@ export class ResourceManager {
    */
   private hasFolder(resource: string, folderName: string): boolean {
     return fs.existsSync(`${resource}/${folderName}`);
+  }
+
+  /**
+   * Create Rollup Config for config files
+   *
+   * @param {string} output
+   * @return {{output: {file: string, format: string}, input: string, external: string[], plugins: any[]}}
+   * @private
+   */
+  private createConfigFolderConfig(output: string): RollupConfigInterface {
+    const plugins = [];
+
+    if (this.isProduction) {
+      const terserPlugin = terser({
+        keep_classnames: true,
+        keep_fnames: true,
+        output: {
+          comments: false
+        }
+      });
+      plugins.push(terserPlugin);
+    }
+
+    plugins.push(multiEntry({
+      entryFileName: 'config.js'
+    }));
+
+    return {
+      input: `${this.configFolderPath}/**/*.ts`,
+      output: {
+        file: output,
+        format: 'esm'
+      },
+      plugins,
+      external: ['@abstractflo/atlas-server/helpers']
+    };
   }
 }
 
