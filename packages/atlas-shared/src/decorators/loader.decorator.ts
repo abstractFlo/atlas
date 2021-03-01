@@ -38,6 +38,22 @@ export const Autoload = (
 };
 
 /**
+ * Alias for @Autoload(AutoloaderEnums.BEFORE_BOOT)
+ * @param {AutoloadOptionsInterface} options
+ * @return {(target: any) => any}
+ * @constructor
+ */
+export const AutoloadBefore = (options?: AutoloadOptionsInterface) => Autoload(AutoloaderEnums.BEFORE_BOOT, options);
+
+/**
+ * Alias for @Autoload(AutoloaderEnums.AFTER_BOOT)
+ * @param {AutoloadOptionsInterface} options
+ * @return {(target: any) => any}
+ * @constructor
+ */
+export const AutoloadAfter = (options?: AutoloadOptionsInterface) => Autoload(AutoloaderEnums.AFTER_BOOT, options);
+
+/**
  * Register @Before decorator
  *
  * @param {number} doneCheckTimeout

@@ -4,11 +4,17 @@
     "src"
   ],
   "compilerOptions": {
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/@altv"
+    ],
     "outDir": "typings",
     "rootDir": "src",
     "baseUrl": ".",
     "paths": {
-      "reflect-metadata": ["./"]
+      "reflect-metadata": [
+        "./"
+      ]
     }
   }
 }

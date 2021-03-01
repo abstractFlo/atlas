@@ -10,10 +10,6 @@ import { RollupConfigInterface } from '../interfaces/rollup-config.interface';
 //@ts-ignore
 import autoExternal from 'rollup-plugin-auto-external';
 import convertNamedImports from './transform';
-import { config } from 'dotenv';
-
-
-config();
 
 export class ResourceManager {
 

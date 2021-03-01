@@ -1,6 +1,4 @@
 import { container, instanceCachingFactory } from 'tsyringe';
-import { constructor } from './types/constructor';
-import { StringResolver } from './decorators/helpers';
 
 
 /**
@@ -57,6 +55,13 @@ export function isProduction(isProduction: boolean): void {
   container.register<boolean>('isProductionMode', { useValue: isProduction });
 }
 
-export function registerLoaderService(target: constructor<any>): void {
-  StringResolver(target);
+/**
+ * Helper for environment variables with default value
+ *
+ * @param {string} key
+ * @param defaultValue
+ * @return {any}
+ */
+export function env(key: string, defaultValue: any = null): any {
+  return process.env[key] || defaultValue;
 }
