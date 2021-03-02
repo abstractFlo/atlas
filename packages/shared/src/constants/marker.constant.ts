@@ -1,4 +1,4 @@
-export enum EMarkerType {
+export enum MarkerType {
     UpsideDownCone = 0,
     VerticalCylinder = 1,
     ThickChevronUp = 2,
