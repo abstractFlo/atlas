@@ -1,10 +1,7 @@
 import './setup';
-import { container } from 'tsyringe';
-import { ConfigService } from './services/config.service';
+
 import './extends/colshape/alt-colshape.prototype';
 import './extends/player/alt-player.prototype';
-
-container.resolve(ConfigService);
 
 export {
   OnClient,

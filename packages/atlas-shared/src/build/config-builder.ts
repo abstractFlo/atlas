@@ -30,6 +30,7 @@ export class ConfigBuilder {
     const basePkgJson = ResourceAnalyzer.readPackageJson(process.cwd()) as any;
     const modulesForConvert = [
       'rxjs/operators',
+      'dotenv',
       ...Object.keys(basePkgJson.devDependencies || {}),
       ...Object.keys(basePkgJson.dependencies || {})
     ].filter((name: string) => !name.startsWith('@abstractflo'));

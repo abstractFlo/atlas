@@ -1,7 +1,6 @@
 import { singleton } from 'tsyringe';
 import { constructor, getAtlasMetaData, UtilsService } from '@abstractflo/atlas-shared';
 import { ConnectionOptions, createConnection } from 'typeorm';
-import { ConfigService } from './config.service';
 import { DatabaseEnums } from '../constants/database.constants';
 
 @singleton()
@@ -20,8 +19,8 @@ export class DatabaseService {
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_DATABASE,
-    logging: Boolean(process.env.DB_LOGGING),
-    synchronize: Boolean(process.env.DB_SYNCHRONIZE),
+    logging: process.env.DB_LOGGING === 'true',
+    synchronize: process.env.DB_SYNCHRONIZE === 'true',
     entities: []
   };
 
@@ -33,9 +32,7 @@ export class DatabaseService {
    */
   private connected: boolean = false;
 
-  constructor(
-      private readonly configService: ConfigService
-  ) {}
+  constructor() {}
 
   /**
    * Setup all entities getting from reflection
