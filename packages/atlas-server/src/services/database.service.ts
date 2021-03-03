@@ -1,4 +1,4 @@
-import { container, singleton } from 'tsyringe';
+import { singleton } from 'tsyringe';
 import { constructor, getAtlasMetaData, UtilsService } from '@abstractflo/atlas-shared';
 import { ConnectionOptions, createConnection } from 'typeorm';
 import { ConfigService } from './config.service';
@@ -13,7 +13,15 @@ export class DatabaseService {
    * @private
    */
   private config: ConnectionOptions = {
-    ...this.configService.get('database'),
+    name: 'default',
+    type: process.env.DB_CONNECTION as any,
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_DATABASE,
+    logging: Boolean(process.env.DB_LOGGING),
+    synchronize: Boolean(process.env.DB_SYNCHRONIZE),
     entities: []
   };
 
