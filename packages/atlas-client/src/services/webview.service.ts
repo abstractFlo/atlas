@@ -1,17 +1,10 @@
 import { container, singleton } from 'tsyringe';
-import {
-  Autoload,
-  AutoloaderEnums,
-  constructor,
-  EventEnum,
-  EventModel,
-  FrameworkEvent,
-  UtilsService
-} from '@abstractflo/atlas-shared';
+import { constructor, EventEnum, EventModel, FrameworkEvent, UtilsService } from '@abstractflo/atlas-shared';
 import { showCursor, WebView } from 'alt-client';
 import { EventService } from './event.service';
+import { AutoloadAfter } from '@abstractflo/atlas-shared';
 
-@Autoload(AutoloaderEnums.BEFORE_BOOT, { methodName: 'load', doneCheckTimeout: 1000 * 10 })
+@AutoloadAfter({ methodName: 'load', doneCheckTimeout: 1000 * 10 })
 @singleton()
 export class WebviewService {
 

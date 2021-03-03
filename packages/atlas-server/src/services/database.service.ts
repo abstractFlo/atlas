@@ -1,5 +1,5 @@
 import { singleton } from 'tsyringe';
-import { constructor, getAtlasMetaData, UtilsService } from '@abstractflo/atlas-shared';
+import { castToBoolean, castToNumber, constructor, getAtlasMetaData, UtilsService } from '@abstractflo/atlas-shared';
 import { ConnectionOptions, createConnection } from 'typeorm';
 import { DatabaseEnums } from '../constants/database.constants';
 
@@ -15,12 +15,12 @@ export class DatabaseService {
     name: 'default',
     type: process.env.DB_CONNECTION as any,
     host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
+    port: castToNumber()(process.env.DB_PORT),
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_DATABASE,
-    logging: process.env.DB_LOGGING === 'true',
-    synchronize: process.env.DB_SYNCHRONIZE === 'true',
+    logging: castToBoolean('true')(process.env.DB_LOGGING),
+    synchronize: castToBoolean('true')(process.env.DB_SYNCRONIZE),
     entities: []
   };
 
@@ -32,11 +32,8 @@ export class DatabaseService {
    */
   private connected: boolean = false;
 
-  constructor() {}
-
   /**
    * Setup all entities getting from reflection
-   *
    */
   public setupReflectionEntities(): void {
     const reflectionEntities = getAtlasMetaData<constructor<any>[]>(DatabaseEnums.ENTITY_ADD, this);
