@@ -1,235 +1,149 @@
+import path from 'path';
 import fs from 'fs-extra';
-import * as path from 'path';
-import { terser } from 'rollup-plugin-terser';
-import { Plugin } from 'rollup';
-import nodeResolve from '@rollup/plugin-node-resolve';
-import typescript from '@rollup/plugin-typescript';
-import { GameResourceInterface, RollupConfigInterface } from '../interfaces';
-
-//@ts-ignore
-import autoExternal from 'rollup-plugin-auto-external';
-import convertNamedImports from './transform';
 import { config } from 'dotenv';
+import { ResourceAnalyzer } from './resource-analyzer';
+import { RollupConfigInterface } from '../interfaces/rollup-config.interface';
+import { ConfigBuilder } from './config-builder';
+import { GameResourceInterface } from '../interfaces/game-resource.interface';
 
 config();
 
 export class ResourceManager {
 
-  /**
-   * Contains all availableResource
-   *
-   * @type {string[]}
-   */
-  protected availableResources: string[] = [];
+  public config: RollupConfigInterface[] = [];
+  private cwd: string = process.cwd();
+  private buildOutput: string = path.resolve(this.cwd, process.env.ATLAS_BUILD_OUPUT || 'dist');
+  private retailFolder: string = path.resolve(this.cwd, process.env.ATLAS_RETAIL_FOLDER || 'retail');
+  private resourceFolder: string = path.resolve(this.cwd, process.env.ATLAS_RESOURCE_FOLDER || 'resources');
+  private configFolder: string = path.resolve(this.cwd, process.env.ATLAS_CONFIG_FOLDER || 'config');
+  private serverConfigPath: string = path.resolve(this.cwd, process.env.ATLAS_SERVER_CFG_PATH || 'docker-data');
+
+  constructor() {}
 
   /**
-   * __dirname fallback for esModule
+   * Return the final config
    *
-   * @type {string}
-   * @private
+   * @return {RollupConfigInterface[]}
    */
-  private __dirname: string = path.resolve(process.cwd());
-
-  /**
-   * Contains the complete config
-   *
-   * @type {RollupConfigInterface[]}
-   * @private
-   */
-  private config: RollupConfigInterface[] = [];
-
-  /**
-   * Check if production environment
-   *
-   * @type {boolean}
-   * @private
-   */
-  private readonly isProduction: boolean = process.env.NODE_ENV === 'production';
-
-  constructor(resourcePath: string) {
-    this.filterAvailableResources(path.resolve(this.__dirname, resourcePath));
-  }
-
-  /**
-   * Return the rollup config ready to use
-   *
-   * @returns {any}
-   */
-  public getConfig(outputPath: string): RollupConfigInterface[] {
-    this.availableResources.forEach((resource: string) => {
-      const pkg = this.readPackageJson(resource);
-
-      if (!pkg.isGameResource) return;
-
-      const hasServerFolder = this.hasFolder(resource, 'server');
-      const hasClientFolder = this.hasFolder(resource, 'client');
-
-      if (hasServerFolder) {
-        const externals = pkg.externals || [];
-        const convertedModules = pkg.convert || [];
-
-        const serverConfig = this.createServerConfig(
-            path.resolve(`${resource}/server/index.ts`),
-            path.resolve(`${outputPath}/${pkg.name}/server.js`),
-            externals,
-            convertedModules
-        );
-
-        this.config.push(serverConfig);
-      }
-
-      if (hasClientFolder) {
-        const clientConfig = this.createClientConfig(
-            path.resolve(`${resource}/client/index.ts`),
-            path.resolve(`${outputPath}/${pkg.name}/client.js`)
-        );
-
-        this.config.push(clientConfig);
-      }
-
-    });
+  public getConfig(): RollupConfigInterface[] {
+    this.cleanup();
+    this.createConfigs();
+    this.copyRetail();
+    this.copyPackageJson();
+    this.copyServerConfig();
 
     return this.config;
   }
 
-  /**
-   * Create the server side rollup config
-   *
-   * @param {string} input
-   * @param {string} output
-   * @param {string[]} external
-   * @param convertedImports
-   * @returns {RollupConfigInterface}
-   */
-  public createServerConfig(
-      input: string,
-      output: string,
-      external: string[] = [],
-      convertedImports: string[] = []
-  ): RollupConfigInterface {
+  private createConfigs() {
+    try {
 
-    const pkg = this.readPackageJson(process.cwd()) as any;
-    const modulesForConvert = [
-      'rxjs/operators',
-      ...Object.keys(pkg.devDependencies || {}),
-      ...Object.keys(pkg.dependencies || {})
-    ].filter(name => !name.startsWith('@abstractflo'));
+      const availableResources = ResourceAnalyzer.getValidResources(this.resourceFolder);
 
-    const plugins = [
-      nodeResolve(),
-      typescript(),
-      convertNamedImports(['rxjs/operators', ...convertedImports, ...modulesForConvert])
-    ];
+      availableResources.forEach((resource: string) => {
+        const pkgJson = ResourceAnalyzer.readPackageJson(resource);
 
-    external.push('alt-server', ...modulesForConvert);
+        if (!pkgJson.isGameResource) return;
 
-    return this.createRollupConfig(input, output, external, plugins);
-  }
+        if (ResourceAnalyzer.hasFolder(resource, 'server')) {
+          this.config.push(ConfigBuilder.serverConfig(resource, this.buildOutput, pkgJson));
+        }
 
-  /**
-   * Create client side rollup config
-   *
-   * @param {string} input
-   * @param {string} output
-   * @returns {RollupConfigInterface}
-   */
-  public createClientConfig(
-      input: string,
-      output: string
-  ): RollupConfigInterface {
+        if (ResourceAnalyzer.hasFolder(resource, 'client')) {
+          this.config.push(ConfigBuilder.clientConfig(resource, this.buildOutput, pkgJson));
+        }
 
-    let plugins = [nodeResolve(), typescript()];
-
-    const external = ['alt-client', 'natives'];
-
-    return this.createRollupConfig(input, output, external, plugins);
-  }
-
-  /**
-   * Return the package.json for given resource
-   *
-   * @param {string} resource
-   * @returns {GameResourceInterface}
-   * @private
-   */
-  private readPackageJson(resource: string): GameResourceInterface {
-    return fs.readJSONSync(`${resource}/package.json`);
-  }
-
-  /**
-   * Filter all resource they have an package.json file
-   *
-   * @private
-   */
-  private filterAvailableResources(resourcePath: string): void {
-    this.availableResources = this.getResourceFolders(resourcePath).filter(
-        (folder: string) => fs.existsSync(`${folder}/package.json`)
-    );
-  }
-
-  /**
-   * Return all folders for given resourcePath
-   *
-   * @param {string} resourcePath
-   * @returns {string[]}
-   * @private
-   */
-  private getResourceFolders(resourcePath: string): string[] {
-    return fs.readdirSync(resourcePath)
-        .map((resource: string) =>
-            path.resolve(resourcePath, resource)
-        );
-  }
-
-  /**
-   * Create the base rollup config for both sides
-   *
-   * @param {string} input
-   * @param {string} output
-   * @param {string[]} external
-   * @param {Plugin[]} plugins
-   * @returns {RollupConfigInterface}
-   * @private
-   */
-  private createRollupConfig(
-      input: string, output: string, external: string[] = [], plugins: Plugin[] = []): RollupConfigInterface {
-    if (this.isProduction) {
-      const terserPlugin = terser({
-        keep_classnames: true,
-        keep_fnames: true,
-        output: {
-          comments: false
+        if (ResourceAnalyzer.hasFolder(resource, 'assets')) {
+          this.copyAssets(resource, pkgJson);
         }
       });
-      plugins.push(terserPlugin);
-    }
 
-    return {
-      input,
-      output: {
-        file: output,
-        format: 'esm',
-        preserveModules: false
-      },
-      external,
-      plugins,
-      watch: {
-        chokidar: true,
-        clearScreen: true
-      }
-    };
+    } catch (e) {
+      console.error('There are no resources for given folder');
+      console.error(this.resourceFolder);
+      console.error(e);
+    }
   }
 
   /**
-   * Check if given folder exists in given resource
+   * Copy assets to destination dir
    *
    * @param {string} resource
-   * @param {string} folderName
-   * @returns {boolean}
+   * @param {GameResourceInterface} pkgJson
    * @private
    */
-  private hasFolder(resource: string, folderName: string): boolean {
-    return fs.existsSync(`${resource}/${folderName}`);
+  private copyAssets(resource: string, pkgJson: GameResourceInterface): void {
+    const destinationPath = path.resolve(this.buildOutput, 'resources', pkgJson.name);
+    const assetsPath = ResourceAnalyzer.pathToFolderInResource(resource, 'assets');
+
+    this.copyFilesSecure(assetsPath, destinationPath);
+  }
+
+  /**
+   * Copy the retail folder to build output
+   *
+   * @private
+   */
+  private copyRetail(): void {
+    const retailFilesAndFolders = ResourceAnalyzer.getOnlyVisibleFoldersAndFiles(this.retailFolder);
+
+    retailFilesAndFolders.forEach((fileOrFolderPath) => {
+      const filename = path.basename(fileOrFolderPath);
+      this.copyFilesSecure(fileOrFolderPath, path.resolve(this.buildOutput, filename));
+    });
+  }
+
+  /**
+   * Copy files from given path to destination and check before if destination exists
+   *
+   * @param {string} srcPath
+   * @param {string} destinationPath
+   * @private
+   */
+  private copyFilesSecure(srcPath: string, destinationPath: string) {
+    const stats = fs.lstatSync(srcPath);
+
+    if (stats.isFile()) {
+      fs.ensureFileSync(destinationPath);
+    }
+
+    if (stats.isDirectory()) {
+      fs.ensureDirSync(destinationPath);
+    }
+
+    fs.copySync(srcPath, destinationPath);
+
+    console.log(`Successfully copied ${srcPath} => ${destinationPath}`);
+  }
+
+  /**
+   * Copy the package json to build output
+   *
+   * @private
+   */
+  private copyPackageJson(): void {
+    const filename = 'package.json';
+    this.copyFilesSecure(path.resolve(this.cwd, filename), path.resolve(this.buildOutput, filename));
+  }
+
+  /**
+   * Copy the server.cfg to build output
+   *
+   * @private
+   */
+  private copyServerConfig(): void {
+    const filename = 'server.cfg';
+    this.copyFilesSecure(path.resolve(this.serverConfigPath, filename), path.resolve(this.buildOutput, filename));
+  }
+
+  /**
+   * Clean up the build output
+   *
+   * @private
+   */
+  private cleanup(): void {
+    fs.emptyDirSync(this.buildOutput);
+    console.log(`Cleanup ${this.buildOutput}`);
   }
 }
 

@@ -1,5 +1,5 @@
-import { constructor } from '../types';
 import { container, instanceCachingFactory } from 'tsyringe';
+import { constructor } from '../types/constructor';
 
 /**
  * Register the override descriptor

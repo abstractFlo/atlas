@@ -1,8 +1,8 @@
-import { constructor } from '../types';
 import { container, singleton } from 'tsyringe';
 import { ModuleLoaderService } from '../services/module-loader.service';
 import { ModuleLoaderEnum } from '../constants/module-loader.constant';
 import { getAtlasMetaData, StringResolver } from './helpers';
+import { constructor } from '../types/constructor';
 
 /**
  * Interface for all module decorator options

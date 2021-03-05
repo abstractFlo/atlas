@@ -1,8 +1,9 @@
-import { EventModel } from '../models';
 import { container } from 'tsyringe';
-import { EventEnum } from '../constants';
-import { EventServiceInterface } from '../interfaces';
 import { getAtlasMetaData, registerDescriptor } from './helpers';
+import { EventEnum } from '../constants/event.contstant';
+import { EventModel } from '../models/event.model';
+import { EventServiceInterface } from '../interfaces/event-service.interface';
+import { BaseEventService } from '../services/base-event.service';
 
 /**
  * Register @On decorator
@@ -105,5 +106,5 @@ export function setEventServiceReflectMetaData(key: string, data: Partial<EventM
  * @return {EventServiceInterface}
  */
 export function eventServiceTarget(): EventServiceInterface {
-  return container.resolve<EventServiceInterface>('EventService');
+  return container.resolve<EventServiceInterface>(BaseEventService);
 }

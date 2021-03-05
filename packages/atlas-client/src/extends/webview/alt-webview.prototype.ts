@@ -1,7 +1,8 @@
 import { WebviewInterface } from './webview.interface';
 import { WebView } from 'alt-client';
 import { container } from 'tsyringe';
-import { WebviewService } from '../../services';
+import { WebviewService } from '../../services/webview.service';
+
 
 declare module 'alt-client' {
   export interface WebView extends WebviewInterface {}

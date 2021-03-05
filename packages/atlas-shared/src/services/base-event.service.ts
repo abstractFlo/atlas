@@ -1,16 +1,15 @@
 import { container, singleton } from 'tsyringe';
-import { EventModel } from '../models';
-import { EventEnum } from '../constants';
-import { constructor } from '../types';
-import { EventServiceInterface } from '../interfaces';
 import { UtilsService } from './utils.service';
 import { Entity } from 'alt-server';
 import { CommandService } from './command.service';
-import { getAtlasMetaData } from '../decorators';
+import { EventEnum } from '../constants/event.contstant';
+import { EventModel } from '../models/event.model';
+import { EventServiceInterface } from '../interfaces/event-service.interface';
+import { getAtlasMetaData } from '../decorators/helpers';
+import { constructor } from '../types/constructor';
 
 @singleton()
 export class BaseEventService implements EventServiceInterface {
-
 
   /**
    * Contains all events where first param is an entity
@@ -34,6 +33,7 @@ export class BaseEventService implements EventServiceInterface {
     EventEnum.ENTITY_ENTER_COLSHAPE,
     EventEnum.ENTITY_LEAVE_COLSHAPE
   ];
+
   /**
    * Contains all base event keys
    *
@@ -101,6 +101,33 @@ export class BaseEventService implements EventServiceInterface {
   public loadEvents(done: CallableFunction): void {
     this.startEventListeners();
     done();
+  }
+
+  /**
+   * Resolve and load events
+   *
+   * @param {string[]} keys
+   * @param {string} eventCategoryName
+   * @param {Function} callback
+   * @protected
+   */
+  public resolveAndLoadEvents(keys: string[], eventCategoryName: string, callback: CallableFunction): void {
+    let loaded = false;
+
+    keys.forEach((key: string) => {
+      const events = getAtlasMetaData<EventModel[]>(key, container.resolve(BaseEventService));
+
+      if (!events.length) return;
+
+      callback(events);
+
+      UtilsService.logRegisteredHandlers(events[0].type, events.length);
+      loaded = true;
+    });
+
+    if (loaded) {
+      UtilsService.logLoaded(eventCategoryName);
+    }
   }
 
   /**
@@ -178,33 +205,6 @@ export class BaseEventService implements EventServiceInterface {
    */
   protected isEntityType(entityType: number, type: number): boolean {
     return entityType === type;
-  }
-
-  /**
-   * Resolve and load events
-   *
-   * @param {string[]} keys
-   * @param {string} eventCategoryName
-   * @param {Function} callback
-   * @protected
-   */
-  public resolveAndLoadEvents(keys: string[], eventCategoryName: string, callback: CallableFunction): void {
-    let loaded = false;
-
-    keys.forEach((key: string) => {
-      const events = getAtlasMetaData<EventModel[]>(key, this);
-
-      if (!events.length) return;
-
-      callback(events);
-
-      UtilsService.logRegisteredHandlers(events[0].type, events.length);
-      loaded = true;
-    });
-
-    if (loaded) {
-      UtilsService.logLoaded(eventCategoryName);
-    }
   }
 
   /**

@@ -1,9 +1,9 @@
 import { container, singleton } from 'tsyringe';
 import { Autoload } from '../decorators/loader.decorator';
-import { AutoloaderEnums } from '../constants';
-import { constructor } from '../types';
 import { ModuleLoaderEnum } from '../constants/module-loader.constant';
 import { getAtlasMetaData } from '../decorators/helpers';
+import { AutoloaderEnums } from '../constants/autoloader.constant';
+import { constructor } from '../types/constructor';
 
 @Autoload(AutoloaderEnums.AFTER_BOOT, { methodName: 'load' })
 @singleton()

@@ -1,8 +1,6 @@
-import { container, instanceCachingFactory } from 'tsyringe';
-import { EventService } from './services/event.service';
-import { EventServiceInterface } from '@abstractflo/atlas-shared';
+import alt from 'alt-server';
+import {config} from 'dotenv';
+import { registerAltLib } from '@abstractflo/atlas-shared/helpers';
 
-container.register<EventServiceInterface>(
-    'EventService',
-    { useFactory: instanceCachingFactory(c => c.resolve(EventService)) }
-);
+config();
+registerAltLib(alt);

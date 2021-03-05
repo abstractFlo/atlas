@@ -1,8 +1,8 @@
 import { DateTimeDay, DateTimeHour, DateTimeMinute, DateTimeMonth, DateTimeSecond, Player } from 'alt-server';
 import { PlayerInterface } from './player.interface';
 import { container } from 'tsyringe';
-import { EventService } from '../../services';
 import { FrameworkEvent, UtilsService } from '@abstractflo/atlas-shared';
+import { EventService } from '../../services/event.service';
 
 export class PlayerClass extends Player implements PlayerInterface {
 

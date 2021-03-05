@@ -10,6 +10,6 @@ module.exports = {
     {
       filePath: './src/helpers.ts',
       outFile: './helpers.d.ts',
-    }
+    },
   ],
 };

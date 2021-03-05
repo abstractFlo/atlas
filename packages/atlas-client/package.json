@@ -19,7 +19,6 @@
   },
   "peerDependencies": {
     "@abraham/reflection": "^0.7.0",
-    "@abstractflo/atlas-shared": "^0.0.0",
     "@altv/types-client": "^1.5.2",
     "rxjs": "^6.6.6",
     "tsyringe": "^4.4.0"

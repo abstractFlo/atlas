@@ -78,9 +78,9 @@ export class UtilsService {
    * Next tick
    * @param {Function} listener
    */
-  public static nextTick(listener: CallableFunction): void {
+  public static nextTick(listener: CallableFunction): number {
     const nextTickFn = container.resolve<CallableFunction>('alt.nextTick');
-    const nextTick = nextTickFn(listener);
+    return nextTickFn(listener);
   }
 
   /**
@@ -91,8 +91,7 @@ export class UtilsService {
    */
   public static clearInterval(interval: number): void {
     const clearIntervalFn = container.resolve<CallableFunction>('alt.clearInterval');
-
-    return clearIntervalFn(interval);
+    clearIntervalFn(interval);
   }
 
   /**
@@ -103,8 +102,7 @@ export class UtilsService {
    */
   public static clearTimeout(timeout: number): void {
     const clearTimeoutFn = container.resolve<CallableFunction>('alt.clearTimeout');
-
-    return clearTimeoutFn(timeout);
+    clearTimeoutFn(timeout);
   }
 
   /**
@@ -115,8 +113,7 @@ export class UtilsService {
    */
   public static clearNextTick(tick: number): void {
     const clearNextTickFn = container.resolve<CallableFunction>('alt.clearNextTick');
-
-    return clearNextTickFn(tick);
+    clearNextTickFn(tick);
   }
 
   /**
@@ -127,8 +124,7 @@ export class UtilsService {
    */
   public static clearEveryTick(tick: number): void {
     const clearEveryTick = container.resolve<CallableFunction>('alt.clearEveryTick');
-
-    return clearEveryTick(tick);
+    clearEveryTick(tick);
   }
 
   /**

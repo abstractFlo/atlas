@@ -1,61 +1,14 @@
 import { container, InjectionToken, singleton } from 'tsyringe';
-import { LoaderServiceQueueItemModel, LoaderServiceQueueModel } from '../models';
-import { LoaderServiceEnum } from '../constants';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeLast } from 'rxjs/operators';
 import { UtilsService } from './utils.service';
 import { getAtlasMetaData } from '../decorators/helpers';
+import { LoaderServiceQueueModel } from '../models/loader-service-queue.model';
+import { LoaderServiceEnum } from '../constants/loader-service.constant';
+import { LoaderServiceQueueItemModel } from '../models/loader-service-queue-item.model';
 
 @singleton()
-export class LoaderService {
-
-  /**
-   * Contains the complete queue
-   *
-   * @type {LoaderServiceQueueModel}
-   * @private
-   */
-  private queue: LoaderServiceQueueModel = new LoaderServiceQueueModel();
-
-  /**
-   * Contains the complete loading queue
-   *
-   * @type {LoaderServiceQueueModel}
-   * @private
-   */
-  private readonly: LoaderServiceQueueModel = new LoaderServiceQueueModel();
-
-  /**
-   * Contains the count for frameworkBeforeBoot
-   *
-   * @type {Observable<number>}
-   * @private
-   */
-  private readonly frameworkBeforeBootCount$: Observable<number> = this.queue.frameworkBeforeBootCount.asObservable();
-
-  /**
-   * Contains the count for frameworkAfterBoot
-   *
-   * @type {Observable<number>}
-   * @private
-   */
-  private readonly frameworkAfterBootCount$: Observable<number> = this.queue.frameworkAfterBootCount.asObservable();
-
-  /**
-   * Contains the count for before
-   *
-   * @type {Observable<number>}
-   * @private
-   */
-  private readonly beforeCount$: Observable<number> = this.queue.beforeCount.asObservable();
-
-  /**
-   * Contains the count for after
-   *
-   * @type {Observable<number>}
-   * @private
-   */
-  private readonly afterCount$: Observable<number> = this.queue.afterCount.asObservable();
+export class BaseLoaderService {
 
   /**
    * The subject for starting the loading system and queue
@@ -63,8 +16,49 @@ export class LoaderService {
    * @type {Subject<boolean>}
    * @private
    */
-  private readonly startingSubject$: Subject<boolean> = new Subject<boolean>();
-
+  protected startingSubject$: Subject<boolean> = new Subject<boolean>();
+  /**
+   * Contains the complete queue
+   *
+   * @type {LoaderServiceQueueModel}
+   * @private
+   */
+  private queue: LoaderServiceQueueModel = new LoaderServiceQueueModel();
+  /**
+   * Contains the complete loading queue
+   *
+   * @type {LoaderServiceQueueModel}
+   * @private
+   */
+  private readonly: LoaderServiceQueueModel = new LoaderServiceQueueModel();
+  /**
+   * Contains the count for frameworkBeforeBoot
+   *
+   * @type {Observable<number>}
+   * @private
+   */
+  private readonly frameworkBeforeBootCount$: Observable<number> = this.queue.frameworkBeforeBootCount.asObservable();
+  /**
+   * Contains the count for frameworkAfterBoot
+   *
+   * @type {Observable<number>}
+   * @private
+   */
+  private readonly frameworkAfterBootCount$: Observable<number> = this.queue.frameworkAfterBootCount.asObservable();
+  /**
+   * Contains the count for before
+   *
+   * @type {Observable<number>}
+   * @private
+   */
+  private readonly beforeCount$: Observable<number> = this.queue.beforeCount.asObservable();
+  /**
+   * Contains the count for after
+   *
+   * @type {Observable<number>}
+   * @private
+   */
+  private readonly afterCount$: Observable<number> = this.queue.afterCount.asObservable();
   /**
    * The subject if the loading finished and queue is empty
    *
@@ -81,34 +75,34 @@ export class LoaderService {
    */
   private isBootstrapped: boolean = false;
 
+  private currentNextTick: number | null = null;
+
   /**
    * Bootstrap the framework
    *
    * @param {InjectionToken} target
-   * @return {LoaderService}
+   * @return {BaseLoaderService}
    */
-  public bootstrap(target: InjectionToken): LoaderService {
+  public bootstrap(target: InjectionToken): BaseLoaderService {
     if (this.isBootstrapped) return this;
     this.resolveMetaDataAndAdd();
 
     this.frameworkBeforeBootCount$
         .pipe(takeLast(1))
         .subscribe(() =>
-            UtilsService.nextTick(() => this.processQueue(this.queue.before, this.queue.beforeCount))
+            this.processQueue(this.queue.before, this.queue.beforeCount)
         );
 
     this.beforeCount$
         .pipe(takeLast(1))
         .subscribe(() =>
-            UtilsService.nextTick(() => this.processQueue(this.queue.after, this.queue.afterCount))
+            this.processQueue(this.queue.after, this.queue.afterCount)
         );
 
     this.afterCount$
         .pipe(takeLast(1))
         .subscribe(() =>
-            UtilsService.nextTick(() =>
-                this.processQueue(this.queue.frameworkAfterBoot, this.queue.frameworkAfterBootCount)
-            )
+            this.processQueue(this.queue.frameworkAfterBoot, this.queue.frameworkAfterBootCount)
         );
 
     this.frameworkAfterBootCount$
@@ -126,10 +120,7 @@ export class LoaderService {
             takeLast(1),
             filter((value: boolean) => value)
         )
-        .subscribe(() => UtilsService.nextTick(() => this.processQueue(
-            this.queue.frameworkBeforeBoot,
-            this.queue.frameworkBeforeBootCount
-        )));
+        .subscribe(() => this.processQueue(this.queue.frameworkBeforeBoot, this.queue.frameworkBeforeBootCount));
 
 
     this.setupQueueCounts();
@@ -152,6 +143,13 @@ export class LoaderService {
   }
 
   /**
+   * Start the loading service
+   *
+   * @private
+   */
+  protected startLoading(): void {}
+
+  /**
    * Done callback handler for all queue decorated methods
    *
    * @param {Map<string, LoaderServiceQueueItemModel>} property
@@ -166,6 +164,11 @@ export class LoaderService {
       key: string | null = null,
       doneCheckIntervalId?: number
   ): void {
+
+    if (this.currentNextTick) {
+      UtilsService.clearNextTick(this.currentNextTick);
+      this.currentNextTick = null;
+    }
 
     if (doneCheckIntervalId) {
       UtilsService.clearInterval(doneCheckIntervalId);
@@ -191,7 +194,7 @@ export class LoaderService {
    */
   private processQueue(property: Map<string, LoaderServiceQueueItemModel>, propertyCount: Subject<number>): void {
     if (property.size === 0) {
-      this.doneCallback(property, propertyCount);
+      this.currentNextTick = UtilsService.nextTick(() => this.doneCallback(property, propertyCount));
     } else {
       propertyCount
           .pipe(filter((size: number) => size !== 0))
@@ -208,29 +211,32 @@ export class LoaderService {
    * @param {Subject<number>} propertyCount
    * @private
    */
-  private async processQueueItem(property: Map<string, LoaderServiceQueueItemModel>, propertyCount: Subject<number>): Promise<void> {
+  private processQueueItem(property: Map<string, LoaderServiceQueueItemModel>, propertyCount: Subject<number>): void {
     const nextItem: LoaderServiceQueueItemModel = property.values().next().value;
     const nextKey = property.keys().next().value as string;
 
     if (nextItem !== undefined) {
-      const instance = container.resolve(nextItem.target);
-      const checkTimeoutDuration = nextItem.doneCheckTimeout;
-      const [moduleName, methodName] = nextKey.split('_');
+      this.currentNextTick = UtilsService.nextTick(async () => {
+        const instance = container.resolve(nextItem.target);
+        const checkTimeoutDuration = nextItem.doneCheckTimeout;
+        const [moduleName, methodName] = nextKey.split('_');
 
-      const instanceMethod = instance[nextItem.methodName];
+        const instanceMethod = instance[nextItem.methodName];
 
-      if (!instanceMethod) {
-        UtilsService.log(`~lb~[Class: ${moduleName}]~w~ - ~r~{Method: ${methodName}} does not exists~w~`);
-        return;
-      }
+        if (!instanceMethod) {
+          UtilsService.log(`~lb~[Class: ${moduleName}]~w~ - ~r~{Method: ${methodName}} does not exists~w~`);
+          return;
+        }
 
-      const doneCheckTimeoutId = UtilsService.setTimeout(() => {
-        this.setupDoneTimeout(moduleName, methodName, checkTimeoutDuration, doneCheckTimeoutId);
-      }, checkTimeoutDuration);
+        const doneCheckTimeoutId = UtilsService.setTimeout(() => {
+          this.setupDoneTimeout(moduleName, methodName, checkTimeoutDuration, doneCheckTimeoutId);
+        }, checkTimeoutDuration);
 
-      const doneCallback = this.doneCallback.bind(this, property, propertyCount, nextKey, doneCheckTimeoutId);
-      const method = instanceMethod.bind(instance, doneCallback);
-      await method();
+        const doneCallback = this.doneCallback.bind(this, property, propertyCount, nextKey, doneCheckTimeoutId);
+        const method = instanceMethod.bind(instance, doneCallback);
+
+        await method();
+      });
     }
 
   }
@@ -258,22 +264,12 @@ export class LoaderService {
    * @private
    */
   private resolveMetaDataAndAdd(): void {
-    const queueItems = getAtlasMetaData<LoaderServiceQueueItemModel[]>(LoaderServiceEnum.QUEUE_ITEM, this);
+    const queueItems = getAtlasMetaData<LoaderServiceQueueItemModel[]>(
+        LoaderServiceEnum.QUEUE_ITEM,
+        container.resolve(BaseLoaderService)
+    );
 
     queueItems.forEach((queueItem: LoaderServiceQueueItemModel) => this.add(queueItem));
-  }
-
-  /**
-   * Start the loading service
-   *
-   * @private
-   */
-  private startLoading(): void {
-    UtilsService.autoClearSetTimeout(() => {
-      UtilsService.log('~lg~Start booting => ~w~Please wait...');
-      this.startingSubject$.next(true);
-      this.startingSubject$.complete();
-    }, 125);
   }
 
   /**

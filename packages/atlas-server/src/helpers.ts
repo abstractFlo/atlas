@@ -1,30 +1,6 @@
-import { container, InjectionToken } from 'tsyringe';
+import { container } from 'tsyringe';
 import { UtilsService } from '@abstractflo/atlas-shared';
-import * as alt from 'alt-server';
 
-// @ts-ignore
-import { registerAltLib } from '@abstractflo/atlas-shared/helpers';
-
-registerAltLib(alt);
-
-
-/**
- * Register path to config file
- *
- * @param {string} path
- */
-export function registerServerConfigPath(path: string): void {
-  container.register<string>('server.config.path.file', { useValue: path });
-}
-
-/**
- * Register database entities for typeorm
- *
- * @param {InjectionToken[]} entities
- */
-export function registerDatabaseEntities(entities: InjectionToken[]): void {
-  container.register<InjectionToken[]>('server.database.entities', { useValue: entities });
-}
 
 /**
  * Register the express server port
@@ -38,9 +14,7 @@ export function registerDiscordApiServerPort(port: number) {
 /**
  * Global Error Handler
  */
-export function defaultErrorHandling(enable: boolean = false): void {
-  if (!enable) return;
-
+export function defaultErrorHandling(): void {
   process.on('uncaughtException', (err) => {
     UtilsService.logError(err.stack);
     UtilsService.logError(err.message);

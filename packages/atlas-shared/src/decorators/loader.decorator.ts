@@ -1,8 +1,9 @@
-import { AutoloaderEnums, LoaderServiceEnum, LoaderServiceQueueTypeEnum } from '../constants';
 import { LoaderServiceQueueItemModel } from '../models/loader-service-queue-item.model';
-import { LoaderService } from '../services/loader.service';
+import { BaseLoaderService } from '../services/base-loader.service';
 import { container } from 'tsyringe';
 import { getAtlasMetaData, registerDescriptor } from './helpers';
+import { LoaderServiceEnum, LoaderServiceQueueTypeEnum } from '../constants/loader-service.constant';
+import { AutoloaderEnums } from '../constants/autoloader.constant';
 
 /**
  * Define options for autoloader decorator
@@ -35,6 +36,22 @@ export const Autoload = (
     return target;
   };
 };
+
+/**
+ * Alias for @Autoload(AutoloaderEnums.BEFORE_BOOT)
+ * @param {AutoloadOptionsInterface} options
+ * @return {(target: any) => any}
+ * @constructor
+ */
+export const AutoloadBefore = (options?: AutoloadOptionsInterface) => Autoload(AutoloaderEnums.BEFORE_BOOT, options);
+
+/**
+ * Alias for @Autoload(AutoloaderEnums.AFTER_BOOT)
+ * @param {AutoloadOptionsInterface} options
+ * @return {(target: any) => any}
+ * @constructor
+ */
+export const AutoloadAfter = (options?: AutoloadOptionsInterface) => Autoload(AutoloaderEnums.AFTER_BOOT, options);
 
 /**
  * Register @Before decorator
@@ -82,7 +99,7 @@ export const After = (doneCheckTimeout?: number): MethodDecorator => {
  * @param {LoaderServiceQueueItemModel} config
  */
 function addLoaderMetaData(config: Partial<LoaderServiceQueueItemModel>): void {
-  const loaderService = container.resolve(LoaderService);
+  const loaderService = container.resolve(BaseLoaderService);
 
   const queueItemModels = getAtlasMetaData<LoaderServiceQueueItemModel[]>(LoaderServiceEnum.QUEUE_ITEM, loaderService);
 

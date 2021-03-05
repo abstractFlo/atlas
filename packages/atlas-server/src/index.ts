@@ -1,12 +1,20 @@
-import '@abraham/reflection';
 import './setup';
-import { container } from 'tsyringe';
-import { ConfigService } from './services';
+
+import './extends/colshape/alt-colshape.prototype';
+import './extends/player/alt-player.prototype';
+
+export {
+  OnClient,
+  OnceClient,
+  EntityEnterColShape,
+  EntityLeaveColShape,
+  SyncedMetaChange
+} from './decorators/event.decorator';
+
+export { AutoAdd } from './decorators/database.decorator';
+
+export { DatabaseService } from './services/database.service';
+export { EventService } from './services/event.service';
+export { LoaderService } from './services/loader.service';
 
 
-export * from './decorators';
-export * from './services';
-export * from './extends';
-
-
-container.resolve(ConfigService);
