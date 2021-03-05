@@ -22,14 +22,3 @@ export function defaultErrorHandling(): void {
     UtilsService.log('~r~Please close the server and fix the problem~w~');
   });
 }
-
-/**
- * Return the process variable or default
- *
- * @param {string} key
- * @param defaultValue
- * @return {any}
- */
-export function env(key: string, defaultValue: any = null): any {
-  return process.env[key] || defaultValue;
-}

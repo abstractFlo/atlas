@@ -32,12 +32,9 @@
     "dotenv": "^8.2.0",
     "fs-extra": "^9.1.0",
     "lodash": "^4.17.21",
-    "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.6",
     "tsyringe": "^4.4.0",
     "typeorm": "^0.2.31"
   },
-  "dependencies": {
-    "dotenv": "^8.2.0"
-  }
+  "dependencies": {}
 }

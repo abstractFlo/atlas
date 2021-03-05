@@ -1,13 +1,11 @@
 import { singleton } from 'tsyringe';
 import { BaseLoaderService, UtilsService } from '@abstractflo/atlas-shared';
 import { DatabaseService } from './database.service';
-import { ConfigService } from './config.service';
 
 @singleton()
 export class LoaderService extends BaseLoaderService {
 
   constructor(
-      private readonly configService: ConfigService,
       private readonly databaseService: DatabaseService
   ) {
     super();
@@ -20,9 +18,7 @@ export class LoaderService extends BaseLoaderService {
    * @protected
    */
   protected async startLoading() {
-    await this.configService.init();
     await this.dbServiceInit();
-
     this.startLoaderService();
   }
 

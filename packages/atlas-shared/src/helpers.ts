@@ -43,14 +43,3 @@ export function registerAltLib(lib: any): void {
   container.register<CallableFunction>('alt.off', { useFactory: instanceCachingFactory(() => lib.off) });
   container.register<CallableFunction>('alt.emit', { useFactory: instanceCachingFactory(() => lib.emit) });
 }
-
-/**
- * Set the production mode
- *
- * If true, they prevent some debug logs like registeredHandlers for each eventListener
- *
- * @param {boolean} isProduction
- */
-export function isProduction(isProduction: boolean): void {
-  container.register<boolean>('isProductionMode', { useValue: isProduction });
-}

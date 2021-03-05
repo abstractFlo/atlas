@@ -13,7 +13,6 @@ export {
 
 export { AutoAdd } from './decorators/database.decorator';
 
-export { ConfigService } from './services/config.service';
 export { DatabaseService } from './services/database.service';
 export { EventService } from './services/event.service';
 export { LoaderService } from './services/loader.service';
