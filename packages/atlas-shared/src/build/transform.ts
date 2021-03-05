@@ -101,6 +101,28 @@ function convert(code: string, modules: string[] = []) {
         });
       });
 
+  // Class Declaration
+  root.find(j.ClassDeclaration)
+      .filter(mPath => mPath.value.superClass !== null)
+      .map(mPath => {
+        const className = mPath.value.superClass.name;
+        Object.keys(moduleMap).forEach(key => {
+          if (!moduleMap[key].includes(className)) return;
+          mPath.value.superClass.name = `${snakeToCamel(key)}.${className}`;
+        });
+      });
+
+  // Class Implementation
+  root.find(j.ClassImplements)
+      .filter(mPath => mPath.value.superClass !== null)
+      .map(mPath => {
+        const className = mPath.value.superClass.name;
+        Object.keys(moduleMap).forEach(key => {
+          if (!moduleMap[key].includes(className)) return;
+          mPath.value.superClass.name = `${snakeToCamel(key)}.${className}`;
+        });
+      });
+
   // Array Expression
   root.find(j.ArrayExpression)
       .filter(mPath => mPath.value.elements.length)
