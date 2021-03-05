@@ -17,4 +17,6 @@ export { DatabaseService } from './services/database.service';
 export { EventService } from './services/event.service';
 export { LoaderService } from './services/loader.service';
 
+export { DiscordApiService } from './modules/discord';
+
 

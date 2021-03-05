@@ -31,6 +31,7 @@ export class ConfigBuilder {
     const modulesForConvert = [
       'rxjs/operators',
       'dotenv',
+      '@overnightjs/core',
       ...Object.keys(basePkgJson.devDependencies || {}),
       ...Object.keys(basePkgJson.dependencies || {})
     ].filter((name: string) => !name.startsWith('@abstractflo'));
