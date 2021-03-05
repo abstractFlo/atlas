@@ -1,12 +1,14 @@
 import { singleton } from 'tsyringe';
 import { BaseLoaderService, UtilsService } from '@abstractflo/atlas-shared';
 import { DatabaseService } from './database.service';
+import { DiscordBotService } from '../modules/discord';
 
 @singleton()
 export class LoaderService extends BaseLoaderService {
 
   constructor(
-      private readonly databaseService: DatabaseService
+      private readonly databaseService: DatabaseService,
+      private readonly discordBotService: DiscordBotService
   ) {
     super();
   }
@@ -19,6 +21,7 @@ export class LoaderService extends BaseLoaderService {
    */
   protected async startLoading() {
     await this.dbServiceInit();
+    await this.discordBotInit();
     this.startLoaderService();
   }
 
@@ -31,6 +34,17 @@ export class LoaderService extends BaseLoaderService {
   private async dbServiceInit(): Promise<void> {
     this.databaseService.setupReflectionEntities();
     await this.databaseService.connect();
+  }
+
+  /**
+   * Start the database service if needed
+   *
+   * @return {Promise<void>}
+   * @private
+   */
+  private async discordBotInit(): Promise<void> {
+    this.discordBotService.setupReflectionEntities();
+    await this.discordBotService.connect();
   }
 
   /**
