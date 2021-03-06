@@ -1,9 +1,9 @@
-import { Autoload, AutoloaderEnums, FrameworkEvent } from '@abstractflo/atlas-shared';
+import { AutoloadAfter, FrameworkEvent } from '@abstractflo/atlas-shared';
 import { setMsPerGameMinute } from 'alt-client';
 import { singleton } from 'tsyringe';
 import { EventService } from '../services/event.service';
 
-@Autoload(AutoloaderEnums.AFTER_BOOT, { methodName: 'load' })
+@AutoloadAfter({ methodName: 'load' })
 @singleton()
 export class PlayerWorker {
 
@@ -12,7 +12,7 @@ export class PlayerWorker {
   ) {}
 
   /**
-   * Load up this method after framwork boot
+   * Load up this method after framework boot
    * @param {Function} done
    */
   public load(done: CallableFunction): void {

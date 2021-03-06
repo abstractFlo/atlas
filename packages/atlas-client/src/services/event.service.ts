@@ -1,6 +1,5 @@
 import {
-  Autoload,
-  AutoloaderEnums,
+  AutoloadAfter,
   BaseEventService,
   CommandService,
   EventEnum,
@@ -12,7 +11,7 @@ import { singleton } from 'tsyringe';
 import { emit, emitServer, offServer, onceServer, onServer } from 'alt-client';
 import { KeyEventService } from './key-event.service';
 
-@Autoload(AutoloaderEnums.AFTER_BOOT, { methodName: 'loadEvents' })
+@AutoloadAfter({ methodName: 'loadEvents' })
 @singleton()
 export class EventService extends BaseEventService {
 
