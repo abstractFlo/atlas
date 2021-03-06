@@ -42,7 +42,6 @@ export class ConfigBuilder {
     const convertedImports = pkgJson.convert || [];
     const external = pkgJson.externals || [];
 
-
     const plugins: Plugin[] = [
       convertNamedImports([...convertedImports, ...modulesForConvert])
     ];
@@ -130,6 +129,4 @@ export class ConfigBuilder {
       }
     };
   }
-
-
 }

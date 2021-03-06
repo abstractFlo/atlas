@@ -17,6 +17,7 @@ export class BaseLoaderService {
    * @private
    */
   protected startingSubject$: Subject<boolean> = new Subject<boolean>();
+
   /**
    * Contains the complete queue
    *
@@ -24,6 +25,7 @@ export class BaseLoaderService {
    * @private
    */
   private queue: LoaderServiceQueueModel = new LoaderServiceQueueModel();
+
   /**
    * Contains the complete loading queue
    *
@@ -31,6 +33,7 @@ export class BaseLoaderService {
    * @private
    */
   private readonly: LoaderServiceQueueModel = new LoaderServiceQueueModel();
+
   /**
    * Contains the count for frameworkBeforeBoot
    *
@@ -38,6 +41,7 @@ export class BaseLoaderService {
    * @private
    */
   private readonly frameworkBeforeBootCount$: Observable<number> = this.queue.frameworkBeforeBootCount.asObservable();
+
   /**
    * Contains the count for frameworkAfterBoot
    *
@@ -45,6 +49,7 @@ export class BaseLoaderService {
    * @private
    */
   private readonly frameworkAfterBootCount$: Observable<number> = this.queue.frameworkAfterBootCount.asObservable();
+
   /**
    * Contains the count for before
    *
@@ -52,6 +57,7 @@ export class BaseLoaderService {
    * @private
    */
   private readonly beforeCount$: Observable<number> = this.queue.beforeCount.asObservable();
+
   /**
    * Contains the count for after
    *
@@ -59,6 +65,7 @@ export class BaseLoaderService {
    * @private
    */
   private readonly afterCount$: Observable<number> = this.queue.afterCount.asObservable();
+
   /**
    * The subject if the loading finished and queue is empty
    *
@@ -75,6 +82,11 @@ export class BaseLoaderService {
    */
   private isBootstrapped: boolean = false;
 
+  /**
+   * Contains the queue item next tick id
+   * @type {number | null}
+   * @private
+   */
   private currentNextTick: number | null = null;
 
   /**
@@ -85,6 +97,7 @@ export class BaseLoaderService {
    */
   public bootstrap(target: InjectionToken): BaseLoaderService {
     if (this.isBootstrapped) return this;
+
     this.resolveMetaDataAndAdd();
 
     this.frameworkBeforeBootCount$
@@ -127,6 +140,7 @@ export class BaseLoaderService {
     this.startLoading();
 
     this.isBootstrapped = true;
+
     return this;
   }
 
@@ -220,7 +234,6 @@ export class BaseLoaderService {
         const instance = container.resolve(nextItem.target);
         const checkTimeoutDuration = nextItem.doneCheckTimeout;
         const [moduleName, methodName] = nextKey.split('_');
-
         const instanceMethod = instance[nextItem.methodName];
 
         if (!instanceMethod) {
@@ -238,7 +251,6 @@ export class BaseLoaderService {
         await method();
       });
     }
-
   }
 
   /**

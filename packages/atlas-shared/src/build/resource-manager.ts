@@ -10,30 +10,62 @@ config();
 
 export class ResourceManager {
 
-  public config: RollupConfigInterface[] = [];
-  private cwd: string = process.cwd();
-  private buildOutput: string = path.resolve(this.cwd, process.env.ATLAS_BUILD_OUPUT || 'dist');
-  private retailFolder: string = path.resolve(this.cwd, process.env.ATLAS_RETAIL_FOLDER || 'retail');
-  private resourceFolder: string = path.resolve(this.cwd, process.env.ATLAS_RESOURCE_FOLDER || 'resources');
-  //private serverConfigPath: string = path.resolve(this.cwd, process.env.ATLAS_SERVER_CFG_PATH || 'docker-data');
+  /**
+   * Rollup Configs Array
+   * @type {RollupConfigInterface[]}
+   */
+  public configs: RollupConfigInterface[] = [];
 
-  constructor() {}
+  /**
+   * Current working dir
+   * @type {string}
+   * @private
+   */
+  private cwd: string = process.cwd();
+
+  /**
+   * Path to buildOutput
+   *
+   * @type {string}
+   * @private
+   */
+  private buildOutput: string = path.resolve(this.cwd, process.env.ATLAS_BUILD_OUPUT || 'dist');
+
+  /**
+   * Path to retail folder
+   *
+   * @type {string}
+   * @private
+   */
+  private retailFolder: string = path.resolve(this.cwd, process.env.ATLAS_RETAIL_FOLDER || 'retail');
+
+  /**
+   * Path to resource folder
+   *
+   * @type {string}
+   * @private
+   */
+  private resourceFolder: string = path.resolve(this.cwd, process.env.ATLAS_RESOURCE_FOLDER || 'resources');
 
   /**
    * Return the final config
    *
    * @return {RollupConfigInterface[]}
    */
-  public getConfig(): RollupConfigInterface[] {
+  public getConfigs(): RollupConfigInterface[] {
     this.cleanup();
     this.createConfigs();
     this.copyRetail();
     this.copyPackageJson();
-    //this.copyServerConfig();
 
-    return this.config;
+    return this.configs;
   }
 
+  /**
+   * Create all needed config objects for each valid resource
+   *
+   * @private
+   */
   private createConfigs() {
     try {
 
@@ -45,11 +77,11 @@ export class ResourceManager {
         if (!pkgJson.isGameResource) return;
 
         if (ResourceAnalyzer.hasFolder(resource, 'server')) {
-          this.config.push(ConfigBuilder.serverConfig(resource, this.buildOutput, pkgJson));
+          this.configs.push(ConfigBuilder.serverConfig(resource, this.buildOutput, pkgJson));
         }
 
         if (ResourceAnalyzer.hasFolder(resource, 'client')) {
-          this.config.push(ConfigBuilder.clientConfig(resource, this.buildOutput, pkgJson));
+          this.configs.push(ConfigBuilder.clientConfig(resource, this.buildOutput, pkgJson));
         }
 
         if (ResourceAnalyzer.hasFolder(resource, 'assets')) {
@@ -60,7 +92,7 @@ export class ResourceManager {
     } catch (e) {
       console.error('There are no resources for given folder');
       console.error(this.resourceFolder);
-      console.error(e);
+      throw new Error(e);
     }
   }
 
@@ -124,17 +156,6 @@ export class ResourceManager {
     const filename = 'package.json';
     this.copyFilesSecure(path.resolve(this.cwd, filename), path.resolve(this.buildOutput, filename));
   }
-
-  /**
-   * Copy the server.cfg to build output
-   *
-   * @private
-   */
-
-  /*private copyServerConfig(): void {
-    const filename = 'server.cfg';
-    this.copyFilesSecure(path.resolve(this.serverConfigPath, filename), path.resolve(this.buildOutput, filename));
-  }*/
 
   /**
    * Clean up the build output

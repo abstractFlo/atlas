@@ -1,3 +1,4 @@
+// Internal Event Names
 export const FrameworkEvent = {
   EventService: {
     EmitGuiEvent: 'event:emit:gui:event',

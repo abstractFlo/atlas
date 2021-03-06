@@ -7,10 +7,7 @@ import { constructor } from '../types/constructor';
  * @param {PropertyDescriptor} descriptor
  * @return {PropertyDescriptor}
  */
-export function registerDescriptor(
-    descriptor: PropertyDescriptor
-): PropertyDescriptor {
-
+export function registerDescriptor(descriptor: PropertyDescriptor): PropertyDescriptor {
   const original = descriptor.value;
 
   descriptor.value = function (...args: any[]) {

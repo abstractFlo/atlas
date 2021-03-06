@@ -1,3 +1,4 @@
+// Keys for reflection
 export enum EventEnum {
   ON = 'atlas-shared:events:on',
   ONCE = 'atlas-shared:events:once',

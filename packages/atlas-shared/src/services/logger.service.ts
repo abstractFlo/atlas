@@ -4,7 +4,6 @@ import { UtilsService } from './utils.service';
 @injectable()
 export class LoggerService {
 
-
   /**
    * Add info to log
    *

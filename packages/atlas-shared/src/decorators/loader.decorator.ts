@@ -21,9 +21,7 @@ export interface AutoloadOptionsInterface {
  * @return {MethodDecorator}
  * @constructor
  */
-export const Autoload = (
-    type: AutoloaderEnums,
-    options?: AutoloadOptionsInterface) => {
+export const Autoload = (type: AutoloaderEnums, options?: AutoloadOptionsInterface) => {
   return (target: any) => {
     const defaultOptions = {
       methodName: 'autoStart',
@@ -39,6 +37,7 @@ export const Autoload = (
 
 /**
  * Alias for @Autoload(AutoloaderEnums.BEFORE_BOOT)
+ *
  * @param {AutoloadOptionsInterface} options
  * @return {(target: any) => any}
  * @constructor
@@ -47,6 +46,7 @@ export const AutoloadBefore = (options?: AutoloadOptionsInterface) => Autoload(A
 
 /**
  * Alias for @Autoload(AutoloaderEnums.AFTER_BOOT)
+ *
  * @param {AutoloadOptionsInterface} options
  * @return {(target: any) => any}
  * @constructor
@@ -96,11 +96,11 @@ export const After = (doneCheckTimeout?: number): MethodDecorator => {
 
 /**
  * Update LoaderMetaData
+ *
  * @param {LoaderServiceQueueItemModel} config
  */
 function addLoaderMetaData(config: Partial<LoaderServiceQueueItemModel>): void {
   const loaderService = container.resolve(BaseLoaderService);
-
   const queueItemModels = getAtlasMetaData<LoaderServiceQueueItemModel[]>(LoaderServiceEnum.QUEUE_ITEM, loaderService);
 
   const newQueueItem = new LoaderServiceQueueItemModel().cast(config);

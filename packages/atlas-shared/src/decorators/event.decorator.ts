@@ -62,9 +62,7 @@ export const Once = (name?: string): MethodDecorator => {
 export const Cmd = (name?: string): MethodDecorator => {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const commandName = name || propertyKey;
-
     const events = getAtlasMetaData<EventModel[]>(EventEnum.CONSOLE_COMMAND, eventServiceTarget());
-
     const alreadyExists = events.find((event: EventModel) => event.eventName === commandName);
 
     if (!alreadyExists) {
@@ -92,12 +90,12 @@ export const Cmd = (name?: string): MethodDecorator => {
  */
 export function setEventServiceReflectMetaData(key: string, data: Partial<EventModel>): void {
   const target = eventServiceTarget();
-  const config = getAtlasMetaData<EventModel[]>(key, target);
+  const events = getAtlasMetaData<EventModel[]>(key, target);
   const eventModel = new EventModel().cast(data);
 
-  config.push(eventModel);
+  events.push(eventModel);
 
-  Reflect.defineMetadata<EventModel[]>(key, config, target);
+  Reflect.defineMetadata<EventModel[]>(key, events, target);
 }
 
 /**

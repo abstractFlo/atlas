@@ -20,7 +20,6 @@ export interface ModuleOptionsDecoratorInterface {
  * @constructor
  */
 export function Module(options?: ModuleOptionsDecoratorInterface): (targetConstructor: constructor<any>) => void {
-
   if (options && (options.components || options.imports)) {
     const moduleLoaderService = container.resolve(ModuleLoaderService);
 

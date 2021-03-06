@@ -1,6 +1,5 @@
 import { container, instanceCachingFactory } from 'tsyringe';
 
-
 /**
  * Register all alt:V related functions from both sides in container for reuse from it
  *

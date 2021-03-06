@@ -1,14 +1,18 @@
 import { container, singleton } from 'tsyringe';
-import { Autoload } from '../decorators/loader.decorator';
+import { AutoloadAfter } from '../decorators/loader.decorator';
 import { ModuleLoaderEnum } from '../constants/module-loader.constant';
 import { getAtlasMetaData } from '../decorators/helpers';
-import { AutoloaderEnums } from '../constants/autoloader.constant';
 import { constructor } from '../types/constructor';
 
-@Autoload(AutoloaderEnums.AFTER_BOOT, { methodName: 'load' })
+@AutoloadAfter({ methodName: 'load' })
 @singleton()
 export class ModuleLoaderService {
 
+  /**
+   * Load all needed imports and components
+   *
+   * @param {Function} done
+   */
   public load(done: CallableFunction): void {
     this.loadImports();
     this.loadComponents();

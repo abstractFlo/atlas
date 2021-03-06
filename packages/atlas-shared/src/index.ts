@@ -8,7 +8,6 @@ export { EventEnum } from './constants/event.contstant';
 export { LoaderServiceEnum, LoaderServiceQueueTypeEnum } from './constants/loader-service.constant';
 export { ModuleLoaderEnum } from './constants/module-loader.constant';
 
-
 export { On, Once, Cmd, eventServiceTarget, setEventServiceReflectMetaData } from './decorators/event.decorator';
 export { Autoload, After, Before, AutoloadAfter, AutoloadBefore } from './decorators/loader.decorator';
 export { Module, Component } from './decorators/atlas-di.decorator';

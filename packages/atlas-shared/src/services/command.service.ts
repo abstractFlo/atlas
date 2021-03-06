@@ -19,8 +19,7 @@ export class CommandService {
    * @type {string}
    * @private
    */
-  private prefix: string = '/';
-
+  private prefix: string = process.env.ATLAS_COMMAND_PREFIX || '!';
 
   /**
    * Load the commands at runtime from decorated meta data

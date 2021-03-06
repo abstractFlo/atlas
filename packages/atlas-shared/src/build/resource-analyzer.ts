@@ -4,8 +4,6 @@ import path from 'path';
 
 export class ResourceAnalyzer {
 
-  constructor() {}
-
   /**
    * Read the package.json for given resource path
    * @param {string} resourcePath

@@ -23,6 +23,7 @@ export class BaseEventService implements EventServiceInterface {
     EventEnum.GAME_ENTITY_CREATE,
     EventEnum.GAME_ENTITY_DESTROY
   ];
+
   /**
    * Contains all colShape keys
    *
@@ -163,6 +164,7 @@ export class BaseEventService implements EventServiceInterface {
 
   /**
    * Handle all meta change events
+   *
    * @param {EventModel[]} events
    * @param {Entity} entity
    * @param {string} key
@@ -172,13 +174,11 @@ export class BaseEventService implements EventServiceInterface {
    */
   protected handleMetaChangeEvents<T extends { type: number }>(events: EventModel[], entity: T, key?: string, value?: any, oldValue?: any) {
     events.forEach((event: EventModel) => {
-
       // stop if not same type
       if (!this.isEntityType(entity.type, event.validateOptions.entity)) return;
 
       const hasMetaKey = event.validateOptions.metaKey !== undefined && key === event.validateOptions.metaKey;
       const instances = container.resolveAll<constructor<any>>(event.targetName);
-
       const args = [key, value, oldValue];
 
       if (hasMetaKey) {
