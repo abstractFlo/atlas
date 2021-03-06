@@ -8,7 +8,7 @@ import { DiscordBotService } from '../services/discord-bot.service';
 /**
  * Register the @OnDiscord decorator
  *
- * @param {K} name
+ * @param {K extends keyof ClientEvents} name
  * @return {MethodDecorator}
  * @constructor
  */

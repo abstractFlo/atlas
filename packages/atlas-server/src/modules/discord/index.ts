@@ -1,6 +1,7 @@
 import { ExpressServer } from './express.server';
 import { container } from 'tsyringe';
 
+// Hack for autoload
 const expressServer = container.resolve(ExpressServer);
 
 export { DiscordApiService } from './services/discord-api.service';

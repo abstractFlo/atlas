@@ -17,6 +17,11 @@ export class ExpressServer extends Server {
    */
   private port: number | null = castToNumber()(process.env.DISCORD_API_PORT) || null;
 
+  /**
+   * Create new instance and add express server setup and controllers
+   *
+   * @param {DiscordConfigService} discordConfigService
+   */
   constructor(
       private readonly discordConfigService: DiscordConfigService
   ) {

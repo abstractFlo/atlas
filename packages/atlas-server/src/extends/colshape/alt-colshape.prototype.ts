@@ -1,9 +1,9 @@
 import { Colshape } from 'alt-server';
-import { ColshapeClass } from './colshape.class';
-import { ColshapeInterface } from './colshape.interface';
+import { ColShapeClass } from './col -shape.class';
+import { ColShapeInterface } from './col-shape.interface';
 
 declare module 'alt-server' {
-  export interface Colshape extends ColshapeInterface {}
+  export interface Colshape extends ColShapeInterface {}
 }
 
-Colshape.prototype = new ColshapeClass();
+Colshape.prototype = new ColShapeClass();

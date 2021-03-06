@@ -49,6 +49,7 @@ export class LoaderService extends BaseLoaderService {
 
   /**
    * Finally start the booting process
+   *
    * @private
    */
   private startLoaderService(): void {

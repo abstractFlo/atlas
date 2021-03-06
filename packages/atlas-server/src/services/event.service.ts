@@ -66,6 +66,11 @@ export class EventService extends BaseEventService {
     onceClient(eventName, listener);
   }
 
+  /**
+   * Override base startEventListener to fit server needs
+   *
+   * @protected
+   */
   protected startEventListeners() {
     super.startEventListeners();
 
@@ -76,8 +81,6 @@ export class EventService extends BaseEventService {
             this.startColShapeEvents.bind(this)
         ));
   }
-
-
 
   /**
    * Start the meta change event listener

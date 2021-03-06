@@ -4,6 +4,9 @@ import { container } from 'tsyringe';
 import { FrameworkEvent, UtilsService } from '@abstractflo/atlas-shared';
 import { EventService } from '../../services/event.service';
 
+/**
+ * Extend Player with more methods and properties
+ */
 export class PlayerClass extends Player implements PlayerInterface {
 
   /**

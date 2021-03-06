@@ -1,15 +1,4 @@
-import { container } from 'tsyringe';
 import { UtilsService } from '@abstractflo/atlas-shared';
-
-
-/**
- * Register the express server port
- *
- * @param {number} port
- */
-export function registerDiscordApiServerPort(port: number) {
-  container.register<number>('discord.express.port', { useValue: port });
-}
 
 /**
  * Global Error Handler

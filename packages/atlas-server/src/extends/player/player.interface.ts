@@ -1,3 +1,6 @@
+/**
+ * Extend Player with more methods and properties
+ */
 export interface PlayerInterface {
 
   /**
