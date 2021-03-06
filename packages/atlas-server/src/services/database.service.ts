@@ -49,7 +49,7 @@ export class DatabaseService {
 
     try {
       await createConnection(this.config);
-      UtilsService.log(`Registered all entities for ~lg~Database~w~ - ~y~[${this.config.entities.length}]~w~`);
+      UtilsService.logRegisteredHandlers('Database', this.config.entities.length);
       UtilsService.logLoaded('DatabaseService');
       this.connected = true;
     } catch (e) {

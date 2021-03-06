@@ -7,6 +7,9 @@ import typescript from '@rollup/plugin-typescript';
 import convertNamedImports from './transform';
 import { GameResourceInterface } from '../interfaces/game-resource.interface';
 import path from 'path';
+import { config } from 'dotenv';
+
+config();
 
 export class ConfigBuilder {
 
@@ -16,7 +19,7 @@ export class ConfigBuilder {
    * @type {boolean}
    * @private
    */
-  private static isProduction: boolean = Boolean(process.env.ATLAS_PRODUCTION) || false;
+  private static isProduction: boolean = process.env.ATLAS_PRODUCTION === 'true';
 
   /**
    * Create the server config

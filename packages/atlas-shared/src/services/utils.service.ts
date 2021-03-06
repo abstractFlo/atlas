@@ -231,20 +231,12 @@ export class UtilsService {
   }
 
   /**
-   * Return debugMode enabled for server
+   * Return if production mode is enabled
    *
    * @return {boolean}
    */
   public static isProduction(): boolean {
-    let isProduction: boolean;
-
-    try {
-      isProduction = container.resolve<boolean>('isProductionMode');
-    } catch (e) {
-      isProduction = false;
-    }
-
-    return isProduction;
+    return process !== undefined && process.env.ATLAS_PRODUCTION === 'true';
   }
 
 }

@@ -30,7 +30,7 @@ export class DiscordBotService {
     try {
       await this.client.login(this.config.bot_secret);
       this.listenEvents();
-      UtilsService.log(`Registered all events for ~lg~DiscordBot~w~ - ~y~[${this.eventModels.length}]~w~`);
+      UtilsService.logRegisteredHandlers('DiscordBot', this.eventModels.length);
       UtilsService.logLoaded('DiscordBotService');
       this.connected = true;
     } catch (e) {
