@@ -32,9 +32,19 @@ export class ConfigBuilder {
   public static serverConfig(resource: string, buildOutput: string, pkgJson: GameResourceInterface): RollupConfigInterface {
     const basePkgJson = ResourceAnalyzer.readPackageJson(process.cwd()) as any;
     const modulesForConvert = [
-      'rxjs/operators',
-      'dotenv',
+      '@abraham/reflection',
       '@overnightjs/core',
+      'axios',
+      'body-parser',
+      'cors',
+      'discord.js',
+      'dotenv',
+      'fs-extra',
+      'lodash',
+      'rxjs',
+      'rxjs/operators',
+      'tsyringe',
+      'typeorm',
       ...Object.keys(basePkgJson.devDependencies || {}),
       ...Object.keys(basePkgJson.dependencies || {})
     ].filter((name: string) => !name.startsWith('@abstractflo'));

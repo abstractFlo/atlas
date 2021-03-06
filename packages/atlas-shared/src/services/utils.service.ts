@@ -1,4 +1,5 @@
 import { container } from 'tsyringe';
+import { CommandService } from './command.service';
 
 export class UtilsService {
 
@@ -235,8 +236,18 @@ export class UtilsService {
    *
    * @return {boolean}
    */
-  public static isProduction(): boolean {
-    return process !== undefined && process.env.ATLAS_PRODUCTION === 'true';
+  public static isProduction(toggle: boolean = false): boolean {
+    return typeof process !== 'undefined' && process.env.ATLAS_PRODUCTION === 'true' || toggle;
+  }
+
+  /**
+   * Setup new command prefix
+   *
+   * @param {string} prefix
+   */
+  public static setCommandPrefix(prefix: string): void {
+    const commandService = container.resolve(CommandService);
+    commandService.setPrefix(prefix);
   }
 
 }

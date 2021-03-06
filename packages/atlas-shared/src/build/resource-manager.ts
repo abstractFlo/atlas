@@ -47,6 +47,23 @@ export class ResourceManager {
    */
   private resourceFolder: string = path.resolve(this.cwd, process.env.ATLAS_RESOURCE_FOLDER || 'resources');
 
+  private preserveFilesAndFolders: string[] = [
+    'altv-server.exe',
+    'altv-server',
+    '.env',
+    'start.sh',
+    'cache',
+    'data',
+    'modules',
+    'node_modules',
+    'package-lock.json',
+    'server.log',
+    '.docker',
+    'docker-data',
+    'resources',
+    'docker-compose'
+  ];
+
   /**
    * Return the final config
    *
@@ -163,7 +180,31 @@ export class ResourceManager {
    * @private
    */
   private cleanup(): void {
-    fs.emptyDirSync(this.buildOutput);
+    const cleanUpNeeded = process.env.ATLAS_CLEAR_BEFORE_BUILD === 'true';
+
+    if (!cleanUpNeeded || !fs.pathExistsSync(this.buildOutput)) return;
+
+    const hasDefinedPreserve = process.env.ATLAS_CLEAR_PRESERVE && process.env.ATLAS_CLEAR_PRESERVE !== 'null';
+
+    if (hasDefinedPreserve) {
+      const preservedFilesAndFolders = process.env.ATLAS_CLEAR_PRESERVE.split(',');
+      this.preserveFilesAndFolders.push(...preservedFilesAndFolders);
+    }
+
+    const filterFiles = (file: string) => !this.preserveFilesAndFolders.find((wFile: string) => wFile.startsWith(file));
+    const files = fs
+        .readdirSync(this.buildOutput)
+        .filter((file: string) => filterFiles(file))
+        .map((file: string) => path.resolve(this.buildOutput, file));
+
+    files.forEach((file: string) => {
+      fs.removeSync(file);
+    });
+
+    if (fs.pathExistsSync(path.resolve(this.buildOutput, 'resources'))) {
+      fs.emptyDirSync(path.resolve(this.buildOutput, 'resources'));
+    }
+
     console.log(`Cleanup ${this.buildOutput}`);
   }
 }

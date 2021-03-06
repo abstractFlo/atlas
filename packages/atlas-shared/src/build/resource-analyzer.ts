@@ -58,7 +58,7 @@ export class ResourceAnalyzer {
     const filesAndFolders = fs.readdirSync(srcPath);
 
     return filesAndFolders
-        .filter((target) => !target.startsWith('.') && !target.startsWith('_'))
+        .filter((target) => !target.startsWith('.') && !target.startsWith('_') && !target.includes('.example.'))
         .map((target: string) => path.resolve(srcPath, target));
   }
 

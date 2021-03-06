@@ -19,7 +19,7 @@ export class CommandService {
    * @type {string}
    * @private
    */
-  private prefix: string = process.env.ATLAS_COMMAND_PREFIX || '!';
+  private prefix: string = '/';
 
   /**
    * Load the commands at runtime from decorated meta data
@@ -28,6 +28,15 @@ export class CommandService {
    */
   public setupCommands(events: EventModel[]): void {
     events.forEach((event: EventModel) => this.add(event));
+  }
+
+  /**
+   * Setup new prefix for commandConsole
+   *
+   * @param {string} prefix
+   */
+  public setPrefix(prefix: string): void {
+    this.prefix = prefix;
   }
 
   /**
