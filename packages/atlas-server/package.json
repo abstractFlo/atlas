@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-server",
-  "version": "0.0.0",
+  "version": "2.0.0-rc.1",
   "description": "",
   "keywords": [],
   "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
@@ -24,7 +24,7 @@
     "typeorm": "^0.2.31"
   },
   "devDependencies": {
-    "@abstractflo/atlas-shared": "^0.0.0",
+    "@abstractflo/atlas-shared": "^2.0.0-rc.1",
     "@altv/types-server": "^1.7.2",
     "@overnightjs/core": "^1.7.5",
     "@types/cors": "^2.8.10",
