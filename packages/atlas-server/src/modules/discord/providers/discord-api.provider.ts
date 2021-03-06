@@ -43,7 +43,7 @@ export class DiscordApiProvider {
       grant_type: 'authorization_code',
       code,
       scope: 'identify',
-      redirect_uri: encodeURI(this.config.redirect_url)
+      redirect_uri: encodeURI(`${this.config.redirect_url}/auth/discord`)
     });
   }
 
@@ -61,7 +61,7 @@ export class DiscordApiProvider {
       response_type: 'code',
       scope: 'identify',
       client_id: this.config.client_id,
-      redirect_uri: encodeURI(this.config.redirect_url),
+      redirect_uri: encodeURI(`${this.config.redirect_url}/auth/discord`),
       state
 
     });

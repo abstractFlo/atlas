@@ -1,6 +1,7 @@
 import { ExpressServer } from './express.server';
+import { container } from 'tsyringe';
 
-const expressServer = new ExpressServer();
+const expressServer = container.resolve(ExpressServer);
 
 export { DiscordApiService } from './services/discord-api.service';
 export { DiscordBotService } from './services/discord-bot.service';

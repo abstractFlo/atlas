@@ -1,24 +1,29 @@
 import { Server } from '@overnightjs/core';
-import { container } from 'tsyringe';
+import { container, singleton } from 'tsyringe';
 import { AutoloadAfter, castToNumber, UtilsService } from '@abstractflo/atlas-shared';
 import { AuthenticationController } from './controllers/authentication.controller';
 import bodyParser from 'body-parser';
+import { DiscordConfigService } from './services/discord-config.service';
 
 @AutoloadAfter({ methodName: 'start' })
+@singleton()
 export class ExpressServer extends Server {
 
+  /**
+   * Contains the express port to be listen
+   *
+   * @type {number | null}
+   * @private
+   */
   private port: number | null = castToNumber()(process.env.DISCORD_API_PORT) || null;
-  private hasClientId: boolean = process.env.DISCORD_CLIENT_ID !== 'null';
-  private hasClientSecret: boolean = process.env.DISCORD_CLIENT_SECRET !== 'null';
 
-  constructor() {
+  constructor(
+      private readonly discordConfigService: DiscordConfigService
+  ) {
     super();
 
     if (this.port) {
-      if (!this.hasClientId || !this.hasClientSecret) {
-        throw new Error(`DiscordExpressServer can't start. You missing some configuration. 
-      Look at your .env and fill out DISCORD_API_PORT, DISCORD_CLIENT_ID & DISCORD_CLIENT_SECRET`);
-      }
+      if (!this.discordConfigService.hasValidConfiguration()) return;
 
       this.app.use(bodyParser.json());
       this.app.use(bodyParser.urlencoded({ extended: true }));
