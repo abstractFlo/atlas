@@ -1,0 +1,50 @@
+{
+  "name": "@abstractflo/atlas-server",
+  "version": "2.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
+  "license": "ISC",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "helpers.js",
+    "helpers.d.ts",
+    "dist/index.d.ts"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "rollup -c",
+    "generate:typings": "dts-bundle-generator --config dts-generator.cjs"
+  },
+  "peerDependencies": {
+    "@abraham/reflection": "^0.7.0",
+    "@altv/types-server": "^1.7.2",
+    "rxjs": "^6.6.6",
+    "tsyringe": "^4.4.0",
+    "typeorm": "^0.2.31"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.11",
+    "@types/fs-extra": "^9.0.7",
+    "@types/lodash": "^4.14.168",
+    "@types/node": "^14.14.31"
+  },
+  "dependencies": {
+    "@abstractflo/atlas-shared": "^2.0.0",
+    "@altv/types-server": "^1.7.2",
+    "@overnightjs/core": "^1.7.5",
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "fs-extra": "^9.1.0",
+    "lodash": "^4.17.21",
+    "rxjs": "^6.6.6",
+    "tsyringe": "^4.4.0",
+    "typeorm": "^0.2.31"
+  }
+}

@@ -2,10 +2,7 @@
 .vscode
 .DS_Store
 
-dist
+/dist
 node_modules
 
 lerna-debug.log
-
-helpers.*
-resource-manager.*
