@@ -16,6 +16,7 @@ export { AutoAdd } from './decorators/database.decorator';
 export { DatabaseService } from './services/database.service';
 export { EventService } from './services/event.service';
 export { LoaderService } from './services/loader.service';
+export { EncryptionService } from './services/encryption.service';
 
 export { OnDiscord, DiscordApiService, DiscordBotService, DiscordUserModel } from './modules/discord';
 
