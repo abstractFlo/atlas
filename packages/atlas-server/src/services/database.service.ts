@@ -47,11 +47,16 @@ export class DatabaseService {
   public async connect(): Promise<void> {
     if (this.connected || !this.config.entities.length) return;
 
-    return createConnection(this.config).then(() => {
+    try {
+      await createConnection(this.config);
       UtilsService.log(`Registered all entities for ~lg~Database~w~ - ~y~[${this.config.entities.length}]~w~`);
       UtilsService.logLoaded('DatabaseService');
       this.connected = true;
-    });
+    } catch (e) {
+      UtilsService.logError(`Can't connect to database, do you have setup it correctly inside .env?`);
+      throw new Error(e);
+    }
+
   }
 
   /**

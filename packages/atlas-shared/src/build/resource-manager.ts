@@ -15,8 +15,7 @@ export class ResourceManager {
   private buildOutput: string = path.resolve(this.cwd, process.env.ATLAS_BUILD_OUPUT || 'dist');
   private retailFolder: string = path.resolve(this.cwd, process.env.ATLAS_RETAIL_FOLDER || 'retail');
   private resourceFolder: string = path.resolve(this.cwd, process.env.ATLAS_RESOURCE_FOLDER || 'resources');
-  private configFolder: string = path.resolve(this.cwd, process.env.ATLAS_CONFIG_FOLDER || 'config');
-  private serverConfigPath: string = path.resolve(this.cwd, process.env.ATLAS_SERVER_CFG_PATH || 'docker-data');
+  //private serverConfigPath: string = path.resolve(this.cwd, process.env.ATLAS_SERVER_CFG_PATH || 'docker-data');
 
   constructor() {}
 
@@ -30,7 +29,7 @@ export class ResourceManager {
     this.createConfigs();
     this.copyRetail();
     this.copyPackageJson();
-    this.copyServerConfig();
+    //this.copyServerConfig();
 
     return this.config;
   }
@@ -131,10 +130,11 @@ export class ResourceManager {
    *
    * @private
    */
-  private copyServerConfig(): void {
+
+  /*private copyServerConfig(): void {
     const filename = 'server.cfg';
     this.copyFilesSecure(path.resolve(this.serverConfigPath, filename), path.resolve(this.buildOutput, filename));
-  }
+  }*/
 
   /**
    * Clean up the build output

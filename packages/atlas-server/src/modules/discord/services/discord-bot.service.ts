@@ -27,13 +27,16 @@ export class DiscordBotService {
   public async connect(): Promise<void> {
     if (this.connected || !this.eventModels.length) return;
 
-    return this.client.login(this.config.bot_secret)
-        .then(() => {
-          this.listenEvents();
-          UtilsService.log(`Registered all events for ~lg~DiscordBot~w~ - ~y~[${this.eventModels.length}]~w~`);
-          UtilsService.logLoaded('DiscordBotService');
-          this.connected = true;
-        });
+    try {
+      await this.client.login(this.config.bot_secret);
+      this.listenEvents();
+      UtilsService.log(`Registered all events for ~lg~DiscordBot~w~ - ~y~[${this.eventModels.length}]~w~`);
+      UtilsService.logLoaded('DiscordBotService');
+      this.connected = true;
+    } catch (e) {
+      UtilsService.logError(`You have add the bot_secret to your .env file?`);
+      throw new Error(e);
+    }
   }
 
   /**
@@ -63,6 +66,7 @@ export class DiscordBotService {
       if (!this.listeners.has(eventModel.eventName)) {
         this.listeners.set(eventModel.eventName, []);
       }
+
       const models = this.listeners.get(eventModel.eventName);
       models.push(eventModel);
     });

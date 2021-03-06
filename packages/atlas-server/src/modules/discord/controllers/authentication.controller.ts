@@ -1,13 +1,13 @@
 import { ClassMiddleware, Controller, Get } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { filter, mergeMap } from 'rxjs/operators';
-import { DiscordUserModel } from '../models/discord-user.model';
 import { FrameworkEvent, LoggerService } from '@abstractflo/atlas-shared';
 import { AccessTokenModel } from '../models/access-token.model';
 import { DiscordApiService } from '../services/discord-api.service';
 import { EventService } from '../../../services/event.service';
 import { injectable } from 'tsyringe';
 import cors from 'cors';
+import { DiscordUserModel } from '../models/discord-user.model';
 
 @injectable()
 @Controller('auth')
