@@ -48,7 +48,6 @@ export class ResourceManager {
   private resourceFolder: string = path.resolve(this.cwd, process.env.ATLAS_RESOURCE_FOLDER || 'resources');
 
   private preserveFilesAndFolders: string[] = [
-    'altv-server.exe',
     'altv-server',
     '.env',
     'start.sh',
@@ -59,9 +58,8 @@ export class ResourceManager {
     'package-lock.json',
     'server.log',
     '.docker',
-    'docker-data',
+    'docker',
     'resources',
-    'docker-compose'
   ];
 
   /**
@@ -191,7 +189,7 @@ export class ResourceManager {
       this.preserveFilesAndFolders.push(...preservedFilesAndFolders);
     }
 
-    const filterFiles = (file: string) => !this.preserveFilesAndFolders.find((wFile: string) => wFile.startsWith(file));
+    const filterFiles = (file: string) => !this.preserveFilesAndFolders.find((wFile: string) => file.startsWith(wFile));
     const files = fs
         .readdirSync(this.buildOutput)
         .filter((file: string) => filterFiles(file))
