@@ -29,7 +29,7 @@ export class ResourceManager {
    * @type {string}
    * @private
    */
-  private buildOutput: string = path.resolve(this.cwd, process.env.ATLAS_BUILD_OUPUT || 'dist');
+  private buildOutput: string = path.resolve(this.cwd, process.env.ATLAS_BUILD_OUTPUT || 'dist');
 
   /**
    * Path to retail folder

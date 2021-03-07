@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-client",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "",
   "keywords": [],
   "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
@@ -30,7 +30,7 @@
     "@types/node": "^14.14.31"
   },
   "dependencies": {
-    "@abstractflo/atlas-shared": "^2.0.1",
+    "@abstractflo/atlas-shared": "^2.0.2",
     "@altv/types-client": "^1.5.2",
     "@altv/types-natives": "^1.1.0",
     "fs-extra": "^9.1.0",

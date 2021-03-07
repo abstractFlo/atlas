@@ -45,6 +45,7 @@ export class ConfigBuilder {
       'rxjs/operators',
       'tsyringe',
       'typeorm',
+      'sjcl',
       ...Object.keys(basePkgJson.devDependencies || {}),
       ...Object.keys(basePkgJson.dependencies || {})
     ].filter((name: string) => !name.startsWith('@abstractflo'));
