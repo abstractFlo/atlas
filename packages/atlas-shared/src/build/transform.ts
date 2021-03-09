@@ -3,22 +3,22 @@ import j from 'jscodeshift';
 import { Plugin } from 'rollup';
 
 /**
- * Convert snakeCase to CamelCase
+ * Convert to PascalCase
  *
- * @param str
- * @returns {*}
+ * @param string
+ * @return {string}
  */
-const snakeToCamel = (str) => {
-  return str
-      .split('/')
-      .pop().replace(
-          /([-_.][a-z])/g,
-          (group) => group.toUpperCase()
-              .replace('-', '')
-              .replace('_', '')
-              .replace('.', '')
-      );
-};
+function convertToReadableName(string) {
+  return `${string.replace('/', '-')}`
+      .replace(new RegExp(/[-_]+/, 'g'), ' ')
+      .replace(new RegExp(/[^\w\s]/, 'g'), '')
+      .replace(
+          new RegExp(/\s+(.)(\w+)/, 'g'),
+          ($1, $2, $3) => `${$2.toUpperCase() + $3.toLowerCase()}`
+      )
+      .replace(new RegExp(/\s/, 'g'), '')
+      .replace(new RegExp(/\w/), s => s.toLowerCase());
+}
 
 /**
  * Analyse all files and transform all given modules to normal import
@@ -51,7 +51,7 @@ function convert(code: string, modules: string[] = []) {
 
     j(path)
         .replaceWith(
-            `import ${snakeToCamel(moduleName)} from '${moduleName}';`
+            `import ${convertToReadableName(moduleName)} from '${moduleName}';`
         );
   });
 
@@ -63,7 +63,7 @@ function convert(code: string, modules: string[] = []) {
         Object.keys(moduleMap).forEach(key => {
           if (!moduleMap[key].includes(calleeName)) return;
 
-          mPath.value.callee.name = `${snakeToCamel(key)}.${calleeName}`;
+          mPath.value.callee.name = `${convertToReadableName(key)}.${calleeName}`;
         });
       });
 
@@ -75,7 +75,7 @@ function convert(code: string, modules: string[] = []) {
         Object.keys(moduleMap).forEach(key => {
           if (!moduleMap[key].includes(calleeName)) return;
 
-          mPath.value.callee.name = `${snakeToCamel(key)}.${calleeName}`;
+          mPath.value.callee.name = `${convertToReadableName(key)}.${calleeName}`;
         });
       });
 
@@ -86,7 +86,7 @@ function convert(code: string, modules: string[] = []) {
         const objectName = mPath.value.object.name;
         Object.keys(moduleMap).forEach(key => {
           if (!moduleMap[key].includes(objectName)) return;
-          mPath.value.object.name = `${snakeToCamel(key)}.${objectName}`;
+          mPath.value.object.name = `${convertToReadableName(key)}.${objectName}`;
         });
       });
 
@@ -97,7 +97,7 @@ function convert(code: string, modules: string[] = []) {
         const className = mPath.value.superClass.name;
         Object.keys(moduleMap).forEach(key => {
           if (!moduleMap[key].includes(className)) return;
-          mPath.value.superClass.name = `${snakeToCamel(key)}.${className}`;
+          mPath.value.superClass.name = `${convertToReadableName(key)}.${className}`;
         });
       });
 
@@ -108,7 +108,7 @@ function convert(code: string, modules: string[] = []) {
         const className = mPath.value.superClass.name;
         Object.keys(moduleMap).forEach(key => {
           if (!moduleMap[key].includes(className)) return;
-          mPath.value.superClass.name = `${snakeToCamel(key)}.${className}`;
+          mPath.value.superClass.name = `${convertToReadableName(key)}.${className}`;
         });
       });
 
@@ -119,7 +119,7 @@ function convert(code: string, modules: string[] = []) {
         const className = mPath.value.superClass.name;
         Object.keys(moduleMap).forEach(key => {
           if (!moduleMap[key].includes(className)) return;
-          mPath.value.superClass.name = `${snakeToCamel(key)}.${className}`;
+          mPath.value.superClass.name = `${convertToReadableName(key)}.${className}`;
         });
       });
 
@@ -132,14 +132,14 @@ function convert(code: string, modules: string[] = []) {
             const arrayName = element.name;
             Object.keys(moduleMap).forEach(key => {
               if (!moduleMap[key].includes(arrayName)) return;
-              element.name = `${snakeToCamel(key)}.${arrayName}`;
+              element.name = `${convertToReadableName(key)}.${arrayName}`;
             });
           } else {
             element.arguments.map(arg => {
               const arrayName = arg.name;
               Object.keys(moduleMap).forEach(key => {
                 if (!moduleMap[key].includes(arrayName)) return;
-                arg.name = `${snakeToCamel(key)}.${arrayName}`;
+                arg.name = `${convertToReadableName(key)}.${arrayName}`;
               });
             });
           }
