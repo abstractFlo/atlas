@@ -1,6 +1,7 @@
 //@ts-nocheck
 import j from 'jscodeshift';
 import { Plugin } from 'rollup';
+import { GameResourceInterface } from '../interfaces/game-resource.interface';
 
 /**
  * Convert to PascalCase
@@ -28,7 +29,7 @@ function convertToReadableName(string) {
  * @param modules
  * @returns {{transform(*=, *): *}|*}
  */
-function convert(code: string, modules: string[] = []) {
+function convert(code: string, modules: string[] = [], config: GameResourceInterface) {
 
   const modulesForConvert = modules || [];
   const moduleMap = [];
@@ -51,7 +52,7 @@ function convert(code: string, modules: string[] = []) {
 
     j(path)
         .replaceWith(
-            `import * as ${convertToReadableName(moduleName)} from '${moduleName}';`
+            `import ${ (config.useDefaultImport || true) ? '' : '* as' } ${convertToReadableName(moduleName)} from '${moduleName}';`
         );
   });
 
@@ -155,10 +156,10 @@ function convert(code: string, modules: string[] = []) {
  *
  * @return {{transform: (function(*, *, *=): *)}}
  */
-export default function (modules: string[] = []): Plugin {
+export default function (modules: string[] = [], config: GameResourceInterface): Plugin {
   return {
     transform(fileInfo) {
-      return convert(fileInfo, modules);
+      return convert(fileInfo, modules, config);
     }
   };
 }
