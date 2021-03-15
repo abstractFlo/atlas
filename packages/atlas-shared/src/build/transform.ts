@@ -27,6 +27,7 @@ function convertToReadableName(string) {
  *
  * @param code
  * @param modules
+ * @param config
  * @returns {{transform(*=, *): *}|*}
  */
 function convert(code: string, modules: string[] = [], config: GameResourceInterface) {
