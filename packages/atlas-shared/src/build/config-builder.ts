@@ -81,7 +81,8 @@ export class ConfigBuilder {
     return this.baseConfig(
         path.resolve(resource, 'client', 'index.ts'),
         path.resolve(buildOutput, 'resources', pkgJson.name, 'client.js'),
-        external
+        external,
+        []
     );
   }
 
@@ -117,7 +118,8 @@ export class ConfigBuilder {
       output: {
         file: output,
         format: 'esm',
-        preserveModules: false
+        preserveModules: false,
+        inlineDynamicImports:  true
       },
       external,
       plugins: [
