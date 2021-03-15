@@ -51,7 +51,7 @@ function convert(code: string, modules: string[] = []) {
 
     j(path)
         .replaceWith(
-            `import ${convertToReadableName(moduleName)} from '${moduleName}';`
+            `import * as ${convertToReadableName(moduleName)} from '${moduleName}';`
         );
   });
 
