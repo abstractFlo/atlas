@@ -63,7 +63,8 @@ export class ConfigBuilder {
         path.resolve(resource, 'server', 'index.ts'),
         path.resolve(buildOutput, 'resources', pkgJson.name, 'server.js'),
         external,
-        plugins
+        plugins,
+        pkgJson
     );
 
   }
@@ -81,7 +82,9 @@ export class ConfigBuilder {
     return this.baseConfig(
         path.resolve(resource, 'client', 'index.ts'),
         path.resolve(buildOutput, 'resources', pkgJson.name, 'client.js'),
-        external
+        external,
+        [],
+        pkgJson
     );
   }
 
@@ -92,6 +95,7 @@ export class ConfigBuilder {
    * @param {string} output
    * @param {string[]} external
    * @param {Plugin[]} plugins
+   * @param {GameResourceInterface} pkgJson
    * @return {RollupConfigInterface}
    * @private
    */
@@ -99,7 +103,8 @@ export class ConfigBuilder {
       input: string,
       output: string,
       external: string[] = [],
-      plugins: Plugin[] = []
+      plugins: Plugin[] = [],
+      pkgJson: GameResourceInterface
   ): RollupConfigInterface {
 
     if (this.isProduction) {
@@ -107,7 +112,8 @@ export class ConfigBuilder {
         keep_classnames: true,
         keep_fnames: true,
         output: {
-          comments: false
+          comments: false,
+          inlineDynamicImports: pkgJson.inlineDynamicImports || true
         }
       }));
     }

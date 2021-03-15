@@ -12,6 +12,7 @@ export interface RollupConfigOutputInterface {
   file: string;
   format: string;
   preserveModules?: boolean;
+  inlineDynamicImports?: boolean;
 }
 
 export interface RollupConfigWatchInterface {
