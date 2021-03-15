@@ -54,7 +54,7 @@ export class ConfigBuilder {
     const external = pkgJson.externals || [];
 
     const plugins: Plugin[] = [
-      convertNamedImports([...convertedImports, ...modulesForConvert])
+      convertNamedImports([...convertedImports, ...modulesForConvert], pkgJson)
     ];
 
     external.push('alt-server', ...modulesForConvert);
