@@ -23,9 +23,4 @@ export interface GameResourceInterface {
    * Enable if the import should be default or all(*), default set to true
    */
   useDefaultImport: boolean;
-
-  /**
-   * Enable if rollup should inline dynamic imports, default set to true
-   */
-  inlineDynamicImports: boolean;
 }
