@@ -16,8 +16,8 @@ export class EventModel extends JsonEntityModel {
       'streamSyncedMetaChange' |
       'gameEntityCreate' |
       'gameEntityDestroy' |
-      'entityEnterColShape' |
-      'entityLeaveColShape' |
+      'entityEnterColshape' |
+      'entityLeaveColshape' |
       'consoleCommand' |
       'keyup' |
       'keydown';
