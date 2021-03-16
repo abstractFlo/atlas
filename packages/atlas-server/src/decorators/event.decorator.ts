@@ -89,7 +89,7 @@ export const EntityEnterColShape = (colShapeType: ColShapeType, name?: string, e
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ENTITY_ENTER_COLSHAPE, {
-      type: 'entityEnterColShape',
+      type: 'entityEnterColshape',
       eventName,
       methodName: propertyKey,
       targetName: target.constructor.name,
@@ -118,7 +118,7 @@ export const EntityLeaveColShape = (colShapeType: ColShapeType, name?: string, e
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ENTITY_LEAVE_COLSHAPE, {
-      type: 'entityLeaveColShape',
+      type: 'entityLeaveColshape',
       eventName,
       methodName: propertyKey,
       targetName: target.constructor.name,
