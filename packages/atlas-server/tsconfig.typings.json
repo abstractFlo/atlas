@@ -10,11 +10,6 @@
     ],
     "outDir": "typings",
     "rootDir": "src",
-    "baseUrl": ".",
-    "paths": {
-      "reflect-metadata": [
-        "./"
-      ]
-    }
+    "baseUrl": "."
   }
 }

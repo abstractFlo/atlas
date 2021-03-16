@@ -6,6 +6,11 @@ module.exports = {
     {
       filePath: './src/index.ts',
       outFile: './dist/index.d.ts',
+      output: {
+        inlineDeclareGlobals: false,
+        sortNodes: true,
+        inlineDeclareExternals: true,
+      },
     },
     {
       filePath: './src/build/resource-manager.ts',

@@ -18,6 +18,9 @@ export { EventService } from './services/event.service';
 export { LoaderService } from './services/loader.service';
 export { EncryptionService } from './services/encryption.service';
 
+export { ColShapeInterface } from './extends/colshape/col-shape.interface';
+export { PlayerInterface } from './extends/player/player.interface';
+
 export { OnDiscord, DiscordApiService, DiscordBotService, DiscordUserModel } from './modules/discord';
 
 
