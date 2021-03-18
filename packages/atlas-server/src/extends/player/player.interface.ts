@@ -33,6 +33,39 @@ export interface PlayerInterface {
    * @param args
    */
   emitGuiNextTick(eventName: string, ...args: any[]): void;
+
+  /**
+   * Route webview for player
+   *
+   * @param {string} routeName
+   * @param args
+   */
+  guiRouteTo(routeName: string, ...args: any[]): void;
+
+  /**
+   * Show gui cursor for player
+   */
+  guiShowCursor(): void;
+
+  /**
+   * Remove cursor for player
+   */
+  guiRemoveCursor(): void;
+
+  /**
+   * Remove all cursors for player
+   */
+  guiRemoveAllCursors(): void;
+
+  /**
+   * Focus gui for player
+   */
+  guiFocus(): void;
+
+  /**
+   * Unfocus gui for player
+   */
+  guiUnfocus(): void;
 }
 
 

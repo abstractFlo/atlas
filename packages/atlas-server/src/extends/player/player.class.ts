@@ -26,7 +26,7 @@ export class PlayerClass extends Player implements PlayerInterface {
    * @param {string} eventName
    * @param args
    */
-  emitGui(eventName: string, ...args: any[]): void {
+  public emitGui(eventName: string, ...args: any[]): void {
     const eventService = container.resolve(EventService);
     eventService.emitGui(this, eventName, ...args);
   }
@@ -37,8 +37,53 @@ export class PlayerClass extends Player implements PlayerInterface {
    * @param {string} eventName
    * @param args
    */
-  emitGuiNextTick(eventName: string, ...args: any[]): void {
+  public emitGuiNextTick(eventName: string, ...args: any[]): void {
     UtilsService.setTimeout(() => this.emitGui(eventName, args), 25);
+  }
+
+  /**
+   * Route webview for player
+   *
+   * @param {string} routeName
+   * @param args
+   */
+  public guiRouteTo(routeName: string, ...args: any[]): void {
+    this.emit(FrameworkEvent.EventService.GuiChangeRoute, routeName, args);
+  }
+
+  /**
+   * Show gui cursor for player
+   */
+  public guiShowCursor(): void {
+    this.emit(FrameworkEvent.EventService.GuiShowCursor);
+  }
+
+  /**
+   * Remove cursor for player
+   */
+  public guiRemoveCursor(): void {
+    this.emit(FrameworkEvent.EventService.GuiRemoveCursor);
+  }
+
+  /**
+   * Remove all cursors for player
+   */
+  public guiRemoveAllCursors(): void {
+    this.emit(FrameworkEvent.EventService.GuiRemoveAllCursors);
+  }
+
+  /**
+   * Focus gui for player
+   */
+  public guiFocus(): void {
+    this.emit(FrameworkEvent.EventService.GuiFocus);
+  }
+
+  /**
+   * Unfocus gui for player
+   */
+  public guiUnfocus(): void {
+    this.emit(FrameworkEvent.EventService.GuiUnfocus);
   }
 
   /**
