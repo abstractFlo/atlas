@@ -63,7 +63,12 @@ export class TimerManagerService {
    * @param {number} interval
    * @return {TimerManagerService}
    */
-  public createInterval(timerName: string, callback: CallableFunction, interval: number): TimerManagerService {
+  public createInterval(timerName: string, callback: CallableFunction, interval: number): TimerManagerService | void {
+    if (this.runningTimers.get(timerName)) {
+      UtilsService.logError(`There is a timer with name ${timerName} already registered`);
+      return;
+    }
+
     const identifier = UtilsService.setInterval(() => callback(this), interval);
 
     this.runningTimers.set(timerName, { type: 'interval', identifier });
@@ -77,7 +82,12 @@ export class TimerManagerService {
    * @param {Function} callback
    * @return {TimerManagerService}
    */
-  public createEveryTick(timerName: string, callback: CallableFunction): TimerManagerService {
+  public createEveryTick(timerName: string, callback: CallableFunction): TimerManagerService | void {
+    if (this.runningTimers.get(timerName)) {
+      UtilsService.logError(`There is a timer with name ${timerName} already registered`);
+      return;
+    }
+
     const identifier = UtilsService.everyTick(() => callback(this));
 
     this.runningTimers.set(timerName, { type: 'everyTick', identifier });
@@ -91,7 +101,12 @@ export class TimerManagerService {
    * @param {Function} callback
    * @return {TimerManagerService}
    */
-  public createNextTick(timerName: string, callback: CallableFunction): TimerManagerService {
+  public createNextTick(timerName: string, callback: CallableFunction): TimerManagerService | void {
+    if (this.runningTimers.get(timerName)) {
+      UtilsService.logError(`There is a timer with name ${timerName} already registered`);
+      return;
+    }
+
     const identifier = UtilsService.nextTick(() => callback(this));
 
     this.runningTimers.set(timerName, { type: 'nextTick', identifier });
@@ -106,7 +121,12 @@ export class TimerManagerService {
    * @param {number} duration
    * @return {TimerManagerService}
    */
-  public createTimeout(timerName: string, callback: CallableFunction, duration: number): TimerManagerService {
+  public createTimeout(timerName: string, callback: CallableFunction, duration: number): TimerManagerService | void {
+    if (this.runningTimers.get(timerName)) {
+      UtilsService.logError(`There is a timer with name ${timerName} already registered`);
+      return;
+    }
+
     const identifier = UtilsService.setTimeout(() => callback(this), duration);
 
     this.runningTimers.set(timerName, { type: 'timeout', identifier });
