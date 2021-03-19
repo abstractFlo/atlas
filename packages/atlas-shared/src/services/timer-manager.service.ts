@@ -26,7 +26,6 @@ export class TimerManagerService {
    */
   public load(done: CallableFunction): void {
     this.registerAndResolveTimers();
-    UtilsService.logLoaded('TimerManagerService');
     done();
   }
 
@@ -203,6 +202,9 @@ export class TimerManagerService {
       });
     });
 
-    UtilsService.logRegisteredHandlers('TimerManagerService', timerCount);
+    if (timerCount > 0) {
+      UtilsService.logRegisteredHandlers('TimerManagerService', timerCount);
+      UtilsService.logLoaded('TimerManagerService');
+    }
   }
 }
