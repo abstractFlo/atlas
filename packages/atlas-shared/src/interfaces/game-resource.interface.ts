@@ -20,7 +20,7 @@ export interface GameResourceInterface {
   externals: string[]
 
   /**
-   * Enable if the import should be default or all(*), default set to true
+   * Enable if the import should be default or all(*), default set to false
    */
-  useDefaultImport: boolean;
+  useStarImport: boolean;
 }

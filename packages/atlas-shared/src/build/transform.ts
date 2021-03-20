@@ -53,7 +53,7 @@ function convert(code: string, modules: string[] = [], config: GameResourceInter
 
     j(path)
         .replaceWith(
-            `import ${ config.useDefaultImport ? '' : '* as' } ${convertToReadableName(moduleName)} from '${moduleName}';`
+            `import ${ !config.useStarImport ? '' : '* as' } ${convertToReadableName(moduleName)} from '${moduleName}';`
         );
   });
 
