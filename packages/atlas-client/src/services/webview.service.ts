@@ -1,8 +1,14 @@
 import { container, singleton } from 'tsyringe';
-import { constructor, EventEnum, EventModel, FrameworkEvent, UtilsService } from '@abstractflo/atlas-shared';
+import {
+  AutoloadAfter,
+  constructor,
+  EventEnum,
+  EventModel,
+  FrameworkEvent,
+  UtilsService
+} from '@abstractflo/atlas-shared';
 import { showCursor, WebView } from 'alt-client';
 import { EventService } from './event.service';
-import { AutoloadAfter } from '@abstractflo/atlas-shared';
 
 @AutoloadAfter({ methodName: 'load', doneCheckTimeout: 1000 * 10 })
 @singleton()
@@ -76,7 +82,7 @@ export class WebviewService {
    * @param args
    */
   public routeTo(route: string, ...args: any[]): WebviewService {
-    this.webview.emit(this.routeToEventName, route, ...args);
+    this.emit(this.routeToEventName, route, ...args);
     return this;
   }
 
