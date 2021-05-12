@@ -1,5 +1,5 @@
 import { Colshape } from 'alt-server';
-import { ColShapeClass } from './col -shape.class';
+import { ColShapeClass } from './col-shape.class';
 import { ColShapeInterface } from './col-shape.interface';
 
 declare module 'alt-server' {

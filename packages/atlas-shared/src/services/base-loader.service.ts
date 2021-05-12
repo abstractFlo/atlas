@@ -27,14 +27,6 @@ export class BaseLoaderService {
   private queue: LoaderServiceQueueModel = new LoaderServiceQueueModel();
 
   /**
-   * Contains the complete loading queue
-   *
-   * @type {LoaderServiceQueueModel}
-   * @private
-   */
-  private readonly: LoaderServiceQueueModel = new LoaderServiceQueueModel();
-
-  /**
    * Contains the count for frameworkBeforeBoot
    *
    * @type {Observable<number>}

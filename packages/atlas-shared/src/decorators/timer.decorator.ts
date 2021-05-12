@@ -5,7 +5,7 @@ import { TimerConstants } from '../constants/timer.constants';
 import { TimerModel } from '../models/timer.model';
 
 /**
- * Register @Before decorator
+ * Register @Interval decorator
  *
  * @param {string} name
  * @param {number} duration
