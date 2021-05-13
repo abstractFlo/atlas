@@ -107,15 +107,15 @@ export class EventService extends BaseEventService {
   private handleColShapeEvents(events: EventModel[], colShape: Colshape, entity: Entity): void {
     events.forEach((event: EventModel) => {
       // Stop if not the same type
-      if (!(colShape.colshapeType === event.validateOptions.colShapeType)) return;
+      if (colShape.colshapeType !== event.validateOptions.colShapeType) return;
 
       // Stop if name is set and not the same
-      if (!(event.validateOptions.name !== undefined && colShape.name === event.validateOptions.name)) return;
+      if (event.validateOptions.name !== undefined && colShape.name !== event.validateOptions.name) return;
 
       // Stop if entity is set not the the same
-      if (!(
+      if (
           event.validateOptions.entity !== undefined &&
-          this.isEntityType(entity.type, event.validateOptions.entity))
+          !this.isEntityType(entity.type, event.validateOptions.entity)
       ) return;
 
       const instances = container.resolveAll<constructor<any>>(event.targetName);
