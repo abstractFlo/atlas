@@ -63,7 +63,6 @@ export class DiscordApiProvider {
       client_id: this.config.client_id,
       redirect_uri: encodeURI(`${this.config.redirect_url}/auth/discord`),
       state
-
     });
   }
 
