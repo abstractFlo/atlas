@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-server",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "description": "",
   "keywords": [],
   "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
@@ -34,7 +34,7 @@
     "@types/sjcl": "^1.0.29"
   },
   "dependencies": {
-    "@abstractflo/atlas-shared": "^2.1.8",
+    "@abstractflo/atlas-shared": "^2.1.9",
     "@altv/types-server": "^1.7.6",
     "@overnightjs/core": "^1.7.5",
     "axios": "^0.21.1",
