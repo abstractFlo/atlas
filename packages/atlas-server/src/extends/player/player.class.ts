@@ -38,7 +38,7 @@ export class PlayerClass extends Player implements PlayerInterface {
    * @param args
    */
   public emitGuiNextTick(eventName: string, ...args: any[]): void {
-    UtilsService.setTimeout(() => this.emitGui(eventName, args), 25);
+    UtilsService.setTimeout(() => this.emitGui(eventName, ...args), 25);
   }
 
   /**
@@ -48,7 +48,7 @@ export class PlayerClass extends Player implements PlayerInterface {
    * @param args
    */
   public guiRouteTo(routeName: string, ...args: any[]): void {
-    this.emit(FrameworkEvent.EventService.GuiChangeRoute, routeName, args);
+    this.emit(FrameworkEvent.EventService.GuiChangeRoute, routeName, ...args);
   }
 
   /**
