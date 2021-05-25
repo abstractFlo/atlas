@@ -8,6 +8,7 @@ import convertNamedImports from './transform';
 import { GameResourceInterface } from '../interfaces/game-resource.interface';
 import path from 'path';
 import { config } from 'dotenv';
+import json from '@rollup/plugin-json';
 
 config();
 
@@ -119,10 +120,11 @@ export class ConfigBuilder {
         file: output,
         format: 'esm',
         preserveModules: false,
-        inlineDynamicImports:  true
+        inlineDynamicImports: true
       },
       external,
       plugins: [
+        json(),
         nodeResolve({
           dedupe: [
             'alt-server',
