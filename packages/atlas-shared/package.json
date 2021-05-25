@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-shared",
-  "version": "2.1.10",
+  "version": "2.1.11",
   "description": "",
   "keywords": [],
   "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
@@ -32,10 +32,10 @@
   },
   "dependencies": {
     "@abraham/reflection": "^0.8.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-multi-entry": "^4.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-typescript": "^8.2.1",
-    "@rollup/plugin-json": "^4.1.0",
     "dotenv": "^9.0.2",
     "fs-extra": "^10.0.0",
     "jscodeshift": "^0.12.0",
