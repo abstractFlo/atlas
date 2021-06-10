@@ -21,7 +21,7 @@
   "peerDependencies": {
     "@abraham/reflection": "^0.8.0",
     "@altv/types-server": "^1.7.6",
-    "rxjs": "^7.0.1",
+    "rxjs": "^6.6.7",
     "tsyringe": "^4.5.0",
     "typeorm": "^0.2.32"
   },
@@ -44,9 +44,9 @@
     "dotenv": "^9.0.2",
     "fs-extra": "^10.0.0",
     "lodash": "^4.17.21",
-    "rxjs": "^6.6.7",
     "sjcl": "^1.0.8",
     "tsyringe": "^4.5.0",
-    "typeorm": "^0.2.32"
+    "typeorm": "^0.2.32",
+    "rxjs": "^6.6.7"
   }
 }

@@ -1,0 +1,8 @@
+node_modules/
+**/dist/
+**/docs/
+**/build/
+**/*.d.ts
+**/helpers.js
+**/resource-manager.js
+**/dts-generator.cjs

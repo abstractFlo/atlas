@@ -6,20 +6,18 @@ import { Client } from 'discord.js';
 import { DiscordEnum } from '../constants/discord.constant';
 import { DiscordEventModel } from '../models/discord-event.model';
 
-
 @singleton()
 export class DiscordBotService {
-
-  private config: DiscordConfigModel = this.discordConfigService.config;
-  private client: Client = new Client(this.config.presences);
+  private config: DiscordConfigModel;
+  private client: Client;
   private eventModels: DiscordEventModel[] = [];
   private listeners: Map<string, DiscordEventModel[]> = new Map<string, DiscordEventModel[]>();
-  private connected: boolean = false;
+  private connected = false;
 
-  constructor(
-      private readonly discordConfigService: DiscordConfigService
-  ) {}
-
+  public constructor(private readonly discordConfigService: DiscordConfigService) {
+    this.config = this.discordConfigService.config;
+    this.client = new Client(this.config.presences);
+  }
 
   /**
    * Connect the discord bot

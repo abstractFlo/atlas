@@ -7,37 +7,33 @@ export default [
     input: ['src/index.ts'],
     output: {
       dir: 'dist',
-      format: 'esm',
+      format: 'esm'
     },
-    plugins: [
-      typescript(),
-    ],
+    plugins: [typescript()],
     external: [
       'alt-server',
       'rxjs/operators',
       ...builtinModules,
       ...Object.keys(pkg.devDependencies || {}),
       ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {}),
-    ],
+      ...Object.keys(pkg.peerDependencies || {})
+    ]
   },
 
   {
     input: ['src/helpers.ts'],
     output: {
       dir: './',
-      format: 'esm',
+      format: 'esm'
     },
-    plugins: [
-      typescript(),
-    ],
+    plugins: [typescript()],
     external: [
       'alt-server',
       'rxjs/operators',
       ...builtinModules,
       ...Object.keys(pkg.devDependencies || {}),
       ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {}),
-    ],
-  },
+      ...Object.keys(pkg.peerDependencies || {})
+    ]
+  }
 ];

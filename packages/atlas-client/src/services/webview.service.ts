@@ -13,7 +13,6 @@ import { EventService } from './event.service';
 @AutoloadAfter({ methodName: 'load', doneCheckTimeout: 1000 * 10 })
 @singleton()
 export class WebviewService {
-
   /**
    * Contains all webview events
    *
@@ -43,7 +42,7 @@ export class WebviewService {
    * @type {number}
    * @private
    */
-  private cursorCount: number = 0;
+  private cursorCount = 0;
 
   /**
    * The event name for sending from webview to server
@@ -71,9 +70,7 @@ export class WebviewService {
    */
   private doneCallback: CallableFunction;
 
-  constructor(
-      private readonly eventService: EventService
-  ) {}
+  public constructor(private readonly eventService: EventService) {}
 
   /**
    * Emit the route change to webview
@@ -100,7 +97,7 @@ export class WebviewService {
    */
   public showCursor(): WebviewService {
     showCursor(true);
-    this.cursorCount = this.cursorCount + 1;
+    this.cursorCount += 1;
 
     return this;
   }
@@ -111,7 +108,7 @@ export class WebviewService {
   public removeCursor(): WebviewService {
     if (this.cursorCount > 0) {
       showCursor(false);
-      this.cursorCount = this.cursorCount - 1;
+      this.cursorCount -= 1;
     }
 
     return this;
@@ -198,9 +195,9 @@ export class WebviewService {
    */
   private setupEvents(): void {
     this.eventService.resolveAndLoadEvents(
-        [EventEnum.ON_GUI],
-        'WebViewEvents',
-        (events: EventModel[]) => this.events = events
+      [EventEnum.ON_GUI],
+      'WebViewEvents',
+      (events: EventModel[]) => (this.events = events)
     );
   }
 
@@ -239,7 +236,6 @@ export class WebviewService {
       });
     });
   }
-
 
   /**
    * Listen all events
@@ -286,5 +282,4 @@ export class WebviewService {
       });
     });
   }
-
 }

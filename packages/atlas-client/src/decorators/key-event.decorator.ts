@@ -15,7 +15,7 @@ import {
  * @constructor
  */
 export const KeyUp = (key: number | string): MethodDecorator => {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     registerKeyEvent(key, target, propertyKey, 'keyup', EventEnum.KEY_UP);
     return registerDescriptor(descriptor);
   };
@@ -29,7 +29,7 @@ export const KeyUp = (key: number | string): MethodDecorator => {
  * @constructor
  */
 export const KeyDown = (key: number | string): MethodDecorator => {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     registerKeyEvent(key, target, propertyKey, 'keydown', EventEnum.KEY_DOWN);
     return registerDescriptor(descriptor);
   };
@@ -39,12 +39,18 @@ export const KeyDown = (key: number | string): MethodDecorator => {
  * Helper for key event register
  *
  * @param {string | number} key
- * @param {Object} target
+ * @param {unknown} target
  * @param {string} propertyKey
  * @param {string} type
  * @param {string} metaDataKey
  */
-function registerKeyEvent(key: string | number, target: Object, propertyKey: string, type: 'keyup' | 'keydown', metaDataKey: string): void {
+function registerKeyEvent(
+  key: string | number,
+  target: unknown,
+  propertyKey: string,
+  type: 'keyup' | 'keydown',
+  metaDataKey: string
+): void {
   const keyValue = typeof key === 'string' ? key.charCodeAt(0) : key;
   const events = getAtlasMetaData<EventModel[]>(metaDataKey, eventServiceTarget());
   const alreadyExists = events.find((event: EventModel) => event.validateOptions.keyboardKey === keyValue);
@@ -59,5 +65,4 @@ function registerKeyEvent(key: string | number, target: Object, propertyKey: str
       }
     });
   }
-
 }

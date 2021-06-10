@@ -2,29 +2,29 @@ import { Cast, castToBoolean, castToNumber, castToString, JsonEntityModel } from
 
 export class DiscordUserModel extends JsonEntityModel {
   @Cast({ from: castToString() })
-  id: string;
+  public id: string;
 
   @Cast({ from: castToString() })
-  username: string;
+  public username: string;
 
   @Cast({ from: castToString() })
-  avatar: string;
+  public avatar: string;
 
   @Cast({ from: castToString() })
-  discriminator: string;
+  public discriminator: string;
 
   @Cast({ from: castToNumber() })
-  public_flags: number;
+  public public_flags: number;
 
   @Cast({ from: castToNumber() })
-  flags: number;
+  public flags: number;
 
   @Cast({ from: castToString() })
-  locale: string;
+  public locale: string;
 
   @Cast({ from: castToBoolean() })
-  mfa_enabled: boolean;
+  public mfa_enabled: boolean;
 
   @Cast({ from: castToString() })
-  avatarUrl: string = '/images/128.jpg';
+  public avatarUrl = '/images/128.jpg';
 }

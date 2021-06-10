@@ -30,7 +30,7 @@ export class DatabaseService {
    * @type {boolean}
    * @private
    */
-  private connected: boolean = false;
+  private connected = false;
 
   /**
    * Setup all entities getting from reflection
@@ -56,7 +56,6 @@ export class DatabaseService {
       UtilsService.logError(`Can't connect to database, do you have setup it correctly inside .env?`);
       throw new Error(e);
     }
-
   }
 
   /**

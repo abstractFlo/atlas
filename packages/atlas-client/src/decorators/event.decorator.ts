@@ -9,7 +9,7 @@ import { BaseObjectType } from 'alt-client';
  * @constructor
  */
 export const OnServer = (name?: string): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ON_SERVER, {
@@ -34,7 +34,7 @@ export const OnServer = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const OnceServer = (name?: string): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ONCE_SERVER, {
@@ -59,7 +59,7 @@ export const OnceServer = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const OnGui = (name?: string): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ON_GUI, {
@@ -84,7 +84,7 @@ export const OnGui = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     setEventServiceReflectMetaData(EventEnum.GAME_ENTITY_CREATE, {
       type: 'gameEntityCreate',
       methodName: propertyKey,
@@ -106,7 +106,7 @@ export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator =>
  * @constructor
  */
 export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     setEventServiceReflectMetaData(EventEnum.GAME_ENTITY_DESTROY, {
       type: 'gameEntityCreate',
       methodName: propertyKey,
@@ -129,7 +129,7 @@ export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator =
  * @constructor
  */
 export const StreamSyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     setEventServiceReflectMetaData(EventEnum.STREAM_SYNCED_META_CHANGE, {
       type: 'streamSyncedMetaChange',
       methodName: propertyKey,
@@ -153,7 +153,7 @@ export const StreamSyncedMetaChange = (entityType: BaseObjectType, metaKey?: str
  * @constructor
  */
 export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     setEventServiceReflectMetaData(EventEnum.SYNCED_META_CHANGE, {
       type: 'syncedMetaChange',
       methodName: propertyKey,

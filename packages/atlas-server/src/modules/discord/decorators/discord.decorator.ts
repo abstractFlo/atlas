@@ -13,7 +13,7 @@ import { DiscordBotService } from '../services/discord-bot.service';
  * @constructor
  */
 export const OnDiscord = <K extends keyof ClientEvents>(name?: K): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) => {
     const eventName = name || propertyKey;
     const baseTarget = container.resolve(DiscordBotService);
     const discordEventModels = getAtlasMetaData<DiscordEventModel[]>(DiscordEnum.ON_DISCORD, baseTarget);
@@ -28,6 +28,5 @@ export const OnDiscord = <K extends keyof ClientEvents>(name?: K): MethodDecorat
     Reflect.defineMetadata(DiscordEnum.ON_DISCORD, discordEventModels, baseTarget);
 
     return registerDescriptor(descriptor);
-
   };
 };

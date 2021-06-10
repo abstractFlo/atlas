@@ -20,6 +20,5 @@ export const AutoAdd = () => {
 
     entities.push(target);
     Reflect.defineMetadata(DatabaseEnums.ENTITY_ADD, entities, dbService);
-
   };
 };

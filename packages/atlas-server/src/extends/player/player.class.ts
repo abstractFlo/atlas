@@ -8,7 +8,6 @@ import { EventService } from '../../services/event.service';
  * Extend Player with more methods and properties
  */
 export class PlayerClass extends Player implements PlayerInterface {
-
   /**
    * Emit event directly to current player
    *
@@ -92,17 +91,15 @@ export class PlayerClass extends Player implements PlayerInterface {
    * @param {Date} date
    */
   public setRealTime(date: Date): void {
-
     this.setDateTime(
-        date.getDate() as DateTimeDay,
-        date.getMonth() as DateTimeMonth,
-        date.getFullYear(),
-        date.getHours() as DateTimeHour,
-        date.getMinutes() as DateTimeMinute,
-        date.getSeconds() as DateTimeSecond
+      date.getDate() as DateTimeDay,
+      date.getMonth() as DateTimeMonth,
+      date.getFullYear(),
+      date.getHours() as DateTimeHour,
+      date.getMinutes() as DateTimeMinute,
+      date.getSeconds() as DateTimeSecond
     );
 
     this.emit(FrameworkEvent.Player.SetRealTime, 60000);
   }
-
 }

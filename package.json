@@ -9,7 +9,9 @@
     "build": "lerna run --parallel build",
     "generate:typings": "lerna run generate:typings",
     "clean": "rimraf packages/*/{dist,resource-manager.js,resource-manager.d.ts,helpers.js,helpers.d.ts}",
-    "publish": "lerna publish --no-git-tag-version --no-push --skip-npm --force-publish * --yes && lerna exec -- npm publish"
+    "publish": "lerna publish --no-git-tag-version --no-push --skip-npm --force-publish * --yes && lerna exec -- npm publish",
+    "format": "prettier --write packages/**/src/**/*.{ts,js}",
+    "lint": "eslint packages --ext ts --fix"
   },
   "keywords": [],
   "author": "",
@@ -22,19 +24,28 @@
     "@types/fs-extra": "^9.0.8",
     "@types/node": "^8.0.0",
     "@types/reflect-metadata": "^0.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
     "builtin-modules": "^3.2.0",
     "dts-bundle": "^0.7.3",
     "dts-bundle-generator": "^5.7.0",
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "fs-extra": "^8.1.0",
     "jscodeshift": "^0.11.0",
     "lerna": "^3.22.1",
     "npm-run-all": "^4.1.5",
-    "reflect-metadata": "^0.1.13",
+    "prettier": "^2.3.1",
+    "pretty-quick": "^3.1.0",
+    "reflect-metadata": "^0.1.rxj",
     "rimraf": "^2.7.1",
     "rollup": "^2.39.1",
     "rollup-plugin-typescript2": "^0.30.0",
     "tsyringe": "^4.4.0",
     "typeorm": "^0.2.31",
     "typescript": "^4.2.2"
+  },
+  "lint-staged": {
+    "*.{ts}": "eslint --fix --ext ts"
   }
 }

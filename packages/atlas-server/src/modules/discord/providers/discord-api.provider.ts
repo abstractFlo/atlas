@@ -5,18 +5,17 @@ import { DiscordConfigModel } from '../models/discord-config.model';
 
 @singleton()
 export class DiscordApiProvider {
-
   /**
    * Contains the discord config model
    *
    * @type {DiscordConfigModel}
    * @private
    */
-  private config: DiscordConfigModel = this.discordConfigService.config;
+  private config: DiscordConfigModel;
 
-  constructor(
-      private readonly discordConfigService: DiscordConfigService
-  ) {}
+  public constructor(private readonly discordConfigService: DiscordConfigService) {
+    this.config = this.discordConfigService.config;
+  }
 
   /**
    * Return the auth url
@@ -46,7 +45,6 @@ export class DiscordApiProvider {
       redirect_uri: encodeURI(`${this.config.redirect_url}/auth/discord`)
     });
   }
-
 
   /**
    * Return the auth url params

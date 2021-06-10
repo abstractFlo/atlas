@@ -1,32 +1,30 @@
 import { Cast, castToString, JsonEntityModel } from '@abstractflo/atlas-shared';
 
 export class DiscordConfigModel extends JsonEntityModel {
+  @Cast({ from: castToString() })
+  public client_id: string;
 
   @Cast({ from: castToString() })
-  client_id: string;
+  public client_secret: string;
 
   @Cast({ from: castToString() })
-  client_secret: string;
+  public bot_secret: string;
 
   @Cast({ from: castToString() })
-  bot_secret: string;
+  public server_id: string;
 
   @Cast({ from: castToString() })
-  server_id: string;
+  public redirect_url: string;
 
   @Cast({ from: castToString() })
-  redirect_url: string;
+  public auth_url: string;
 
   @Cast({ from: castToString() })
-  auth_url: string;
+  public auth_token_url: string;
 
   @Cast({ from: castToString() })
-  auth_token_url: string;
-
-  @Cast({ from: castToString() })
-  user_me_url: string;
+  public user_me_url: string;
 
   @Cast()
-  presences: Object;
-
+  public presences: unknown;
 }

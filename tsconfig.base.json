@@ -1,20 +1,12 @@
 {
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "skipLibCheck": false,
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": [
-      "es6",
-      "esnext"
-    ],
-    "typeRoots": [
-      "./node_modules/@altv"
-    ],
+    "lib": ["es6", "esnext"],
+    "typeRoots": ["./node_modules/@altv"],
     "rootDir": ".",
     "outDir": "dist",
     "strict": false,
@@ -33,12 +25,8 @@
     "allowJs": true,
     "baseUrl": "./",
     "paths": {
-      "@abstractflo/atlas-shared": [
-        "packages/atlas-shared/src"
-      ],
-      "@abstractflo/atlas-shared/helpers": [
-        "packages/atlas-shared/src/helpers"
-      ]
+      "@abstractflo/atlas-shared": ["packages/atlas-shared/src"],
+      "@abstractflo/atlas-shared/helpers": ["packages/atlas-shared/src/helpers"]
     },
     "declaration": false,
     "declarationMap": false,

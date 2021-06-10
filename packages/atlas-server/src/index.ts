@@ -22,5 +22,3 @@ export { ColShapeInterface } from './extends/colshape/col-shape.interface';
 export { PlayerInterface } from './extends/player/player.interface';
 
 export { OnDiscord, DiscordApiService, DiscordBotService, DiscordUserModel } from './modules/discord';
-
-

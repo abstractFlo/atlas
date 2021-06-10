@@ -8,4 +8,4 @@ declare module 'alt-server' {
 
 Player.prototype = new PlayerClass();
 
-export default {}
+export default {};

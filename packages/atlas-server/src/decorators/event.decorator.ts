@@ -9,7 +9,7 @@ import { BaseObjectType, ColShapeType } from 'alt-server';
  * @constructor
  */
 export const OnClient = (name?: string): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ON_CLIENT, {
@@ -34,7 +34,7 @@ export const OnClient = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const OnceClient = (name?: string): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ONCE_CLIENT, {
@@ -60,7 +60,7 @@ export const OnceClient = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     setEventServiceReflectMetaData(EventEnum.SYNCED_META_CHANGE, {
       type: 'syncedMetaChange',
       methodName: propertyKey,
@@ -84,8 +84,12 @@ export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): 
  * @return {MethodDecorator}
  * @constructor
  */
-export const EntityEnterColShape = (colShapeType: ColShapeType, name?: string, entity?: BaseObjectType): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+export const EntityEnterColShape = (
+  colShapeType: ColShapeType,
+  name?: string,
+  entity?: BaseObjectType
+): MethodDecorator => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ENTITY_ENTER_COLSHAPE, {
@@ -113,8 +117,12 @@ export const EntityEnterColShape = (colShapeType: ColShapeType, name?: string, e
  * @return {MethodDecorator}
  * @constructor
  */
-export const EntityLeaveColShape = (colShapeType: ColShapeType, name?: string, entity?: BaseObjectType): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+export const EntityLeaveColShape = (
+  colShapeType: ColShapeType,
+  name?: string,
+  entity?: BaseObjectType
+): MethodDecorator => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ENTITY_LEAVE_COLSHAPE, {

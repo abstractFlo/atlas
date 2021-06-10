@@ -1,13 +1,12 @@
 import { Cast, castToString, JsonEntityModel } from '@abstractflo/atlas-shared';
 
 export class DiscordEventModel extends JsonEntityModel {
+  @Cast({ from: castToString() })
+  public eventName: string;
 
   @Cast({ from: castToString() })
-  eventName: string;
+  public targetName: string;
 
   @Cast({ from: castToString() })
-  targetName: string;
-
-  @Cast({ from: castToString() })
-  methodName: string;
+  public methodName: string;
 }

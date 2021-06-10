@@ -8,7 +8,7 @@ module.exports = {
       filePath: './src/index.ts',
       outFile: './dist/index.d.ts',
       output: {
-        inlineDeclareGlobals:false,
+        inlineDeclareGlobals: false,
         sortNodes: true,
         inlineDeclareExternals: true
       }
@@ -16,6 +16,6 @@ module.exports = {
     {
       filePath: './src/helpers.ts',
       outFile: './helpers.d.ts'
-    },
-  ],
+    }
+  ]
 };
