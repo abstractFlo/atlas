@@ -23,7 +23,7 @@ export function castToBoolean(trueValue: any = '1') {
  * @returns {(v: any) => string}
  */
 export function castBooleanToString(trueValue: any = '1', falseValue: any = '0') {
-  return (v: any): string => (true === v ? trueValue : falseValue);
+  return (v: any): string => (v === true ? trueValue : falseValue);
 }
 
 /**
@@ -53,7 +53,7 @@ export function castToNumber(keepNull = true) {
  * @return {(v: any) => (object | null)}
  */
 export function castFromJson(keepNull = true) {
-  return (v: any): object | null => {
+  return (v: any): Record<string, unknown> | null => {
     if (keepNull && v === null) {
       return null;
     }

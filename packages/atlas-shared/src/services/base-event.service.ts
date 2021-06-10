@@ -10,7 +10,6 @@ import { constructor } from '../types/constructor';
 
 @singleton()
 export class BaseEventService implements EventServiceInterface {
-
   /**
    * Contains all events where first param is an entity
    *
@@ -30,10 +29,7 @@ export class BaseEventService implements EventServiceInterface {
    * @type {string[]}
    * @protected
    */
-  protected colShapeEvents: string[] = [
-    EventEnum.ENTITY_ENTER_COLSHAPE,
-    EventEnum.ENTITY_LEAVE_COLSHAPE
-  ];
+  protected colShapeEvents: string[] = [EventEnum.ENTITY_ENTER_COLSHAPE, EventEnum.ENTITY_LEAVE_COLSHAPE];
 
   /**
    * Contains all base event keys
@@ -50,9 +46,7 @@ export class BaseEventService implements EventServiceInterface {
     EventEnum.ONCE_SERVER
   ];
 
-  constructor(
-      protected readonly commandService: CommandService
-  ) {}
+  public constructor(protected readonly commandService: CommandService) {}
 
   /**
    * Emit event server/client
@@ -138,27 +132,19 @@ export class BaseEventService implements EventServiceInterface {
    */
   protected startEventListeners(): void {
     UtilsService.nextTick(() => {
-      this.resolveAndLoadEvents(
-          this.baseEvents,
-          'BaseEvents',
-          this.startBaseMethod.bind(this)
-      );
+      this.resolveAndLoadEvents(this.baseEvents, 'BaseEvents', this.startBaseMethod.bind(this));
     });
 
     UtilsService.nextTick(() =>
-        this.resolveAndLoadEvents(
-            this.entityChangeEvents,
-            'EntityChangeEvents',
-            this.startMetaChangeEvents.bind(this)
-        )
+      this.resolveAndLoadEvents(this.entityChangeEvents, 'EntityChangeEvents', this.startMetaChangeEvents.bind(this))
     );
 
     UtilsService.nextTick(() =>
-        this.resolveAndLoadEvents(
-            [EventEnum.CONSOLE_COMMAND],
-            'ConsoleCommandEvents',
-            this.startConsoleCommandEvents.bind(this)
-        )
+      this.resolveAndLoadEvents(
+        [EventEnum.CONSOLE_COMMAND],
+        'ConsoleCommandEvents',
+        this.startConsoleCommandEvents.bind(this)
+      )
     );
   }
 
@@ -172,7 +158,13 @@ export class BaseEventService implements EventServiceInterface {
    * @param {any} oldValue
    * @protected
    */
-  protected handleMetaChangeEvents<T extends { type: number }>(events: EventModel[], entity: T, key?: string, value?: any, oldValue?: any) {
+  protected handleMetaChangeEvents<T extends { type: number }>(
+    events: EventModel[],
+    entity: T,
+    key?: string,
+    value?: any,
+    oldValue?: any
+  ) {
     events.forEach((event: EventModel) => {
       // stop if not same type
       if (!this.isEntityType(entity.type, event.validateOptions.entity)) return;
@@ -254,9 +246,6 @@ export class BaseEventService implements EventServiceInterface {
   private startConsoleCommandEvents(events: EventModel[]): void {
     this.commandService.setupCommands(events);
 
-    this.on(
-        'consoleCommand',
-        this.commandService.run.bind(this.commandService)
-    );
+    this.on('consoleCommand', this.commandService.run.bind(this.commandService));
   }
 }

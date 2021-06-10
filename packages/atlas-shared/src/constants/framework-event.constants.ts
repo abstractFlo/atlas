@@ -10,7 +10,7 @@ export const FrameworkEvent = {
     GuiRemoveCursor: 'gui:remove:cursor',
     GuiRemoveAllCursors: 'gui:removeAll:cursor',
     GuiFocus: 'gui:focus',
-    GuiUnfocus: 'gui:unfocus',
+    GuiUnfocus: 'gui:unfocus'
   },
   Discord: {
     AuthDone: 'express:discordUser:accessDone'

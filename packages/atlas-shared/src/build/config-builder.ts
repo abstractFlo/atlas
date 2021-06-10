@@ -13,7 +13,6 @@ import json from '@rollup/plugin-json';
 config();
 
 export class ConfigBuilder {
-
   /**
    * Contains if build is production
    *
@@ -30,7 +29,11 @@ export class ConfigBuilder {
    * @param pkgJson
    * @param buildOutput
    */
-  public static serverConfig(resource: string, buildOutput: string, pkgJson: GameResourceInterface): RollupConfigInterface {
+  public static serverConfig(
+    resource: string,
+    buildOutput: string,
+    pkgJson: GameResourceInterface
+  ): RollupConfigInterface {
     const basePkgJson = ResourceAnalyzer.readPackageJson(process.cwd()) as any;
     const modulesForConvert = [
       '@abraham/reflection',
@@ -54,19 +57,16 @@ export class ConfigBuilder {
     const convertedImports = pkgJson.convert || [];
     const external = pkgJson.externals || [];
 
-    const plugins: Plugin[] = [
-      convertNamedImports([...convertedImports, ...modulesForConvert], pkgJson)
-    ];
+    const plugins: Plugin[] = [convertNamedImports([...convertedImports, ...modulesForConvert], pkgJson)];
 
     external.push('alt-server', ...modulesForConvert);
 
     return this.baseConfig(
-        path.resolve(resource, 'server', 'index.ts'),
-        path.resolve(buildOutput, 'resources', pkgJson.name, 'server.js'),
-        external,
-        plugins
+      path.resolve(resource, 'server', 'index.ts'),
+      path.resolve(buildOutput, 'resources', pkgJson.name, 'server.js'),
+      external,
+      plugins
     );
-
   }
 
   /**
@@ -77,13 +77,17 @@ export class ConfigBuilder {
    * @param buildOutput
    * @param pkgJson
    */
-  public static clientConfig(resource: string, buildOutput: string, pkgJson: GameResourceInterface): RollupConfigInterface {
+  public static clientConfig(
+    resource: string,
+    buildOutput: string,
+    pkgJson: GameResourceInterface
+  ): RollupConfigInterface {
     const external: string[] = ['alt-client', 'natives'];
     return this.baseConfig(
-        path.resolve(resource, 'client', 'index.ts'),
-        path.resolve(buildOutput, 'resources', pkgJson.name, 'client.js'),
-        external,
-        []
+      path.resolve(resource, 'client', 'index.ts'),
+      path.resolve(buildOutput, 'resources', pkgJson.name, 'client.js'),
+      external,
+      []
     );
   }
 
@@ -98,20 +102,21 @@ export class ConfigBuilder {
    * @private
    */
   private static baseConfig(
-      input: string,
-      output: string,
-      external: string[] = [],
-      plugins: Plugin[] = []
+    input: string,
+    output: string,
+    external: string[] = [],
+    plugins: Plugin[] = []
   ): RollupConfigInterface {
-
     if (this.isProduction) {
-      plugins.push(terser({
-        keep_classnames: true,
-        keep_fnames: true,
-        output: {
-          comments: false
-        }
-      }));
+      plugins.push(
+        terser({
+          keep_classnames: true,
+          keep_fnames: true,
+          output: {
+            comments: false
+          }
+        })
+      );
     }
 
     return {

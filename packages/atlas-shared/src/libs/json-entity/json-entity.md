@@ -35,7 +35,7 @@ class UserModel extends JsonEntityModel {
   @Cast({ readOnly: isNull() })
   nickname: string | null = null;
 
-  @Cast({ property: 'age', from: v => v > 18, readOnly: true })
+  @Cast({ property: 'age', from: (v) => v > 18, readOnly: true })
   isAdult: boolean;
 }
 

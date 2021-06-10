@@ -9,7 +9,6 @@ import { LoaderServiceQueueItemModel } from '../models/loader-service-queue-item
 
 @singleton()
 export class BaseLoaderService {
-
   /**
    * The subject for starting the loading system and queue
    *
@@ -72,7 +71,7 @@ export class BaseLoaderService {
    * @type {boolean}
    * @private
    */
-  private isBootstrapped: boolean = false;
+  private isBootstrapped = false;
 
   /**
    * Contains the queue item next tick id
@@ -93,40 +92,29 @@ export class BaseLoaderService {
     this.resolveMetaDataAndAdd();
 
     this.frameworkBeforeBootCount$
-        .pipe(takeLast(1))
-        .subscribe(() =>
-            this.processQueue(this.queue.before, this.queue.beforeCount)
-        );
+      .pipe(takeLast(1))
+      .subscribe(() => this.processQueue(this.queue.before, this.queue.beforeCount));
 
-    this.beforeCount$
-        .pipe(takeLast(1))
-        .subscribe(() =>
-            this.processQueue(this.queue.after, this.queue.afterCount)
-        );
+    this.beforeCount$.pipe(takeLast(1)).subscribe(() => this.processQueue(this.queue.after, this.queue.afterCount));
 
     this.afterCount$
-        .pipe(takeLast(1))
-        .subscribe(() =>
-            this.processQueue(this.queue.frameworkAfterBoot, this.queue.frameworkAfterBootCount)
-        );
+      .pipe(takeLast(1))
+      .subscribe(() => this.processQueue(this.queue.frameworkAfterBoot, this.queue.frameworkAfterBootCount));
 
-    this.frameworkAfterBootCount$
-        .pipe(takeLast(1))
-        .subscribe(() =>
-            UtilsService.nextTick(() => {
-              this.finishUpBooting(target);
-              container.resolve(target);
-            })
-        );
+    this.frameworkAfterBootCount$.pipe(takeLast(1)).subscribe(() =>
+      UtilsService.nextTick(() => {
+        this.finishUpBooting(target);
+        container.resolve(target);
+      })
+    );
 
     this.startingSubject$
-        .asObservable()
-        .pipe(
-            takeLast(1),
-            filter((value: boolean) => value)
-        )
-        .subscribe(() => this.processQueue(this.queue.frameworkBeforeBoot, this.queue.frameworkBeforeBootCount));
-
+      .asObservable()
+      .pipe(
+        takeLast(1),
+        filter((value: boolean) => value)
+      )
+      .subscribe(() => this.processQueue(this.queue.frameworkBeforeBoot, this.queue.frameworkBeforeBootCount));
 
     this.setupQueueCounts();
     this.startLoading();
@@ -143,9 +131,9 @@ export class BaseLoaderService {
    */
   public done(callback: (...args: any[]) => void): void {
     this.finishSubject$
-        .asObservable()
-        .pipe(filter((isFinished: boolean) => isFinished))
-        .subscribe(callback);
+      .asObservable()
+      .pipe(filter((isFinished: boolean) => isFinished))
+      .subscribe(callback);
   }
 
   /**
@@ -153,7 +141,9 @@ export class BaseLoaderService {
    *
    * @private
    */
-  protected startLoading(): void {}
+  protected startLoading(): void {
+    // code
+  }
 
   /**
    * Done callback handler for all queue decorated methods
@@ -165,12 +155,11 @@ export class BaseLoaderService {
    * @private
    */
   private doneCallback(
-      property: Map<string, LoaderServiceQueueItemModel>,
-      propertyCount: Subject<number>,
-      key: string | null = null,
-      doneCheckIntervalId?: number
+    property: Map<string, LoaderServiceQueueItemModel>,
+    propertyCount: Subject<number>,
+    key: string | null = null,
+    doneCheckIntervalId?: number
   ): void {
-
     if (this.currentNextTick) {
       UtilsService.clearNextTick(this.currentNextTick);
       this.currentNextTick = null;
@@ -203,8 +192,8 @@ export class BaseLoaderService {
       this.currentNextTick = UtilsService.nextTick(() => this.doneCallback(property, propertyCount));
     } else {
       propertyCount
-          .pipe(filter((size: number) => size !== 0))
-          .subscribe(() => this.processQueueItem(property, propertyCount));
+        .pipe(filter((size: number) => size !== 0))
+        .subscribe(() => this.processQueueItem(property, propertyCount));
 
       this.processQueueItem(property, propertyCount);
     }
@@ -251,10 +240,7 @@ export class BaseLoaderService {
    * @param {LoaderServiceQueueItemModel} queueItem
    */
   private add(queueItem: LoaderServiceQueueItemModel): void {
-
-    const targetName = typeof queueItem.target === 'string'
-        ? queueItem.target
-        : queueItem.target.name;
+    const targetName = typeof queueItem.target === 'string' ? queueItem.target : queueItem.target.name;
 
     const identifier = `${targetName}_${queueItem.methodName}`;
 
@@ -269,8 +255,8 @@ export class BaseLoaderService {
    */
   private resolveMetaDataAndAdd(): void {
     const queueItems = getAtlasMetaData<LoaderServiceQueueItemModel[]>(
-        LoaderServiceEnum.QUEUE_ITEM,
-        container.resolve(BaseLoaderService)
+      LoaderServiceEnum.QUEUE_ITEM,
+      container.resolve(BaseLoaderService)
     );
 
     queueItems.forEach((queueItem: LoaderServiceQueueItemModel) => this.add(queueItem));
@@ -298,8 +284,12 @@ export class BaseLoaderService {
    * @private
    */
   private setupDoneTimeout(moduleName: string, method: string, timeoutDuration: number, timeoutId: number) {
-    UtilsService.log(`~lb~[Module: ${moduleName}]~y~{Method: ${method}}~w~ - ~r~Have you maybe forgotten the done callback?~w~`);
-    UtilsService.log(`~y~If not, increase decorator runtime parameter ~w~[yours: ${timeoutDuration}ms] ~lg~[default: 5000ms] ~w~`);
+    UtilsService.log(
+      `~lb~[Module: ${moduleName}]~y~{Method: ${method}}~w~ - ~r~Have you maybe forgotten the done callback?~w~`
+    );
+    UtilsService.log(
+      `~y~If not, increase decorator runtime parameter ~w~[yours: ${timeoutDuration}ms] ~lg~[default: 5000ms] ~w~`
+    );
     UtilsService.clearInterval(timeoutId);
   }
 
@@ -310,11 +300,15 @@ export class BaseLoaderService {
    * @private
    */
   private finishUpBooting(target: InjectionToken) {
-    container.afterResolution(target, () => {
-      UtilsService.nextTick(() => {
-        this.finishSubject$.next(true);
-        this.finishSubject$.complete();
-      });
-    }, { frequency: 'Once' });
+    container.afterResolution(
+      target,
+      () => {
+        UtilsService.nextTick(() => {
+          this.finishSubject$.next(true);
+          this.finishSubject$.complete();
+        });
+      },
+      { frequency: 'Once' }
+    );
   }
 }

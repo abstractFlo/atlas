@@ -1,6 +1,6 @@
 module.exports = {
   compilationOptions: {
-    preferredConfigPath: './tsconfig.typings.json',
+    preferredConfigPath: './tsconfig.typings.json'
   },
   entries: [
     {
@@ -9,16 +9,16 @@ module.exports = {
       output: {
         inlineDeclareGlobals: false,
         sortNodes: true,
-        inlineDeclareExternals: true,
-      },
+        inlineDeclareExternals: true
+      }
     },
     {
       filePath: './src/build/resource-manager.ts',
-      outFile: './resource-manager.d.ts',
+      outFile: './resource-manager.d.ts'
     },
     {
       filePath: './src/helpers.ts',
-      outFile: './helpers.d.ts',
-    },
-  ],
+      outFile: './helpers.d.ts'
+    }
+  ]
 };

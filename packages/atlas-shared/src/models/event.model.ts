@@ -2,37 +2,35 @@ import { Cast, castToString, HasOne, JsonEntityModel } from '../libs/json-entity
 import { ValidateOptionsModel } from './validate-options.model';
 
 export class EventModel extends JsonEntityModel {
+  @Cast({ from: castToString() })
+  public type:
+    | 'on'
+    | 'once'
+    | 'onClient'
+    | 'onceClient'
+    | 'onServer'
+    | 'onceServer'
+    | 'onGui'
+    | 'syncedMetaChange'
+    | 'streamSyncedMetaChange'
+    | 'gameEntityCreate'
+    | 'gameEntityDestroy'
+    | 'entityEnterColshape'
+    | 'entityLeaveColshape'
+    | 'consoleCommand'
+    | 'keyup'
+    | 'keydown';
 
   @Cast({ from: castToString() })
-  type:
-      'on' |
-      'once' |
-      'onClient' |
-      'onceClient' |
-      'onServer' |
-      'onceServer' |
-      'onGui' |
-      'syncedMetaChange' |
-      'streamSyncedMetaChange' |
-      'gameEntityCreate' |
-      'gameEntityDestroy' |
-      'entityEnterColshape' |
-      'entityLeaveColshape' |
-      'consoleCommand' |
-      'keyup' |
-      'keydown';
+  public eventName: string;
 
   @Cast({ from: castToString() })
-  eventName: string;
+  public methodName: string;
 
   @Cast({ from: castToString() })
-  methodName: string;
-
-  @Cast({ from: castToString() })
-  targetName: string;
+  public targetName: string;
 
   @HasOne(ValidateOptionsModel)
   @Cast()
-  validateOptions: Partial<ValidateOptionsModel>;
-
+  public validateOptions: Partial<ValidateOptionsModel>;
 }

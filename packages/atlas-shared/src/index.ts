@@ -42,4 +42,3 @@ export {
   HasMany,
   Cast
 } from './libs/json-entity';
-

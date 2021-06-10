@@ -7,7 +7,6 @@ import { constructor } from '../types/constructor';
 @AutoloadAfter({ methodName: 'load' })
 @singleton()
 export class ModuleLoaderService {
-
   /**
    * Load all needed imports and components
    *

@@ -1,13 +1,13 @@
-import {KEYS} from '../json-entity.constants';
+import { KEYS } from '../json-entity.constants';
 
 export type CastCallback = (currentValue: any, jsonObject: any) => any;
 
 export interface CastConfig {
-    property?: string;
-    from?: CastCallback;
-    to?: CastCallback;
-    readOnly?: CastCallback | boolean;
-    trim?: boolean; // default:true
+  property?: string;
+  from?: CastCallback;
+  to?: CastCallback;
+  readOnly?: CastCallback | boolean;
+  trim?: boolean; // default:true
 }
 
 /**
@@ -16,15 +16,16 @@ export interface CastConfig {
  * @returns {(t: any, p: (string)) => void}
  * @constructor
  */
-export function Cast(config: CastConfig = {trim: true}): (t: any, p: string | symbol) => void {
-    return function (target: any, propertyKey: string): void {
-        config.property = config.property || (propertyKey as string);
-        config.trim = false !== config.trim;
+export function Cast(config: CastConfig = { trim: true }): (t: any, p: string | symbol) => void {
+  return (target: any, propertyKey: string): void => {
+    config.property = config.property || (propertyKey as string);
+    // eslint-disable-next-line no-self-assign
+    config.trim = config.trim;
 
-        const propertiesConfig: { [key: string]: any } = Reflect.getMetadata(KEYS.CONFIG, target) || {};
+    const propertiesConfig: { [key: string]: any } = Reflect.getMetadata(KEYS.CONFIG, target) || {};
 
-        propertiesConfig[propertyKey] = config;
+    propertiesConfig[propertyKey] = config;
 
-        Reflect.defineMetadata(KEYS.CONFIG, propertiesConfig, target);
-    };
+    Reflect.defineMetadata(KEYS.CONFIG, propertiesConfig, target);
+  };
 }

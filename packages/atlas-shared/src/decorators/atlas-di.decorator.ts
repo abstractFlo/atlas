@@ -8,8 +8,8 @@ import { constructor } from '../types/constructor';
  * Interface for all module decorator options
  */
 export interface ModuleOptionsDecoratorInterface {
-  imports?: constructor<any>[],
-  components?: constructor<any>[],
+  imports?: constructor<any>[];
+  components?: constructor<any>[];
 }
 
 /**
@@ -25,20 +25,21 @@ export function Module(options?: ModuleOptionsDecoratorInterface): (targetConstr
 
     if (options.components) {
       options.components.forEach((component: constructor<any>) =>
-          addMetaData(ModuleLoaderEnum.COMPONENTS, component, moduleLoaderService));
+        addMetaData(ModuleLoaderEnum.COMPONENTS, component, moduleLoaderService)
+      );
     }
 
     if (options.imports) {
       options.imports.forEach((importedModule: constructor<any>) =>
-          addMetaData(ModuleLoaderEnum.IMPORTS, importedModule, moduleLoaderService));
+        addMetaData(ModuleLoaderEnum.IMPORTS, importedModule, moduleLoaderService)
+      );
     }
   }
 
-  return function (targetConstructor: constructor<any>) {
+  return (targetConstructor: constructor<any>) => {
     registerAsSingletonAndString(targetConstructor);
   };
 }
-
 
 /**
  * Register component decorator for singleton and stringed version
@@ -47,7 +48,7 @@ export function Module(options?: ModuleOptionsDecoratorInterface): (targetConstr
  * @constructor
  */
 export function Component(): (targetConstructor: constructor<any>) => void {
-  return function (targetConstructor: constructor<any>) {
+  return (targetConstructor: constructor<any>) => {
     registerAsSingletonAndString(targetConstructor);
   };
 }
@@ -82,4 +83,3 @@ function addMetaData(key: string, newProperty: constructor<any>, target: any): v
 
   Reflect.defineMetadata<constructor<any>[]>(key, properties, target);
 }
-

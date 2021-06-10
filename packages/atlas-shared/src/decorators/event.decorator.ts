@@ -13,7 +13,7 @@ import { BaseEventService } from '../services/base-event.service';
  * @constructor
  */
 export const On = (name?: string): MethodDecorator => {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ON, {
@@ -38,7 +38,7 @@ export const On = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const Once = (name?: string): MethodDecorator => {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const eventName = name || propertyKey;
 
     setEventServiceReflectMetaData(EventEnum.ONCE, {
@@ -60,7 +60,7 @@ export const Once = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const Cmd = (name?: string): MethodDecorator => {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const commandName = name || propertyKey;
     const events = getAtlasMetaData<EventModel[]>(EventEnum.CONSOLE_COMMAND, eventServiceTarget());
     const alreadyExists = events.find((event: EventModel) => event.eventName === commandName);
@@ -80,7 +80,6 @@ export const Cmd = (name?: string): MethodDecorator => {
     return registerDescriptor(descriptor);
   };
 };
-
 
 /**
  * Setup metaData

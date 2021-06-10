@@ -4,6 +4,6 @@
   "compilerOptions": {
     "outDir": "typings",
     "rootDir": "src",
-    "baseUrl": ".",
+    "baseUrl": "."
   }
 }

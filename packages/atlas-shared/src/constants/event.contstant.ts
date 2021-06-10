@@ -15,5 +15,5 @@ export enum EventEnum {
   ENTITY_LEAVE_COLSHAPE = 'atlas-shared:events:entityLeaveColShape',
   CONSOLE_COMMAND = 'atlas-shared:events:consoleCommand',
   KEY_UP = 'atlas-shared:events:keyUp',
-  KEY_DOWN = 'atlas-shared:events:keyDown',
+  KEY_DOWN = 'atlas-shared:events:keyDown'
 }

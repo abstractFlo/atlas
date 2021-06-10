@@ -8,28 +8,23 @@ import { container, instanceCachingFactory } from 'tsyringe';
 export function registerAltLib(lib: any): void {
   // Timers
   container.register<CallableFunction>('alt.setTimeout', { useFactory: instanceCachingFactory(() => lib.setTimeout) });
-  container.register<CallableFunction>(
-      'alt.clearTimeout',
-      { useFactory: instanceCachingFactory(() => lib.clearTimeout) }
-  );
+  container.register<CallableFunction>('alt.clearTimeout', {
+    useFactory: instanceCachingFactory(() => lib.clearTimeout)
+  });
   container.register<CallableFunction>('alt.nextTick', { useFactory: instanceCachingFactory(() => lib.nextTick) });
-  container.register<CallableFunction>(
-      'alt.clearNextTick',
-      { useFactory: instanceCachingFactory(() => lib.clearNextTick) }
-  );
-  container.register<CallableFunction>(
-      'alt.setInterval',
-      { useFactory: instanceCachingFactory(() => lib.setInterval) }
-  );
-  container.register<CallableFunction>(
-      'alt.clearInterval',
-      { useFactory: instanceCachingFactory(() => lib.clearInterval) }
-  );
+  container.register<CallableFunction>('alt.clearNextTick', {
+    useFactory: instanceCachingFactory(() => lib.clearNextTick)
+  });
+  container.register<CallableFunction>('alt.setInterval', {
+    useFactory: instanceCachingFactory(() => lib.setInterval)
+  });
+  container.register<CallableFunction>('alt.clearInterval', {
+    useFactory: instanceCachingFactory(() => lib.clearInterval)
+  });
   container.register<CallableFunction>('alt.everyTick', { useFactory: instanceCachingFactory(() => lib.everyTick) });
-  container.register<CallableFunction>(
-      'alt.clearEveryTick',
-      { useFactory: instanceCachingFactory(() => lib.clearEveryTick) }
-  );
+  container.register<CallableFunction>('alt.clearEveryTick', {
+    useFactory: instanceCachingFactory(() => lib.clearEveryTick)
+  });
 
   // Logs
   container.register<CallableFunction>('alt.log', { useFactory: instanceCachingFactory(() => lib.log) });

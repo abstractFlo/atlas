@@ -10,7 +10,6 @@ import { constructor } from '../types/constructor';
 @AutoloadAfter({ methodName: 'load' })
 @singleton()
 export class TimerManagerService {
-
   /**
    * Contains all timers
    *
@@ -37,7 +36,9 @@ export class TimerManagerService {
   public clearRunningTimer(timerName: string): void {
     const runningTimer = this.runningTimers.get(timerName);
 
-    if (!runningTimer) return;
+    if (!runningTimer) {
+      return;
+    }
 
     this.clearTimer(runningTimer);
     this.runningTimers.delete(timerName);
@@ -62,7 +63,11 @@ export class TimerManagerService {
    * @param {number} interval
    * @return {TimerManagerService}
    */
-  public createInterval(timerName: string, callback: CallableFunction, interval: number): TimerManagerService | void {
+  public createInterval(
+    timerName: string,
+    callback: CallableFunction,
+    interval: number
+  ): TimerManagerService | unknown {
     if (this.runningTimers.get(timerName)) {
       UtilsService.logError(`There is a timer with name ${timerName} already registered`);
       return;
@@ -81,7 +86,7 @@ export class TimerManagerService {
    * @param {Function} callback
    * @return {TimerManagerService}
    */
-  public createEveryTick(timerName: string, callback: CallableFunction): TimerManagerService | void {
+  public createEveryTick(timerName: string, callback: CallableFunction): TimerManagerService | unknown {
     if (this.runningTimers.get(timerName)) {
       UtilsService.logError(`There is a timer with name ${timerName} already registered`);
       return;
@@ -100,7 +105,7 @@ export class TimerManagerService {
    * @param {Function} callback
    * @return {TimerManagerService}
    */
-  public createNextTick(timerName: string, callback: CallableFunction): TimerManagerService | void {
+  public createNextTick(timerName: string, callback: CallableFunction): TimerManagerService | unknown {
     if (this.runningTimers.get(timerName)) {
       UtilsService.logError(`There is a timer with name ${timerName} already registered`);
       return;
@@ -120,7 +125,7 @@ export class TimerManagerService {
    * @param {number} duration
    * @return {TimerManagerService}
    */
-  public createTimeout(timerName: string, callback: CallableFunction, duration: number): TimerManagerService | void {
+  public createTimeout(timerName: string, callback: CallableFunction, duration: number): TimerManagerService | unknown {
     if (this.runningTimers.get(timerName)) {
       UtilsService.logError(`There is a timer with name ${timerName} already registered`);
       return;
@@ -140,18 +145,25 @@ export class TimerManagerService {
    */
   private clearTimer(runningTimer: RunningTimerInterface) {
     switch (runningTimer.type) {
-      case 'nextTick':
+      case 'nextTick': {
         UtilsService.clearNextTick(runningTimer.identifier);
         break;
-      case 'everyTick':
+      }
+
+      case 'everyTick': {
         UtilsService.clearEveryTick(runningTimer.identifier);
         break;
-      case 'interval':
+      }
+
+      case 'interval': {
         UtilsService.clearInterval(runningTimer.identifier);
         break;
-      case 'timeout':
+      }
+
+      case 'timeout': {
         UtilsService.clearTimeout(runningTimer.identifier);
         break;
+      }
     }
   }
 
@@ -164,18 +176,25 @@ export class TimerManagerService {
    */
   private startTimer(timer: TimerModel, callback: CallableFunction) {
     switch (timer.type) {
-      case 'timeout':
+      case 'timeout': {
         this.createTimeout(timer.identifier, callback, timer.duration);
         break;
-      case 'interval':
+      }
+
+      case 'interval': {
         this.createInterval(timer.identifier, callback, timer.duration);
         break;
-      case 'nextTick':
+      }
+
+      case 'nextTick': {
         this.createNextTick(timer.identifier, callback);
         break;
-      case 'everyTick':
+      }
+
+      case 'everyTick': {
         this.createEveryTick(timer.identifier, callback);
         break;
+      }
     }
   }
 
@@ -194,7 +213,9 @@ export class TimerManagerService {
       instances.forEach((instance: constructor<any>) => {
         const instanceMethod = instance[timer.methodName];
 
-        if (!instanceMethod) return;
+        if (!instanceMethod) {
+          return;
+        }
 
         const method = instanceMethod.bind(instance);
         this.startTimer(timer, method);

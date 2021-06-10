@@ -1,20 +1,18 @@
 import { Cast, castToNumber, castToString, JsonEntityModel } from '../libs/json-entity';
 
 export class TimerModel extends JsonEntityModel {
+  @Cast({ from: castToString() })
+  public identifier: string;
 
   @Cast({ from: castToString() })
-  identifier: string;
+  public type: 'nextTick' | 'everyTick' | 'interval' | 'timeout';
 
   @Cast({ from: castToString() })
-  type: 'nextTick' | 'everyTick' | 'interval' | 'timeout';
+  public methodName: string;
 
   @Cast({ from: castToString() })
-  methodName: string;
-
-  @Cast({ from: castToString() })
-  targetName: string;
+  public targetName: string;
 
   @Cast({ from: castToNumber() })
-  duration: number | null = null;
-
+  public duration: number | null = null;
 }

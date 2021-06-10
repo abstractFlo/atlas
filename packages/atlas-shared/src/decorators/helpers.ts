@@ -10,7 +10,7 @@ import { constructor } from '../types/constructor';
 export function registerDescriptor(descriptor: PropertyDescriptor): PropertyDescriptor {
   const original = descriptor.value;
 
-  descriptor.value = function (...args: any[]) {
+  descriptor.value = function value(...args: any[]) {
     return original.apply(this, args);
   };
 
@@ -24,7 +24,7 @@ export function registerDescriptor(descriptor: PropertyDescriptor): PropertyDesc
  * @constructor
  */
 export const StringResolver = (target: constructor<any>) => {
-  container.register(target.name, { useFactory: instanceCachingFactory(c => c.resolve(target)) });
+  container.register(target.name, { useFactory: instanceCachingFactory((c) => c.resolve(target)) });
   return target;
 };
 

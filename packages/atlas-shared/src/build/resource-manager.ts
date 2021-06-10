@@ -9,7 +9,6 @@ import { GameResourceInterface } from '../interfaces/game-resource.interface';
 config();
 
 export class ResourceManager {
-
   /**
    * Rollup Configs Array
    * @type {RollupConfigInterface[]}
@@ -59,7 +58,7 @@ export class ResourceManager {
     'server.log',
     '.docker',
     'docker',
-    'resources',
+    'resources'
   ];
 
   /**
@@ -83,7 +82,6 @@ export class ResourceManager {
    */
   private createConfigs() {
     try {
-
       const availableResources = ResourceAnalyzer.getValidResources(this.resourceFolder);
 
       availableResources.forEach((resource: string) => {
@@ -103,7 +101,6 @@ export class ResourceManager {
           this.copyAssets(resource, pkgJson);
         }
       });
-
     } catch (e) {
       console.error('There are no resources for given folder');
       console.error(this.resourceFolder);
@@ -191,9 +188,9 @@ export class ResourceManager {
 
     const filterFiles = (file: string) => !this.preserveFilesAndFolders.find((wFile: string) => file.startsWith(wFile));
     const files = fs
-        .readdirSync(this.buildOutput)
-        .filter((file: string) => filterFiles(file))
-        .map((file: string) => path.resolve(this.buildOutput, file));
+      .readdirSync(this.buildOutput)
+      .filter((file: string) => filterFiles(file))
+      .map((file: string) => path.resolve(this.buildOutput, file));
 
     files.forEach((file: string) => {
       fs.removeSync(file);
@@ -206,5 +203,3 @@ export class ResourceManager {
     console.log(`Cleanup ${this.buildOutput}`);
   }
 }
-
-

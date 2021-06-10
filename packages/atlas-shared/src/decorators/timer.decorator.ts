@@ -13,8 +13,7 @@ import { TimerModel } from '../models/timer.model';
  * @constructor
  */
 export const Interval = (name: string, duration: number): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     const timeManager = container.resolve(TimerManagerService);
     const timers: TimerModel[] = getAtlasMetaData(TimerConstants.TIMERS, timeManager, []);
 

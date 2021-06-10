@@ -1,5 +1,4 @@
 export abstract class BasePool<T, K = string | number> {
-
   /**
    * Contains the pool
    *
@@ -22,10 +21,12 @@ export abstract class BasePool<T, K = string | number> {
    *
    * @param {K} identifier
    * @param {T} entity
-   * @returns {Map<K, T> | void}
+   * @returns {Map<K, T> | any}
    */
-  public add(identifier: K, entity: T): Map<K, T> | void {
-    if (this.has(identifier)) return;
+  public add(identifier: K, entity: T): Map<K, T> | any {
+    if (this.has(identifier)) {
+      return;
+    }
 
     this.pool.set(identifier, entity);
   }
@@ -34,9 +35,9 @@ export abstract class BasePool<T, K = string | number> {
    * Return entry from pool
    *
    * @param {K} identifier
-   * @returns {void | T}
+   * @returns {T | any}
    */
-  public get(identifier: K): T | void {
+  public get(identifier: K): T | any {
     return this.pool.get(identifier);
   }
 
@@ -64,7 +65,7 @@ export abstract class BasePool<T, K = string | number> {
    *
    * @returns {K[]}
    */
-  public keysAsArray(): (K)[] {
+  public keysAsArray(): K[] {
     return Array.from(this.pool.keys());
   }
 
@@ -85,6 +86,3 @@ export abstract class BasePool<T, K = string | number> {
     this.pool.clear();
   }
 }
-
-
-

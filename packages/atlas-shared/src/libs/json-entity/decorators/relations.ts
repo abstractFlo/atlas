@@ -21,7 +21,7 @@ export interface IRelationInfo {
  * @param model ModelClass
  */
 export function HasMany(model: typeof JsonEntityModel) {
-  return function (target: any, propertyKey: string | symbol) {
+  return (target: any, propertyKey: string | symbol) => {
     const config: IRelationInfo = {
       type: RELATION.HAS_MANY,
       model
@@ -45,7 +45,7 @@ export function HasMany(model: typeof JsonEntityModel) {
  * @param model ModelClass
  */
 export function HasOne(model: typeof JsonEntityModel) {
-  return function (target: any, propertyKey: string | symbol) {
+  return (target: any, propertyKey: string | symbol) => {
     const config: IRelationInfo = {
       type: RELATION.HAS_ONE,
       model

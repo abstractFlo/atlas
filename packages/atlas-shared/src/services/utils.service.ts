@@ -2,7 +2,6 @@ import { container } from 'tsyringe';
 import { CommandService } from './command.service';
 
 export class UtilsService {
-
   /**
    * Auto clear setTimeout
    *
@@ -73,7 +72,6 @@ export class UtilsService {
       clearIntervalFn(interval);
     }, intervalDuration);
   }
-
 
   /**
    * Next tick
@@ -236,8 +234,8 @@ export class UtilsService {
    *
    * @return {boolean}
    */
-  public static isProduction(toggle: boolean = false): boolean {
-    return typeof process !== 'undefined' && process.env.ATLAS_PRODUCTION === 'true' || toggle;
+  public static isProduction(toggle = false): boolean {
+    return (typeof process !== 'undefined' && process.env.ATLAS_PRODUCTION === 'true') || toggle;
   }
 
   /**
@@ -249,5 +247,4 @@ export class UtilsService {
     const commandService = container.resolve(CommandService);
     commandService.setPrefix(prefix);
   }
-
 }

@@ -10,7 +10,7 @@ import { AutoloaderEnums } from '../constants/autoloader.constant';
  */
 export interface AutoloadOptionsInterface {
   methodName?: string;
-  doneCheckTimeout?: number
+  doneCheckTimeout?: number;
 }
 
 /**
@@ -61,7 +61,7 @@ export const AutoloadAfter = (options?: AutoloadOptionsInterface) => Autoload(Au
  * @constructor
  */
 export const Before = (doneCheckTimeout?: number): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     addLoaderMetaData({
       type: LoaderServiceQueueTypeEnum.BEFORE,
       target: target.constructor.name,
@@ -73,7 +73,6 @@ export const Before = (doneCheckTimeout?: number): MethodDecorator => {
   };
 };
 
-
 /**
  * Register @After decorator
  *
@@ -82,7 +81,7 @@ export const Before = (doneCheckTimeout?: number): MethodDecorator => {
  * @constructor
  */
 export const After = (doneCheckTimeout?: number): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
     addLoaderMetaData({
       type: LoaderServiceQueueTypeEnum.AFTER,
       target: target.constructor.name,

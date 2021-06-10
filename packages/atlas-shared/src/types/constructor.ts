@@ -1,7 +1,8 @@
 /**
  * Constructor Type
  */
-declare type constructor<T> = {
-  new(...args: any[]): T;
-};
+declare interface constructor<T> {
+  new (...args: any[]): T;
+}
+
 export { constructor };
