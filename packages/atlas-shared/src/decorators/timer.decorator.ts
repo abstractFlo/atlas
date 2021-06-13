@@ -33,3 +33,31 @@ export const Interval = (name: string, duration: number): MethodDecorator => {
     return registerDescriptor(descriptor);
   };
 };
+
+/**
+ * Create @EveryTick decorator
+ *
+ * @param {string} name
+ * @return {MethodDecorator}
+ * @constructor
+ */
+export const EveryTick = (name: string): MethodDecorator => {
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    const timeManager = container.resolve(TimerManagerService);
+    const timers: TimerModel[] = getAtlasMetaData(TimerConstants.TIMERS, timeManager, []);
+
+    const newTimer = new TimerModel().cast({
+      identifier: name,
+      type: 'everyTick',
+      targetName: target.constructor.name,
+      methodName: propertyKey
+    });
+
+    timers.push(newTimer);
+
+    Reflect.defineMetadata<TimerModel[]>(TimerConstants.TIMERS, timers, timeManager);
+
+    return registerDescriptor(descriptor);
+  }
+}
+
