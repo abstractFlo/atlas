@@ -11,7 +11,7 @@ export { ModuleLoaderEnum } from './constants/module-loader.constant';
 export { On, Once, Cmd, eventServiceTarget, setEventServiceReflectMetaData } from './decorators/event.decorator';
 export { Autoload, After, Before, AutoloadAfter, AutoloadBefore } from './decorators/loader.decorator';
 export { Module, Component } from './decorators/atlas-di.decorator';
-export { Interval } from './decorators/timer.decorator';
+export { Interval, EveryTick } from './decorators/timer.decorator';
 export { StringResolver, getAtlasMetaData, registerDescriptor } from './decorators/helpers';
 
 export { UtilsService } from './services/utils.service';
