@@ -21,7 +21,7 @@
   "peerDependencies": {
     "@abraham/reflection": "^0.8.0",
     "@altv/types-server": "^1.7.6",
-    "rxjs": "^7.0.1",
+    "rxjs": "^6.6.7",
     "tsyringe": "^4.5.0",
     "typeorm": "^0.2.32"
   },
