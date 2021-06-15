@@ -12,11 +12,13 @@ export class DiscordApiProvider {
    * @type {DiscordConfigModel}
    * @private
    */
-  private config: DiscordConfigModel = this.discordConfigService.config;
+  private config: DiscordConfigModel;
 
   constructor(
       private readonly discordConfigService: DiscordConfigService
-  ) {}
+  ) {
+    this.config = this.discordConfigService.config;
+  }
 
   /**
    * Return the auth url
