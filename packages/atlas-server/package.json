@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-server",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "description": "",
   "keywords": [],
   "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
@@ -20,33 +20,33 @@
   },
   "peerDependencies": {
     "@abraham/reflection": "^0.8.0",
-    "@altv/types-server": "^1.7.6",
-    "rxjs": "^7.0.1",
+    "@altv/types-server": "^1.8.1",
+    "rxjs": "^6.6.7",
     "tsyringe": "^4.5.0",
-    "typeorm": "^0.2.32"
+    "typeorm": "^0.2.34"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
-    "@types/express": "^4.17.11",
+    "@types/express": "^4.17.12",
     "@types/fs-extra": "^9.0.11",
-    "@types/lodash": "^4.14.169",
-    "@types/node": "^15.0.2",
+    "@types/lodash": "^4.14.170",
+    "@types/node": "^15.12.2",
     "@types/sjcl": "^1.0.29"
   },
   "dependencies": {
-    "@abstractflo/atlas-shared": "^2.1.13",
-    "@altv/types-server": "^1.7.6",
-    "@overnightjs/core": "^1.7.5",
+    "@abstractflo/atlas-shared": "^2.1.14",
+    "@altv/types-server": "^1.8.1",
+    "@overnightjs/core": "^1.7.6",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "discord.js": "^12.5.3",
-    "dotenv": "^9.0.2",
+    "dotenv": "^10.0.0",
     "fs-extra": "^10.0.0",
     "lodash": "^4.17.21",
     "rxjs": "^6.6.7",
     "sjcl": "^1.0.8",
     "tsyringe": "^4.5.0",
-    "typeorm": "^0.2.32"
+    "typeorm": "^0.2.34"
   }
 }

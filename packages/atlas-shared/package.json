@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-shared",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "description": "",
   "keywords": [],
   "author": "Florian Uhlrich <f.uhlrich@gmx.de>",
@@ -22,13 +22,13 @@
   },
   "peerDependencies": {
     "@abraham/reflection": "^0.8.0",
-    "rxjs": "^7.0.1",
+    "rxjs": "^6.6.7",
     "tsyringe": "^4.5.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",
     "@types/jscodeshift": "^0.11.0",
-    "@types/node": "^15.0.2"
+    "@types/node": "^15.12.2"
   },
   "dependencies": {
     "@abraham/reflection": "^0.8.0",
@@ -36,10 +36,10 @@
     "@rollup/plugin-multi-entry": "^4.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-typescript": "^8.2.1",
-    "dotenv": "^9.0.2",
+    "dotenv": "^10.0.0",
     "fs-extra": "^10.0.0",
     "jscodeshift": "^0.12.0",
-    "rollup": "^2.47.0",
+    "rollup": "^2.51.2",
     "rollup-plugin-auto-external": "^2.0.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-terser": "^7.0.2",
