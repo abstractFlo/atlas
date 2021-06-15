@@ -17,12 +17,14 @@ export class DiscordApiService {
    * @type {DiscordConfigModel}
    * @private
    */
-  private readonly config: DiscordConfigModel = this.discordConfigService.config;
+  private readonly config: DiscordConfigModel;
 
   constructor(
       private readonly discordConfigService: DiscordConfigService,
       private readonly discordApiProvider: DiscordApiProvider
-  ) {}
+  ) {
+    this.config = this.discordConfigService.config;
+  }
 
 
   /**
