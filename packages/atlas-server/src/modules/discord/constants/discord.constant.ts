@@ -1,4 +1,4 @@
 // Key for reflection
 export enum DiscordEnum {
-  ON_DISCORD = 'atlas-server:discord:onDiscord'
+  ON_DISCORD = 'atlas-server:discord:onDiscord',
 }

@@ -18,8 +18,8 @@ export const OnServer = (name?: string): MethodDecorator => {
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        name: eventName
-      }
+        name: eventName,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -43,8 +43,8 @@ export const OnceServer = (name?: string): MethodDecorator => {
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        name: eventName
-      }
+        name: eventName,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -68,8 +68,8 @@ export const OnGui = (name?: string): MethodDecorator => {
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        name: eventName
-      }
+        name: eventName,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -90,8 +90,8 @@ export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator =>
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        entity: entityType
-      }
+        entity: entityType,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -112,8 +112,8 @@ export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator =
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        entity: entityType
-      }
+        entity: entityType,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -136,8 +136,8 @@ export const StreamSyncedMetaChange = (entityType: BaseObjectType, metaKey?: str
       targetName: target.constructor.name,
       validateOptions: {
         entity: entityType,
-        metaKey
-      }
+        metaKey,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -160,8 +160,8 @@ export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): 
       targetName: target.constructor.name,
       validateOptions: {
         entity: entityType,
-        metaKey
-      }
+        metaKey,
+      },
     });
 
     return registerDescriptor(descriptor);

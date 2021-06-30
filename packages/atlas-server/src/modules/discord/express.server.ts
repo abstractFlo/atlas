@@ -8,7 +8,6 @@ import { DiscordConfigService } from './services/discord-config.service';
 @AutoloadAfter({ methodName: 'start' })
 @singleton()
 export class ExpressServer extends Server {
-
   /**
    * Contains the express port to be listen
    *
@@ -22,9 +21,7 @@ export class ExpressServer extends Server {
    *
    * @param {DiscordConfigService} discordConfigService
    */
-  constructor(
-      private readonly discordConfigService: DiscordConfigService
-  ) {
+  constructor(private readonly discordConfigService: DiscordConfigService) {
     super();
 
     if (this.port) {
@@ -53,5 +50,4 @@ export class ExpressServer extends Server {
       done();
     });
   }
-
 }

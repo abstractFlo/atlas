@@ -5,11 +5,7 @@ import { DiscordBotService } from '../modules/discord';
 
 @singleton()
 export class LoaderService extends BaseLoaderService {
-
-  constructor(
-      private readonly databaseService: DatabaseService,
-      private readonly discordBotService: DiscordBotService
-  ) {
+  constructor(private readonly databaseService: DatabaseService, private readonly discordBotService: DiscordBotService) {
     super();
   }
 

@@ -40,6 +40,5 @@ export {
   castFromJson,
   HasOne,
   HasMany,
-  Cast
+  Cast,
 } from './libs/json-entity';
-

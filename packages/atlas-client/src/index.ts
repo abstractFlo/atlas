@@ -11,7 +11,7 @@ export {
   GameEntityCreate,
   GameEntityDestroy,
   StreamSyncedMetaChange,
-  SyncedMetaChange
+  SyncedMetaChange,
 } from './decorators/event.decorator';
 
 export { KeyUp, KeyDown } from './decorators/key-event.decorator';
@@ -21,4 +21,3 @@ export { WebviewService } from './services/webview.service';
 export { LoaderService } from './services/loader.service';
 
 export { WebviewInterface } from './extends/webview/webview.interface';
-

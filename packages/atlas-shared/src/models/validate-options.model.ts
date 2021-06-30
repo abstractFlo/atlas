@@ -1,7 +1,6 @@
 import { Cast, castToNumber, castToString, JsonEntityModel } from '../libs/json-entity';
 
 export class ValidateOptionsModel extends JsonEntityModel {
-
   @Cast({ from: castToNumber() })
   entity: number;
 
@@ -16,5 +15,4 @@ export class ValidateOptionsModel extends JsonEntityModel {
 
   @Cast({ from: castToString() })
   name: string;
-
 }

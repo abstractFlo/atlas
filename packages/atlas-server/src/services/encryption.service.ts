@@ -3,7 +3,6 @@ import sjcl from 'sjcl';
 
 @injectable()
 export class EncryptionService {
-
   /**
    * Hash a string of data into a persistent SHA256 hash
    *
@@ -24,5 +23,4 @@ export class EncryptionService {
   public static sha256Random(data: string): string {
     return this.sha256(`${data} + ${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}`);
   }
-
 }

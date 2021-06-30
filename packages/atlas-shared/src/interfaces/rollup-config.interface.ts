@@ -5,7 +5,7 @@ export interface RollupConfigInterface {
   output: RollupConfigOutputInterface;
   external: string[];
   plugins: Plugin[];
-  watch?: RollupConfigWatchInterface
+  watch?: RollupConfigWatchInterface;
 }
 
 export interface RollupConfigOutputInterface {

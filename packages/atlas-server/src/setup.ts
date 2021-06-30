@@ -1,5 +1,5 @@
 import alt from 'alt-server';
-import {config} from 'dotenv';
+import { config } from 'dotenv';
 import { registerAltLib } from '@abstractflo/atlas-shared/helpers';
 
 config();

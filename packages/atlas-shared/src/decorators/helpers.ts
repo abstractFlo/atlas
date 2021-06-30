@@ -24,7 +24,9 @@ export function registerDescriptor(descriptor: PropertyDescriptor): PropertyDesc
  * @constructor
  */
 export const StringResolver = (target: constructor<any>) => {
-  container.register(target.name, { useFactory: instanceCachingFactory(c => c.resolve(target)) });
+  container.register(target.name, {
+    useFactory: instanceCachingFactory((c) => c.resolve(target)),
+  });
   return target;
 };
 

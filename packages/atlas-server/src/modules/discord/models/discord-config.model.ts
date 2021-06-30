@@ -1,7 +1,6 @@
 import { Cast, castToString, JsonEntityModel } from '@abstractflo/atlas-shared';
 
 export class DiscordConfigModel extends JsonEntityModel {
-
   @Cast({ from: castToString() })
   client_id: string;
 
@@ -28,5 +27,4 @@ export class DiscordConfigModel extends JsonEntityModel {
 
   @Cast()
   presences: Object;
-
 }

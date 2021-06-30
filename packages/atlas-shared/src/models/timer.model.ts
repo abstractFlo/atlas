@@ -1,7 +1,6 @@
 import { Cast, castToNumber, castToString, JsonEntityModel } from '../libs/json-entity';
 
 export class TimerModel extends JsonEntityModel {
-
   @Cast({ from: castToString() })
   identifier: string;
 
@@ -16,5 +15,4 @@ export class TimerModel extends JsonEntityModel {
 
   @Cast({ from: castToNumber() })
   duration: number | null = null;
-
 }

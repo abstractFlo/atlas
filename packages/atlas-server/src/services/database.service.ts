@@ -21,7 +21,7 @@ export class DatabaseService {
     database: process.env.DB_DATABASE,
     logging: castToBoolean('true')(process.env.DB_LOGGING),
     synchronize: castToBoolean('true')(process.env.DB_SYNCRONIZE),
-    entities: []
+    entities: [],
   };
 
   /**
@@ -56,7 +56,6 @@ export class DatabaseService {
       UtilsService.logError(`Can't connect to database, do you have setup it correctly inside .env?`);
       throw new Error(e);
     }
-
   }
 
   /**

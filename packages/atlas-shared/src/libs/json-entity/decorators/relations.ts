@@ -24,7 +24,7 @@ export function HasMany(model: typeof JsonEntityModel) {
   return function (target: any, propertyKey: string | symbol) {
     const config: IRelationInfo = {
       type: RELATION.HAS_MANY,
-      model
+      model,
     };
     Reflect.defineMetadata(KEYS.RELATIONS, config, target, propertyKey);
   };
@@ -48,7 +48,7 @@ export function HasOne(model: typeof JsonEntityModel) {
   return function (target: any, propertyKey: string | symbol) {
     const config: IRelationInfo = {
       type: RELATION.HAS_ONE,
-      model
+      model,
     };
     Reflect.defineMetadata(KEYS.RELATIONS, config, target, propertyKey);
   };

@@ -4,7 +4,7 @@ import {
   eventServiceTarget,
   getAtlasMetaData,
   registerDescriptor,
-  setEventServiceReflectMetaData
+  setEventServiceReflectMetaData,
 } from '@abstractflo/atlas-shared';
 
 /**
@@ -55,9 +55,8 @@ function registerKeyEvent(key: string | number, target: Object, propertyKey: str
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        keyboardKey: keyValue
-      }
+        keyboardKey: keyValue,
+      },
     });
   }
-
 }

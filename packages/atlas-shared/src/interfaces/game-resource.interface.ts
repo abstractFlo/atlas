@@ -17,7 +17,7 @@ export interface GameResourceInterface {
   /**
    * Define which modules are externals
    */
-  externals: string[]
+  externals: string[];
 
   /**
    * Enable if the import should be default or all(*), default set to false

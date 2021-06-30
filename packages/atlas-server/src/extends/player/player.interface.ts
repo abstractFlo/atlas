@@ -2,7 +2,6 @@
  * Extend Player with more methods and properties
  */
 export interface PlayerInterface {
-
   /**
    * Set realtime for player
    *
@@ -67,5 +66,3 @@ export interface PlayerInterface {
    */
   guiUnfocus(): void;
 }
-
-

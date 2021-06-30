@@ -11,7 +11,6 @@ interface InternalCastConfig extends CastConfig {
  * automatic cast json to entity model
  */
 export class JsonEntityModel {
-
   /**
    * create relations
    * @param {IRelationInfo} relationInfo
@@ -20,9 +19,9 @@ export class JsonEntityModel {
    * @returns {JsonEntityModel | JsonEntityModel[] | undefined}
    */
   private static createRelations(
-      relationInfo: IRelationInfo,
-      json: { [key: string]: any },
-      mapping: boolean = true
+    relationInfo: IRelationInfo,
+    json: { [key: string]: any },
+    mapping: boolean = true,
   ): JsonEntityModel | JsonEntityModel[] | undefined {
     if (!json) {
       return undefined;
@@ -47,7 +46,7 @@ export class JsonEntityModel {
    * @returns {this}
    */
   public cast(json: { [key: string]: any } | null, mapping: boolean = true) {
-    const self = (this as unknown) as JsonEntityModel & { [key: string]: string };
+    const self = this as unknown as JsonEntityModel & { [key: string]: string };
 
     const properties: { [key: string]: InternalCastConfig } = Reflect.getMetadata(KEYS.CONFIG, this) || {};
 
@@ -60,7 +59,6 @@ export class JsonEntityModel {
         if (relationInfo) {
           castValue = JsonEntityModel.createRelations(relationInfo, castValue, mapping);
         }
-
 
         if (castConfig.trim && typeof castValue === 'string') {
           castValue = castValue.trim();

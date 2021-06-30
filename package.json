@@ -9,7 +9,9 @@
     "build": "lerna run --parallel build",
     "generate:typings": "lerna run generate:typings",
     "clean": "rimraf packages/*/{dist,resource-manager.js,resource-manager.d.ts,helpers.js,helpers.d.ts}",
-    "publish": "lerna publish --no-git-tag-version --no-push --skip-npm --force-publish * --yes && lerna exec -- npm publish"
+    "publish": "lerna publish --no-git-tag-version --no-push --skip-npm --force-publish * --yes && lerna exec -- npm publish",
+    "format": "prettier --write packages/**/src/**/*.{mjs,ts,js}",
+    "lint": "lerna run lint"
   },
   "keywords": [],
   "author": "",
@@ -22,13 +24,19 @@
     "@types/fs-extra": "^9.0.11",
     "@types/node": "^15.12.2",
     "@types/reflect-metadata": "^0.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.28.1",
+    "@typescript-eslint/parser": "^4.28.1",
     "builtin-modules": "^3.2.0",
     "dts-bundle": "^0.7.3",
     "dts-bundle-generator": "^5.9.0",
+    "eslint": "^7.29.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "fs-extra": "^10.0.0",
     "jscodeshift": "^0.12.0",
     "lerna": "^4.0.0",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rollup": "^2.51.2",
@@ -36,5 +44,15 @@
     "tsyringe": "^4.5.0",
     "typeorm": "^0.2.34",
     "typescript": "^4.3.2"
+  },
+  "prettier": {
+    "$schema": "http://json.schemastore.org/prettierrc",
+    "tabWidth": 2,
+    "useTabs": false,
+    "printWidth": 140,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "quoteProps": "as-needed"
   }
 }

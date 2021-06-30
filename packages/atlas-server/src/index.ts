@@ -3,13 +3,7 @@ import './setup';
 import './extends/colshape/alt-colshape.prototype';
 import './extends/player/alt-player.prototype';
 
-export {
-  OnClient,
-  OnceClient,
-  EntityEnterColShape,
-  EntityLeaveColShape,
-  SyncedMetaChange
-} from './decorators/event.decorator';
+export { OnClient, OnceClient, EntityEnterColShape, EntityLeaveColShape, SyncedMetaChange } from './decorators/event.decorator';
 
 export { AutoAdd } from './decorators/database.decorator';
 
@@ -22,5 +16,3 @@ export { ColShapeInterface } from './extends/colshape/col-shape.interface';
 export { PlayerInterface } from './extends/player/player.interface';
 
 export { OnDiscord, DiscordApiService, DiscordBotService, DiscordUserModel } from './modules/discord';
-
-

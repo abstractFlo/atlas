@@ -3,7 +3,6 @@ import { LoaderServiceQueueItemModel } from './loader-service-queue-item.model';
 import { Subject } from 'rxjs';
 
 export class LoaderServiceQueueModel extends JsonEntityModel {
-
   @Cast()
   before: Map<string, LoaderServiceQueueItemModel> = new Map<string, LoaderServiceQueueItemModel>();
 
@@ -27,5 +26,4 @@ export class LoaderServiceQueueModel extends JsonEntityModel {
 
   @Cast()
   frameworkAfterBootCount: Subject<number> = new Subject<number>();
-
 }

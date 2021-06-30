@@ -3,7 +3,6 @@ import { EventModel } from '../models/event.model';
 
 @singleton()
 export class CommandService {
-
   /**
    * Contains all commands
    *
@@ -11,7 +10,6 @@ export class CommandService {
    * @private
    */
   private commands: Map<string, EventModel> = new Map<string, EventModel>();
-
 
   /**
    * Contains the command prefix

@@ -5,7 +5,7 @@ import {
   EventEnum,
   EventModel,
   FrameworkEvent,
-  UtilsService
+  UtilsService,
 } from '@abstractflo/atlas-shared';
 import { singleton } from 'tsyringe';
 import { emit, emitServer, offServer, onceServer, onServer } from 'alt-client';
@@ -14,22 +14,15 @@ import { KeyEventService } from './key-event.service';
 @AutoloadAfter({ methodName: 'loadEvents' })
 @singleton()
 export class EventService extends BaseEventService {
-
   /**
    * Contains all key event keys
    *
    * @type {string[]}
    * @private
    */
-  private keyEvents: string[] = [
-    EventEnum.KEY_DOWN,
-    EventEnum.KEY_UP
-  ];
+  private keyEvents: string[] = [EventEnum.KEY_DOWN, EventEnum.KEY_UP];
 
-  constructor(
-      protected readonly commandService: CommandService,
-      private readonly keyEventService: KeyEventService
-  ) {
+  constructor(protected readonly commandService: CommandService, private readonly keyEventService: KeyEventService) {
     super(commandService);
   }
 
@@ -91,13 +84,7 @@ export class EventService extends BaseEventService {
   protected startEventListeners() {
     super.startEventListeners();
 
-    UtilsService.nextTick(() =>
-        this.resolveAndLoadEvents(
-            this.keyEvents,
-            'KeyEvents',
-            this.startKeyEvents.bind(this)
-        )
-    );
+    UtilsService.nextTick(() => this.resolveAndLoadEvents(this.keyEvents, 'KeyEvents', this.startKeyEvents.bind(this)));
   }
 
   /**

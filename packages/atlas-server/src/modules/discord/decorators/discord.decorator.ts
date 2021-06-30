@@ -21,13 +21,12 @@ export const OnDiscord = <K extends keyof ClientEvents>(name?: K): MethodDecorat
     const eventModel = new DiscordEventModel().cast({
       eventName,
       targetName: target.constructor.name,
-      methodName: propertyKey
+      methodName: propertyKey,
     });
 
     discordEventModels.push(eventModel);
     Reflect.defineMetadata(DiscordEnum.ON_DISCORD, discordEventModels, baseTarget);
 
     return registerDescriptor(descriptor);
-
   };
 };

@@ -18,8 +18,8 @@ export const OnClient = (name?: string): MethodDecorator => {
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        name: eventName
-      }
+        name: eventName,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -43,8 +43,8 @@ export const OnceClient = (name?: string): MethodDecorator => {
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        name: eventName
-      }
+        name: eventName,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -67,8 +67,8 @@ export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): 
       targetName: target.constructor.name,
       validateOptions: {
         entity: entityType,
-        metaKey
-      }
+        metaKey,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -96,8 +96,8 @@ export const EntityEnterColShape = (colShapeType: ColShapeType, name?: string, e
       validateOptions: {
         colShapeType,
         name,
-        entity
-      }
+        entity,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -125,8 +125,8 @@ export const EntityLeaveColShape = (colShapeType: ColShapeType, name?: string, e
       validateOptions: {
         colShapeType,
         name,
-        entity
-      }
+        entity,
+      },
     });
 
     return registerDescriptor(descriptor);

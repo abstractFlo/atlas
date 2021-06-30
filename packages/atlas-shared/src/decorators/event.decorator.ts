@@ -22,8 +22,8 @@ export const On = (name?: string): MethodDecorator => {
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
-        name: eventName
-      }
+        name: eventName,
+      },
     });
 
     return registerDescriptor(descriptor);
@@ -45,7 +45,7 @@ export const Once = (name?: string): MethodDecorator => {
       type: 'once',
       eventName,
       methodName: propertyKey,
-      targetName: target.constructor.name
+      targetName: target.constructor.name,
     });
 
     return registerDescriptor(descriptor);
@@ -72,15 +72,14 @@ export const Cmd = (name?: string): MethodDecorator => {
         methodName: propertyKey,
         targetName: target.constructor.name,
         validateOptions: {
-          name: commandName
-        }
+          name: commandName,
+        },
       });
     }
 
     return registerDescriptor(descriptor);
   };
 };
-
 
 /**
  * Setup metaData
