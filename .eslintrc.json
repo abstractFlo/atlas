@@ -2,7 +2,7 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "extraFileExtensions": [".mjs", ".cjs"],
+    "extraFileExtensions": [".cjs"],
     "project": "./tsconfig.eslint.json",
     "sourceType": "module",
     "ecmaVersion": 2020
