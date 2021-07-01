@@ -108,7 +108,7 @@ export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator =>
 export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     setEventServiceReflectMetaData(EventEnum.GAME_ENTITY_DESTROY, {
-      type: 'gameEntityCreate',
+      type: 'gameEntityDestroy',
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
