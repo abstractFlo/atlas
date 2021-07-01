@@ -10,7 +10,6 @@ import { DiscordUserModel } from '../models/discord-user.model';
 
 @singleton()
 export class DiscordApiService {
-
   /**
    * Contains the discord config
    *
@@ -19,13 +18,9 @@ export class DiscordApiService {
    */
   private readonly config: DiscordConfigModel;
 
-  constructor(
-      private readonly discordConfigService: DiscordConfigService,
-      private readonly discordApiProvider: DiscordApiProvider
-  ) {
+  constructor(private readonly discordConfigService: DiscordConfigService, private readonly discordApiProvider: DiscordApiProvider) {
     this.config = this.discordConfigService.config;
   }
-
 
   /**
    * Return the AccessTokenModel as observable
@@ -34,16 +29,11 @@ export class DiscordApiService {
    * @returns {Observable<AccessTokenModel>}
    */
   public getToken(code: string): Observable<AccessTokenModel> {
-
-    return from(axios.post(
-        this.config.auth_token_url,
-        this.discordApiProvider.getAuthTokenParams(code),
-        {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        }
-    )).pipe(
-        map((response: AxiosResponse<any>) => new AccessTokenModel().cast(response.data))
-    );
+    return from(
+      axios.post(this.config.auth_token_url, this.discordApiProvider.getAuthTokenParams(code), {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      }),
+    ).pipe(map((response: AxiosResponse<any>) => new AccessTokenModel().cast(response.data)));
   }
 
   /**
@@ -54,17 +44,14 @@ export class DiscordApiService {
    * @returns {Observable<DiscordUserModel>}
    */
   public getUserData(tokenType: string, accessToken: string): Observable<DiscordUserModel> {
-    return from(axios.get(
-        this.config.user_me_url,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `${tokenType} ${accessToken}`
-          }
-        }
-    )).pipe(
-        map((response: AxiosResponse<any>) => new DiscordUserModel().cast(response.data))
-    );
+    return from(
+      axios.get(this.config.user_me_url, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: `${tokenType} ${accessToken}`,
+        },
+      }),
+    ).pipe(map((response: AxiosResponse<any>) => new DiscordUserModel().cast(response.data)));
   }
 
   /**
@@ -76,5 +63,4 @@ export class DiscordApiService {
   public getAuthUrl(token: string): string {
     return this.discordApiProvider.getAuthUrl(token);
   }
-
 }

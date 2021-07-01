@@ -10,7 +10,6 @@ import { constructor } from '../types/constructor';
 
 @singleton()
 export class BaseEventService implements EventServiceInterface {
-
   /**
    * Contains all events where first param is an entity
    *
@@ -21,7 +20,7 @@ export class BaseEventService implements EventServiceInterface {
     EventEnum.STREAM_SYNCED_META_CHANGE,
     EventEnum.SYNCED_META_CHANGE,
     EventEnum.GAME_ENTITY_CREATE,
-    EventEnum.GAME_ENTITY_DESTROY
+    EventEnum.GAME_ENTITY_DESTROY,
   ];
 
   /**
@@ -30,10 +29,7 @@ export class BaseEventService implements EventServiceInterface {
    * @type {string[]}
    * @protected
    */
-  protected colShapeEvents: string[] = [
-    EventEnum.ENTITY_ENTER_COLSHAPE,
-    EventEnum.ENTITY_LEAVE_COLSHAPE
-  ];
+  protected colShapeEvents: string[] = [EventEnum.ENTITY_ENTER_COLSHAPE, EventEnum.ENTITY_LEAVE_COLSHAPE];
 
   /**
    * Contains all base event keys
@@ -47,12 +43,10 @@ export class BaseEventService implements EventServiceInterface {
     EventEnum.ON_CLIENT,
     EventEnum.ONCE_CLIENT,
     EventEnum.ON_SERVER,
-    EventEnum.ONCE_SERVER
+    EventEnum.ONCE_SERVER,
   ];
 
-  constructor(
-      protected readonly commandService: CommandService
-  ) {}
+  constructor(protected readonly commandService: CommandService) {}
 
   /**
    * Emit event server/client
@@ -138,27 +132,15 @@ export class BaseEventService implements EventServiceInterface {
    */
   protected startEventListeners(): void {
     UtilsService.nextTick(() => {
-      this.resolveAndLoadEvents(
-          this.baseEvents,
-          'BaseEvents',
-          this.startBaseMethod.bind(this)
-      );
+      this.resolveAndLoadEvents(this.baseEvents, 'BaseEvents', this.startBaseMethod.bind(this));
     });
 
     UtilsService.nextTick(() =>
-        this.resolveAndLoadEvents(
-            this.entityChangeEvents,
-            'EntityChangeEvents',
-            this.startMetaChangeEvents.bind(this)
-        )
+      this.resolveAndLoadEvents(this.entityChangeEvents, 'EntityChangeEvents', this.startMetaChangeEvents.bind(this)),
     );
 
     UtilsService.nextTick(() =>
-        this.resolveAndLoadEvents(
-            [EventEnum.CONSOLE_COMMAND],
-            'ConsoleCommandEvents',
-            this.startConsoleCommandEvents.bind(this)
-        )
+      this.resolveAndLoadEvents([EventEnum.CONSOLE_COMMAND], 'ConsoleCommandEvents', this.startConsoleCommandEvents.bind(this)),
     );
   }
 
@@ -254,9 +236,6 @@ export class BaseEventService implements EventServiceInterface {
   private startConsoleCommandEvents(events: EventModel[]): void {
     this.commandService.setupCommands(events);
 
-    this.on(
-        'consoleCommand',
-        this.commandService.run.bind(this.commandService)
-    );
+    this.on('consoleCommand', this.commandService.run.bind(this.commandService));
   }
 }

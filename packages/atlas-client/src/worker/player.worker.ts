@@ -7,11 +7,7 @@ import { WebviewService } from '../services/webview.service';
 @AutoloadAfter({ methodName: 'load' })
 @singleton()
 export class PlayerWorker {
-
-  constructor(
-      private readonly eventService: EventService,
-      private readonly webviewService: WebviewService
-  ) {}
+  constructor(private readonly eventService: EventService, private readonly webviewService: WebviewService) {}
 
   /**
    * Load up this method after framework boot

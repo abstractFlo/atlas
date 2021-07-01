@@ -9,7 +9,9 @@ import { Player } from 'alt-client';
  */
 export function registerWebview(url: string, routeToEventName: string): void {
   container.register<string>('alt.webview.url', { useValue: url });
-  container.register<string>('alt.webview.routeTo.eventName', { useValue: routeToEventName });
+  container.register<string>('alt.webview.routeTo.eventName', {
+    useValue: routeToEventName,
+  });
 }
 
 /**

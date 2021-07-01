@@ -13,11 +13,10 @@ import { DiscordUserModel } from '../models/discord-user.model';
 @Controller('auth')
 @ClassMiddleware([cors()])
 export class AuthenticationController {
-
   constructor(
-      private readonly discordApiService: DiscordApiService,
-      private readonly eventService: EventService,
-      private readonly loggerService: LoggerService
+    private readonly discordApiService: DiscordApiService,
+    private readonly eventService: EventService,
+    private readonly loggerService: LoggerService,
   ) {}
 
   /**
@@ -48,19 +47,18 @@ export class AuthenticationController {
     }
 
     this.discordApiService
-        .getToken(bearerToken)
-        .pipe(
-            filter((model: AccessTokenModel) => !!model.access_token),
-            mergeMap((model: AccessTokenModel) => this.discordApiService.getUserData(
-                model.token_type,
-                model.access_token
-            )),
-            filter((discordUser: DiscordUserModel) => !!discordUser.id && !!discordUser.username)
-        )
-        .subscribe((discordUser: DiscordUserModel) => {
+      .getToken(bearerToken)
+      .pipe(
+        filter((model: AccessTokenModel) => !!model.access_token),
+        mergeMap((model: AccessTokenModel) => this.discordApiService.getUserData(model.token_type, model.access_token)),
+        filter((discordUser: DiscordUserModel) => !!discordUser.id && !!discordUser.username),
+      )
+      .subscribe(
+        (discordUser: DiscordUserModel) => {
           this.eventService.emit(FrameworkEvent.Discord.AuthDone, discordToken, discordUser);
           res.redirect('done');
-        }, (err: Error) => this.loggerService.error(err.message, err.stack));
+        },
+        (err: Error) => this.loggerService.error(err.message, err.stack),
+      );
   }
-
 }

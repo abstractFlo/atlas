@@ -4,7 +4,6 @@ import { localPlayer } from '../helpers';
 
 @singleton()
 export class KeyEventService {
-
   /**
    * Contains all keyEvents categorized by eventType
    *
@@ -30,8 +29,12 @@ export class KeyEventService {
    */
   public run(key: number, eventType: string): void {
     const keyEvents = this.keyEvents.get(eventType);
-    const dummyValidateOptions = new ValidateOptionsModel().cast({ keyboardKey: key });
-    const dummyKeyEvent = new EventModel().cast({ validateOptions: dummyValidateOptions });
+    const dummyValidateOptions = new ValidateOptionsModel().cast({
+      keyboardKey: key,
+    });
+    const dummyKeyEvent = new EventModel().cast({
+      validateOptions: dummyValidateOptions,
+    });
     const existingEvent = this.keyExists(keyEvents, dummyKeyEvent);
 
     if (!existingEvent) return;
@@ -75,8 +78,6 @@ export class KeyEventService {
    * @private
    */
   private keyExists(keyEvents: EventModel[], event: EventModel): EventModel | undefined {
-    return keyEvents.find((keyEvent: EventModel) =>
-        keyEvent.validateOptions.keyboardKey === event.validateOptions.keyboardKey
-    );
+    return keyEvents.find((keyEvent: EventModel) => keyEvent.validateOptions.keyboardKey === event.validateOptions.keyboardKey);
   }
 }

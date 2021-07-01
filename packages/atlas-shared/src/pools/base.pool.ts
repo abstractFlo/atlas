@@ -1,5 +1,4 @@
 export abstract class BasePool<T, K = string | number> {
-
   /**
    * Contains the pool
    *
@@ -64,7 +63,7 @@ export abstract class BasePool<T, K = string | number> {
    *
    * @returns {K[]}
    */
-  public keysAsArray(): (K)[] {
+  public keysAsArray(): K[] {
     return Array.from(this.pool.keys());
   }
 
@@ -85,6 +84,3 @@ export abstract class BasePool<T, K = string | number> {
     this.pool.clear();
   }
 }
-
-
-

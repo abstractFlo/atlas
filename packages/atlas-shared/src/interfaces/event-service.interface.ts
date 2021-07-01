@@ -1,5 +1,4 @@
 export interface EventServiceInterface {
-
   /**
    * Receive event from client/server
    *

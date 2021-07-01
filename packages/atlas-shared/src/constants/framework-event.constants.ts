@@ -13,9 +13,9 @@ export const FrameworkEvent = {
     GuiUnfocus: 'gui:unfocus',
   },
   Discord: {
-    AuthDone: 'express:discordUser:accessDone'
+    AuthDone: 'express:discordUser:accessDone',
   },
   Player: {
-    SetRealTime: 'player:set:realtime'
-  }
+    SetRealTime: 'player:set:realtime',
+  },
 };

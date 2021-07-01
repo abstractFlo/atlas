@@ -7,5 +7,3 @@ export interface WebviewInterface {
    */
   routeTo(route: string, ...args: any[]): void;
 }
-
-

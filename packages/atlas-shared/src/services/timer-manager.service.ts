@@ -10,7 +10,6 @@ import { constructor } from '../types/constructor';
 @AutoloadAfter({ methodName: 'load' })
 @singleton()
 export class TimerManagerService {
-
   /**
    * Contains all timers
    *

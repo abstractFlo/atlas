@@ -16,7 +16,8 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "rollup -c",
-    "generate:typings": "dts-bundle-generator --config dts-generator.cjs"
+    "generate:typings": "dts-bundle-generator --config dts-generator.cjs",
+    "lint": "eslint src --ext ts"
   },
   "peerDependencies": {
     "@abraham/reflection": "^0.8.0",

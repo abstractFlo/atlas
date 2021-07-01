@@ -1,19 +1,11 @@
 import { container, singleton } from 'tsyringe';
-import {
-  AutoloadAfter,
-  constructor,
-  EventEnum,
-  EventModel,
-  FrameworkEvent,
-  UtilsService
-} from '@abstractflo/atlas-shared';
+import { AutoloadAfter, constructor, EventEnum, EventModel, FrameworkEvent, UtilsService } from '@abstractflo/atlas-shared';
 import { showCursor, WebView } from 'alt-client';
 import { EventService } from './event.service';
 
 @AutoloadAfter({ methodName: 'load', doneCheckTimeout: 1000 * 10 })
 @singleton()
 export class WebviewService {
-
   /**
    * Contains all webview events
    *
@@ -71,9 +63,7 @@ export class WebviewService {
    */
   private doneCallback: CallableFunction;
 
-  constructor(
-      private readonly eventService: EventService
-  ) {}
+  constructor(private readonly eventService: EventService) {}
 
   /**
    * Emit the route change to webview
@@ -197,11 +187,7 @@ export class WebviewService {
    * @protected
    */
   private setupEvents(): void {
-    this.eventService.resolveAndLoadEvents(
-        [EventEnum.ON_GUI],
-        'WebViewEvents',
-        (events: EventModel[]) => this.events = events
-    );
+    this.eventService.resolveAndLoadEvents([EventEnum.ON_GUI], 'WebViewEvents', (events: EventModel[]) => (this.events = events));
   }
 
   /**
@@ -239,7 +225,6 @@ export class WebviewService {
       });
     });
   }
-
 
   /**
    * Listen all events
@@ -286,5 +271,4 @@ export class WebviewService {
       });
     });
   }
-
 }

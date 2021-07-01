@@ -8,5 +8,5 @@ export enum LoaderServiceQueueTypeEnum {
 
 // Keys for reflection
 export enum LoaderServiceEnum {
-  QUEUE_ITEM = 'atlas-shared:loaderService:queueItem'
+  QUEUE_ITEM = 'atlas-shared:loaderService:queueItem',
 }

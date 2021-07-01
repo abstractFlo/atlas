@@ -5,7 +5,6 @@ import { DiscordConfigModel } from '../models/discord-config.model';
 
 @singleton()
 export class DiscordApiProvider {
-
   /**
    * Contains the discord config model
    *
@@ -14,9 +13,7 @@ export class DiscordApiProvider {
    */
   private config: DiscordConfigModel;
 
-  constructor(
-      private readonly discordConfigService: DiscordConfigService
-  ) {
+  constructor(private readonly discordConfigService: DiscordConfigService) {
     this.config = this.discordConfigService.config;
   }
 
@@ -45,10 +42,9 @@ export class DiscordApiProvider {
       grant_type: 'authorization_code',
       code,
       scope: 'identify',
-      redirect_uri: encodeURI(`${this.config.redirect_url}/auth/discord`)
+      redirect_uri: encodeURI(`${this.config.redirect_url}/auth/discord`),
     });
   }
-
 
   /**
    * Return the auth url params
@@ -64,7 +60,7 @@ export class DiscordApiProvider {
       scope: 'identify',
       client_id: this.config.client_id,
       redirect_uri: encodeURI(`${this.config.redirect_url}/auth/discord`),
-      state
+      state,
     });
   }
 

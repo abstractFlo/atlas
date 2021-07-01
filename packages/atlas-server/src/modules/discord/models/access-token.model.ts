@@ -1,7 +1,6 @@
 import { Cast, castToNumber, castToString, JsonEntityModel } from '@abstractflo/atlas-shared';
 
 export class AccessTokenModel extends JsonEntityModel {
-
   @Cast({ from: castToString() })
   access_token: string;
 

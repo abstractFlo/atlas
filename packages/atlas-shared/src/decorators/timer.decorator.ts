@@ -14,7 +14,6 @@ import { TimerModel } from '../models/timer.model';
  */
 export const Interval = (name: string, duration: number): MethodDecorator => {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-
     const timeManager = container.resolve(TimerManagerService);
     const timers: TimerModel[] = getAtlasMetaData(TimerConstants.TIMERS, timeManager, []);
 
@@ -23,7 +22,7 @@ export const Interval = (name: string, duration: number): MethodDecorator => {
       type: 'interval',
       targetName: target.constructor.name,
       methodName: propertyKey,
-      duration
+      duration,
     });
 
     timers.push(newTimer);
@@ -50,7 +49,7 @@ export const EveryTick = (name: string): MethodDecorator => {
       identifier: name,
       type: 'everyTick',
       targetName: target.constructor.name,
-      methodName: propertyKey
+      methodName: propertyKey,
     });
 
     timers.push(newTimer);
@@ -58,6 +57,5 @@ export const EveryTick = (name: string): MethodDecorator => {
     Reflect.defineMetadata<TimerModel[]>(TimerConstants.TIMERS, timers, timeManager);
 
     return registerDescriptor(descriptor);
-  }
-}
-
+  };
+};

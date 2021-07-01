@@ -3,7 +3,6 @@ import fs from 'fs-extra';
 import path from 'path';
 
 export class ResourceAnalyzer {
-
   /**
    * Read the package.json for given resource path
    * @param {string} resourcePath
@@ -58,8 +57,8 @@ export class ResourceAnalyzer {
     const filesAndFolders = fs.readdirSync(srcPath);
 
     return filesAndFolders
-        .filter((target) => !target.startsWith('.') && !target.startsWith('_') && !target.includes('.example.'))
-        .map((target: string) => path.resolve(srcPath, target));
+      .filter((target) => !target.startsWith('.') && !target.startsWith('_') && !target.includes('.example.'))
+      .map((target: string) => path.resolve(srcPath, target));
   }
 
   /**
@@ -73,5 +72,4 @@ export class ResourceAnalyzer {
     const filesAndFolders = fs.readdirSync(resourcePath);
     return filesAndFolders.map((resource: string) => path.resolve(resourcePath, resource));
   }
-
 }

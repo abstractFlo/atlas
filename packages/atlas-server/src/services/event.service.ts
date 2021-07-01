@@ -5,7 +5,7 @@ import {
   constructor,
   EventModel,
   FrameworkEvent,
-  UtilsService
+  UtilsService,
 } from '@abstractflo/atlas-shared';
 import { container, singleton } from 'tsyringe';
 import { Colshape, emitClient, Entity, offClient, onceClient, onClient, Player } from 'alt-server';
@@ -13,7 +13,6 @@ import { Colshape, emitClient, Entity, offClient, onceClient, onClient, Player }
 @Autoload(AutoloaderEnums.AFTER_BOOT, { methodName: 'loadEvents' })
 @singleton()
 export class EventService extends BaseEventService {
-
   /**
    * Emit event to one or all players
    *
@@ -74,12 +73,7 @@ export class EventService extends BaseEventService {
   protected startEventListeners() {
     super.startEventListeners();
 
-    UtilsService.nextTick(() =>
-        this.resolveAndLoadEvents(
-            this.colShapeEvents,
-            'ColShapeEvents',
-            this.startColShapeEvents.bind(this)
-        ));
+    UtilsService.nextTick(() => this.resolveAndLoadEvents(this.colShapeEvents, 'ColShapeEvents', this.startColShapeEvents.bind(this)));
   }
 
   /**
@@ -113,10 +107,7 @@ export class EventService extends BaseEventService {
       if (event.validateOptions.name !== undefined && colShape.name !== event.validateOptions.name) return;
 
       // Stop if entity is set not the the same
-      if (
-          event.validateOptions.entity !== undefined &&
-          !this.isEntityType(entity.type, event.validateOptions.entity)
-      ) return;
+      if (event.validateOptions.entity !== undefined && !this.isEntityType(entity.type, event.validateOptions.entity)) return;
 
       const instances = container.resolveAll<constructor<any>>(event.targetName);
 
@@ -127,8 +118,6 @@ export class EventService extends BaseEventService {
         const method = instanceMethod.bind(instance);
         await method(colShape, entity);
       });
-
     });
   }
 }
-

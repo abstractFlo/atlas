@@ -2,25 +2,24 @@ import { Cast, castToString, HasOne, JsonEntityModel } from '../libs/json-entity
 import { ValidateOptionsModel } from './validate-options.model';
 
 export class EventModel extends JsonEntityModel {
-
   @Cast({ from: castToString() })
   type:
-      'on' |
-      'once' |
-      'onClient' |
-      'onceClient' |
-      'onServer' |
-      'onceServer' |
-      'onGui' |
-      'syncedMetaChange' |
-      'streamSyncedMetaChange' |
-      'gameEntityCreate' |
-      'gameEntityDestroy' |
-      'entityEnterColshape' |
-      'entityLeaveColshape' |
-      'consoleCommand' |
-      'keyup' |
-      'keydown';
+    | 'on'
+    | 'once'
+    | 'onClient'
+    | 'onceClient'
+    | 'onServer'
+    | 'onceServer'
+    | 'onGui'
+    | 'syncedMetaChange'
+    | 'streamSyncedMetaChange'
+    | 'gameEntityCreate'
+    | 'gameEntityDestroy'
+    | 'entityEnterColshape'
+    | 'entityLeaveColshape'
+    | 'consoleCommand'
+    | 'keyup'
+    | 'keydown';
 
   @Cast({ from: castToString() })
   eventName: string;
@@ -34,5 +33,4 @@ export class EventModel extends JsonEntityModel {
   @HasOne(ValidateOptionsModel)
   @Cast()
   validateOptions: Partial<ValidateOptionsModel>;
-
 }

@@ -3,9 +3,7 @@ import { AutoloaderEnums } from '../constants/autoloader.constant';
 import { LoaderServiceQueueTypeEnum } from '../constants/loader-service.constant';
 import { constructor } from '../types/constructor';
 
-
 export class LoaderServiceQueueItemModel extends JsonEntityModel {
-
   @Cast({ from: castToString() })
   type: LoaderServiceQueueTypeEnum | AutoloaderEnums;
 
@@ -17,5 +15,4 @@ export class LoaderServiceQueueItemModel extends JsonEntityModel {
 
   @Cast({ from: castToNumber() })
   doneCheckTimeout: number = 5000;
-
 }
