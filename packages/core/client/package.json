@@ -1,0 +1,39 @@
+{
+  "name": "@abstractflo/atlas-client",
+  "version": "3.1.0",
+  "description": "> TODO: description",
+  "author": "Florian Uhlrich <f.uhlrich@abstractmedia.de>",
+  "homepage": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.esm.js"
+  },
+  "scripts": {
+    "prebuild": "yarn clean",
+    "postbuild": "yarn types && yarn local:pack",
+    "prewatch": "yarn clean",
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
+    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts",
+    "local:pack": "yarn pack --filename client.tgz"
+  },
+  "peerDependencies": {
+    "@abstractflo/atlas-shared": "^3.1.0",
+    "@altv/types-client": "^1.7.5",
+    "@altv/types-natives": "^1.4.2"
+  },
+  "devDependencies": {
+    "@abstractflo/atlas-shared": "*",
+    "@altv/types-client": "*",
+    "@altv/types-natives": "*"
+  }
+}

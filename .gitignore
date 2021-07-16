@@ -1,0 +1,8 @@
+dist
+node_modules
+build
+types
+yarn-error.log
+.idea
+.vscode
+.DS_Store

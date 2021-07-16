@@ -1,0 +1,56 @@
+{
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "compilerOptions": {
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/@altv"
+    ],
+    "skipLibCheck": false,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": [
+      "es6",
+      "esnext"
+    ],
+    "rootDir": ".",
+    "outDir": "dist",
+    "strict": false,
+    "removeComments": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "alwaysStrict": true,
+    "importsNotUsedAsValues": "remove",
+    "incremental": true,
+    "newLine": "lf",
+    "noEmitHelpers": true,
+    "preserveConstEnums": true,
+    "pretty": true,
+    "useDefineForClassFields": true,
+    "baseUrl": "./",
+    "paths": {
+      "@abstractflo/atlas-shared": [
+        "packages/core/shared/src"
+      ],
+      "@abstractflo/atlas-devtools": [
+        "packages/core/devtools/src"
+      ]
+    }
+  }
+}

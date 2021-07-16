@@ -1,0 +1,47 @@
+{
+  "name": "@abstractflo/atlas-devtools",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "Florian Uhlrich <f.uhlrich@abstractmedia.de>",
+  "homepage": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.esm.js"
+  },
+  "scripts": {
+    "prebuild": "yarn clean && yarn types",
+    "postbuild": "yarn local:pack",
+    "prewatch": "yarn clean",
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
+    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts",
+    "local:pack": "yarn pack --filename devtools.tgz"
+  },
+  "dependencies": {
+    "@abraham/reflection": "^0.8.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.2",
+    "@swc/core": "^1.2.64",
+    "change-case": "^4.1.2",
+    "colorette": "^1.2.2",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "fs-jetpack": "^4.1.0",
+    "import-meta-resolve": "^1.1.1",
+    "jscodeshift": "^0.13.0",
+    "rollup": "2.52.7",
+    "rollup-plugin-swc": "leonardssh/rollup-plugin-swc#build"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.0.7"
+  }
+}

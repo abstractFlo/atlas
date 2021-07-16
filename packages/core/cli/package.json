@@ -1,0 +1,35 @@
+{
+  "name": "@abstractflo/atlas-cli",
+  "version": "1.1.0",
+  "description": "> TODO: description",
+  "author": "Florian Uhlrich <f.uhlrich@abstractmedia.de>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "dist/atlas-cli.js",
+  "files": [
+    "dist/*"
+  ],
+  "bin": {
+    "atlas": "dist/atlas-cli.js"
+  },
+  "scripts": {
+    "prebuild": "yarn clean",
+    "postbuild": "yarn local:pack",
+    "prewatch": "yarn clean",
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
+    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts",
+    "local:pack": "yarn pack --filename cli.tgz"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.0.2",
+    "@types/yargs": "^17.0.2"
+  },
+  "dependencies": {
+    "colorette": "^1.2.2",
+    "pretty-ms": "^7.0.1",
+    "rollup": "2.52.7",
+    "yargs": "^17.0.1"
+  }
+}

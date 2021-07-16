@@ -1,0 +1,22 @@
+{
+  "name": "package-name",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Florian Uhlrich <f.uhlrich@abstractmedia.de>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "prebuild": "yarn clean && yarn types",
+    "prewatch": "yarn clean",
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
+    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts"
+  }
+}
