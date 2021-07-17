@@ -1947,6 +1947,11 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
+cfg-reader@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/cfg-reader/-/cfg-reader-1.4.0.tgz#5c4b5c1117f7472b35e58953b79ff8814a4848b3"
+  integrity sha512-WrQbVSy4h+DdDLNr3V1L6cTc+4OpWgrMC+qP206mg4Ac1eB7uuSnqk7zIxhZ5Xa1XM8bDL5RJU2NwFSUtzcIVQ==
+
 chalk@^2.0.0, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
