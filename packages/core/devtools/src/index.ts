@@ -9,7 +9,10 @@ export {
   resolvePath,
   relativeId,
   renderTemplateFromPath,
-  convertNameType
+  convertNameType,
+  appendJsonToYaml,
+  readYamlAsJson,
+  writeJsonToYaml
 } from './filesystem';
 
 export { readEnvAsJson, writeToEnv, env } from './environment';

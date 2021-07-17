@@ -5,7 +5,7 @@
   "author": "Florian Uhlrich <f.uhlrich@abstractmedia.de>",
   "homepage": "",
   "license": "MIT",
-  "type": "commonjs",
+  "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",

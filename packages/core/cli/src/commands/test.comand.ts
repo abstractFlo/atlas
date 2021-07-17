@@ -1,23 +1,35 @@
-import { Config } from 'cfg-reader';
 import { CommandModule } from 'yargs';
-import { fsJetpack } from '@abstractflo/atlas-devtools';
+import { appendJsonToYaml, errorMessage, successMessage, writeJsonToYaml } from '@abstractflo/atlas-devtools';
 
 export const TestComand: CommandModule = {
 
   command: 'test',
   describe: 'foooo',
 
-  handler(): void {
-    const filePath = fsJetpack().path('retail/server.cfg');
-    const config = new Config({
-      type: 'js',
-      main: 'server.js',
-      'client-main': 'client.js',
-      clientFiles: []
-    });
+  async handler(): Promise<void> {
+
+    /*try {
+      const doc = await readYamlAsJson('docker-compose.yml');
+      console.log(doc);
+    } catch (err) {
+      errorMessage(err.path, err.message)
+    }*/
+
+    try {
+      const doc = await appendJsonToYaml('test.yml', { bar: 'baz', bra: 'bru' });
+      successMessage(doc.path, doc.message);
+    } catch (err) {
+      errorMessage(err.path, err.message);
+    }
 
 
-    console.log(config);
+    /*const written = {
+      version: '3.3',
+      services: {
+        altv: {}
+      }
+    }
 
+    console.log(yaml.dump(written));*/
   }
 };
