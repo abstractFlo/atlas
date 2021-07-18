@@ -69,7 +69,7 @@ const newProjectInstaller = [
   { name: '.env', file: jsonToEnv(baseEnv) },
   { name: 'docker-compose.yaml', file: jsonToYaml(dockerCompose), dockerOnly: true },
   { name: '.docker/Dockerfile', file: dockerFile(), dockerOnly: true },
-  { name: 'retail/server.cfg', file: getServerCfgBase() },
+  { name: 'retail/server.cfg', file: getServerCfgBase().replace(/}/g, '#}') },
   { name: 'atlas.json', file: atlasJson }
 ];
 
@@ -90,14 +90,7 @@ function dockerFile(): string {
  * @return {string}
  */
 function getServerCfgBase(): string {
-  const cfg = createTempCfg(serverCfgBase)
-      .serialize()
-      .replace(
-          /(token|password|voice|bitrate|external|}|timeout|streamingDistance|migrationDistance)/g,
-          //@ts-ignore
-          (a: string, b: string) => `#${b}`
-      );
-
+  const cfg = createTempCfg(serverCfgBase).serialize();
   return sanitizedCfg(cfg);
 }
 

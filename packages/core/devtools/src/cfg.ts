@@ -39,9 +39,7 @@ export function createTempCfg(data: { [key: string]: any }): Config {
  * @return {string}
  */
 export function sanitizedCfg(cfg: string): string {
-  return cfg.replace(/,/g, '')
-      //@ts-ignore
-      .replace(/'(true|false|[0-9.]+)'/g, (a: string, b: string) => b);
+  return cfg.replace(/\\/g, '');
 }
 
 /**

@@ -42,7 +42,7 @@ export const gameResource = {
 /**
  * Stub for stream resource
  */
-export const streamResource = {
+export const dlcResource = {
   type: 'dlc',
   main: 'stream.cfg',
   'client-files': ['stream/*']
@@ -53,7 +53,8 @@ export const streamResource = {
  */
 export const streamCfg = {
   files: ['stream/assets/*'],
-  meta: []
+  meta: [],
+  gxt: []
 };
 
 /**
@@ -154,40 +155,40 @@ export const atlasJson = {};
  * @type {{}}
  */
 export const serverCfgBase = {
-  name: 'New alt:V Server powered by Atlas',
+  name: '\'New alt:V Server powered by Atlas\'',
   host: '0.0.0.0',
   port: 7788,
   players: 10,
-  password: '',
+  '#password': '',
   announce: false,
-  token: 'noToken',
+  '#token': 'noToken',
   gamemode: 'unknown',
-  website: 'https://atlas.abstractmedia.de',
+  website: '\'https://atlas.abstractmedia.de\'',
   language: 'English',
-  description: 'A new awesome gamemode written in TypeScript powered by Atlas',
+  description: '\'A new awesome gamemode written in TypeScript powered by Atlas\'',
   debug: true,
-  streamingDistance: '',
-  migrationDistance: 150,
-  timeout: 1,
+  '#streamingDistance': '',
+  '#migrationDistance': 150,
+  '#timeout': 1,
   modules: ['js-module'],
   resources: ['gamemode'],
-  voice: {
-    bitrate: 64000,
-    externalSecret: '',
-    externalHost: 'localhost',
-    externalPort: 7798,
-    externalPublicHost: '',
-    externalPublicPort: 7799
+  '#voice': {
+    '#bitrate': 64000,
+    '#externalSecret': '',
+    '#externalHost': 'localhost',
+    '#externalPort': 7798,
+    '#externalPublicHost': '',
+    '#externalPublicPort': 7799
   },
   tags: [
     'atlas',
     'typescript',
     'oop'
   ],
-  useEarlyAuth: false,
-  earlyAuthUrl: '',
-  useCdn: false,
-  cdnUrl: ''
+  '#useEarlyAuth': false,
+  '#earlyAuthUrl': '\'https://your.url.de\'',
+  '#useCdn': false,
+  '#cdnUrl': '\'https://your.url.de\''
 };
 
 /**
