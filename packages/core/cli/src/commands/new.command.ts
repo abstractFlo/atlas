@@ -5,7 +5,6 @@ import {
   createTempCfg,
   dirAndFileInstaller,
   DirAndFileInstaller,
-  errorMessage,
   fsJetpack,
   jsonToEnv,
   jsonToYaml,
@@ -49,15 +48,12 @@ export const NewCommand: CommandModule = {
    * Process the Command
    */
   async handler(args: Arguments<{ name: string, docker: boolean, force: boolean }>): Promise<void> {
-    const { name, docker, force } = args;
-    const jetpack = fsJetpack().cwd(name);
+    const { docker, force } = args;
+    const installConfig = newProjectInstaller.filter(
+        (item: DirAndFileInstaller & { dockerOnly?: boolean }) => docker ? item : !item.dockerOnly
+    );
 
-    if (!force && jetpack.exists('')) {
-      return errorMessage(jetpack.path(), 'Already exists');
-    }
-
-    const installConfig = newProjectInstaller.filter((item: DirAndFileInstaller & { dockerOnly?: boolean }) => docker ? item : !item.dockerOnly);
-    dirAndFileInstaller(installConfig, jetpack);
+    dirAndFileInstaller(args.name, installConfig, force);
   }
 };
 

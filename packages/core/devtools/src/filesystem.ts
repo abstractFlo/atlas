@@ -2,7 +2,7 @@ import { ExistsResult, FindOptions, FSJetpack } from 'fs-jetpack/types';
 import jetpack from 'fs-jetpack';
 import { render, renderFile } from 'ejs';
 import { dotCase, normalize, pascalCase } from './string';
-import { successMessage } from './terminal';
+import { errorMessage, successMessage } from './terminal';
 
 /**
  * Check if given path exists under current working dir
@@ -100,17 +100,25 @@ export function convertNameType(name: string, type: string): { className: string
 /**
  * Install helper for creating files and folders
  *
+ * @param path
  * @param installConfig
- * @param jetpack
+ * @param force
+ * @param fsJetpack
  */
-export function dirAndFileInstaller(installConfig: DirAndFileInstaller[], jetpack: FSJetpack): void {
+export function dirAndFileInstaller(path: string, installConfig: DirAndFileInstaller[], force: boolean = false, fsJetpack: FSJetpack = jetpack): void {
+  let jetpack = fsJetpack.cwd(path);
+
+  if (!force && jetpack.exists('')) {
+    return errorMessage(jetpack.path(path), 'Already Exists');
+  }
+
   installConfig
       .forEach((step: { name: string, file?: any }) => {
         if (!step.file) {
           jetpack.dir(step.name);
         } else {
           jetpack.file(step.name, {
-            content: step.file === 'empty' ? '': step.file
+            content: step.file === 'empty' ? '' : step.file
           });
         }
 
