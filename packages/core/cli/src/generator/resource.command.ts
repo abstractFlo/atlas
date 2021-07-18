@@ -1,11 +1,14 @@
-import { Arguments, Argv, CommandModule } from 'yargs';
+import { Argv, CommandModule } from 'yargs';
+import { GameResourceCommand } from './resource/game-resource.command';
+import { DlcResourceCommand } from './resource/dlc-resource.command';
+import { AssetResourceCommand } from './resource/asset-resource.command';
 
 export const ResourceCommand: CommandModule = {
 
   /**
    * Command name
    */
-  command: 'resource <type> <name>',
+  command: 'resource',
 
   /**
    * Command Alias
@@ -25,18 +28,14 @@ export const ResourceCommand: CommandModule = {
   builder(yargs: Argv): Argv {
     return yargs
         .wrap(140)
-        .option('standalone', {
-          describe: 'Standalone Resource. Only available on game resource create',
-          default: false,
-          alias: 's',
-          type: 'boolean'
-        });
+        .demandCommand()
+        .command(GameResourceCommand)
+        .command(DlcResourceCommand)
+        .command(AssetResourceCommand);
   },
 
   /**
    * Process the command
    */
-  async handler(args: Arguments<{ name: string, type: string, standalone: boolean }>): Promise<void> {
-    console.log(args);
-  }
+  handler() {}
 };
