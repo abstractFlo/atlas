@@ -109,7 +109,7 @@ export function dirAndFileInstaller(path: string, installConfig: DirAndFileInsta
   let jetpack = fsJetpack.cwd(path);
 
   if (!force && jetpack.exists('')) {
-    return errorMessage(jetpack.path(path), 'Already Exists');
+    return errorMessage(jetpack.path(''), 'Already Exists');
   }
 
   installConfig
