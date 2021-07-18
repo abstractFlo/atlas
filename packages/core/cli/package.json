@@ -25,10 +25,10 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.2",
-    "@types/yargs": "^17.0.2"
+    "@types/yargs": "^17.0.2",
+    "cfg-reader": "^2.0.0-rc8"
   },
   "dependencies": {
-    "cfg-reader": "^1.4.0",
     "colorette": "^1.2.2",
     "pretty-ms": "^7.0.1",
     "rollup": "2.52.7",

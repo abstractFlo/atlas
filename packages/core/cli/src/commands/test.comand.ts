@@ -1,5 +1,5 @@
 import { CommandModule } from 'yargs';
-import { appendJsonToYaml, errorMessage, successMessage, writeJsonToYaml } from '@abstractflo/atlas-devtools';
+import { fsJetpack, jsonToYaml } from '@abstractflo/atlas-devtools';
 
 export const TestComand: CommandModule = {
 
@@ -8,6 +8,15 @@ export const TestComand: CommandModule = {
 
   async handler(): Promise<void> {
 
+
+    /*try {
+      const config = createTempCfg(gameResource);
+      console.log(config.serialize());
+    } catch (err) {
+      errorMessage('Key not found or given type not valid', 'Parse Error');
+    }*/
+
+
     /*try {
       const doc = await readYamlAsJson('docker-compose.yml');
       console.log(doc);
@@ -15,13 +24,13 @@ export const TestComand: CommandModule = {
       errorMessage(err.path, err.message)
     }*/
 
-    try {
+    /*try {
       const doc = await appendJsonToYaml('test.yml', { bar: 'baz', bra: 'bru' });
       successMessage(doc.path, doc.message);
     } catch (err) {
       errorMessage(err.path, err.message);
     }
-
+*/
 
     /*const written = {
       version: '3.3',

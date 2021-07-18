@@ -1,5 +1,12 @@
-import { Arguments, Argv, CommandModule } from 'yargs';
-import baseFileCreator from './baseFileCreator';
+import { Arguments, CommandModule } from 'yargs';
+import {
+  convertNameType,
+  errorMessage,
+  fsJetpack,
+  renderTemplateFromString,
+  successMessage
+} from '@abstractflo/atlas-devtools';
+import { ejsClassTemplate, serviceClass } from '../file-object-stubs';
 
 export const ServiceCommand: CommandModule = {
 
@@ -19,23 +26,22 @@ export const ServiceCommand: CommandModule = {
   describe: 'Generate service',
 
   /**
-   * Command Setup
-   * @param {Argv} yargs
-   * @return {Argv}
-   */
-  builder(yargs: Argv): Argv {
-    return yargs;
-  },
-
-  /**
    * Process the command
    */
   async handler(args: Arguments<{ name: string }>): Promise<void> {
-    await baseFileCreator(
-        args.name,
-        '-service',
-        'import { Singleton } from \'@abstractflo/atlas-shared\'',
-        '@Singleton'
+    const converted = convertNameType(args.name, '-service');
+
+    if (fsJetpack().exists(converted.completePath)) {
+      return errorMessage(converted.completePath, 'Already exists');
+    }
+
+    const template = await renderTemplateFromString(
+        ejsClassTemplate,
+        { className: converted.className, ...serviceClass }
     );
+
+    fsJetpack().file(converted.completePath, { content: template });
+    successMessage(converted.completePath, 'Created');
+
   }
 };

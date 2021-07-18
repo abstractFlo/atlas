@@ -2,6 +2,7 @@ import { Argv, CommandModule } from 'yargs';
 import { ComponentCommand } from './component.command';
 import { ServiceCommand } from './service.command';
 import { ModuleCommand } from './module.command';
+import { ResourceCommand } from './resource.command';
 
 export const GenerateCommand: CommandModule = {
 
@@ -31,7 +32,8 @@ export const GenerateCommand: CommandModule = {
         .demandCommand()
         .command(ComponentCommand)
         .command(ServiceCommand)
-        .command(ModuleCommand);
+        .command(ModuleCommand)
+        .command(ResourceCommand);
   },
 
   /**

@@ -1,14 +1,12 @@
-import { Arguments, Argv, CommandModule } from 'yargs';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { Arguments, CommandModule } from 'yargs';
+import { ejsClassTemplate, moduleClass } from '../file-object-stubs';
 import {
   convertNameType,
   errorMessage,
   fsJetpack,
-  renderTemplateFromPath,
+  renderTemplateFromString,
   successMessage
 } from '@abstractflo/atlas-devtools';
-import baseFileCreator from './baseFileCreator';
 
 export const ModuleCommand: CommandModule = {
 
@@ -28,23 +26,22 @@ export const ModuleCommand: CommandModule = {
   describe: 'Generate new module',
 
   /**
-   * Command Setup
-   * @param {Argv} yargs
-   * @return {Argv}
-   */
-  builder(yargs: Argv): Argv {
-    return yargs;
-  },
-
-  /**
    * Process the command
    */
   async handler(args: Arguments<{ name: string }>): Promise<void> {
-    await baseFileCreator(
-        args.name,
-        '-module',
-        'import { Module } from \'@abstractflo/atlas-shared\'',
-        '@Module({})'
+    const converted = convertNameType(args.name, '-module');
+
+    if (fsJetpack().exists(converted.completePath)) {
+      return errorMessage(converted.completePath, 'Already exists');
+    }
+
+    const template = await renderTemplateFromString(
+        ejsClassTemplate,
+        { className: converted.className, ...moduleClass }
     );
+
+    fsJetpack().file(converted.completePath, { content: template });
+    successMessage(converted.completePath, 'Created');
+
   }
 };

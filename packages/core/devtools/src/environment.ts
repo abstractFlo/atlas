@@ -10,28 +10,26 @@ import { constantCase } from './string';
  * @return {string}
  */
 export function env<T = string>(key: string, defaultValue: T = null): T {
-  const env = readEnvAsJson();
+  const env = envToJson();
 
   return env[key] || defaultValue;
 }
 
 /**
- * Convert given object to string version and write to .env
- *
- * @param data
+ * Map
+ * @param {Record<string, any>} data
+ * @return {string}
  */
-export function writeToEnv(data: Record<string, any>): void {
-  const mapped = Object.keys(data)
+export function jsonToEnv(data: Record<string, any>): string {
+  return Object.keys(data)
       .map((k: string) => `${constantCase(k)}=${data[k]}`)
       .join('\n');
-
-  fsJetpack().write('.env', mapped);
 }
 
 /**
  * Return .env as json object
  */
-export function readEnvAsJson(): Record<string, any> {
+export function envToJson(): Record<string, any> {
   const env = fsJetpack().read('.env');
   return parse(env);
 }

@@ -29,5 +29,5 @@ export {
   pascalCase,
   pathCase,
   sentenceCase,
-  snakeCase
+  snakeCase,
 } from 'change-case';

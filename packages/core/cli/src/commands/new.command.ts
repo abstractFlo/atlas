@@ -1,13 +1,23 @@
+import { dirname } from 'path';
 import { Arguments, Argv, CommandModule } from 'yargs';
-import { writeJsonToYaml } from '@abstractflo/atlas-devtools';
-import { dockerCompose } from '../file-object-stubs';
+import { fileURLToPath } from 'url';
+import {
+  createTempCfg,
+  dirAndFileInstaller,
+  DirAndFileInstaller,
+  errorMessage,
+  fsJetpack,
+  jsonToEnv,
+  jsonToYaml
+} from '@abstractflo/atlas-devtools';
+import { atlasJson, baseEnv, dockerCompose, pkgJson, serverCfgBase, tsConfig, tsEslint } from '../file-object-stubs';
 
 export const NewCommand: CommandModule = {
 
   /**
    * Command Name
    */
-  command: 'new',
+  command: 'new <name>',
 
   /**
    * Command Alias
@@ -26,20 +36,80 @@ export const NewCommand: CommandModule = {
           alias: 'd',
           type: 'boolean',
           default: false
+        })
+        .option('force', {
+          describe: 'This remove existing files!',
+          type: 'boolean',
+          default: false
         });
   },
 
   /**
    * Process the Command
    */
-  async handler(args: Arguments<{ docker: boolean }>): Promise<void> {
-    const isDocker = args.docker;
+  async handler(args: Arguments<{ name: string, docker: boolean, force: boolean }>): Promise<void> {
+    const { name, docker, force } = args;
+    const jetpack = fsJetpack().cwd(name);
 
-    try {
-      await writeJsonToYaml('docker-compose-test.yml', dockerCompose, true);
-    } catch (err) {
-      console.error(err);
+    if (!force && jetpack.exists('')) {
+      return errorMessage(jetpack.path(), 'Already exists');
     }
 
+    const installConfig = newProjectInstaller.filter((item: DirAndFileInstaller & { dockerOnly?: boolean }) => docker ? item : !item.dockerOnly);
+    dirAndFileInstaller(installConfig, jetpack);
   }
 };
+
+/**
+ * Project Installer
+ */
+const newProjectInstaller = [
+  { name: 'resources' },
+  { name: 'retail' },
+  { name: 'tsconfig.json', file: tsConfig },
+  { name: 'tsconfig.eslint.json', file: tsEslint },
+  { name: 'package.json', file: pkgJson },
+  { name: '.env', file: jsonToEnv(baseEnv) },
+  { name: 'docker-compose.yaml', file: jsonToYaml(dockerCompose), dockerOnly: true },
+  { name: '.docker/Dockerfile', file: dockerFile(), dockerOnly: true },
+  { name: 'retail/server.cfg', file: getServerCfgBase() },
+  { name: 'atlas.json', file: atlasJson }
+];
+
+/**
+ * Read docker file
+ *
+ * @return {string}
+ */
+function dockerFile(): string {
+  const currentDir = dirname(fileURLToPath(import.meta.url));
+  return fsJetpack()
+      .cwd(currentDir, '..')
+      .read('stubs/Dockerfile', 'utf8');
+}
+
+/**
+ * Prepare config
+ * @return {string}
+ */
+function getServerCfgBase(): string {
+  return createTempCfg(serverCfgBase)
+      .serialize()
+      .replace(/,/g, '')
+      .replace('token', '#token')
+      .replace('password', '#password')
+      .replace('voice', '#voice')
+      .replace('bitrate', '#bitrate')
+      .replace('externalSecret', '#externalSecret')
+      .replace('externalHost', '#externalHost')
+      .replace('externalPort', '#externalPort')
+      .replace('externalPublicHost', '#externalPublicHost')
+      .replace('externalPublicPort', '#externalPublicPort')
+      .replace('}', '#}')
+      .replace('timeout', '#timeout')
+      .replace('streamingDistance', '#streamingDistance')
+      .replace('migrationDistance', '#migrationDistance')
+      //@ts-ignore
+      .replace(/'(true|false|[0-9.]+)'/g, (a: string, b: string) => b);
+}
+

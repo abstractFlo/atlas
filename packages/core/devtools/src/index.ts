@@ -7,15 +7,18 @@ export {
   hasFolder,
   fsJetpack,
   resolvePath,
-  relativeId,
   renderTemplateFromPath,
   convertNameType,
-  appendJsonToYaml,
-  readYamlAsJson,
-  writeJsonToYaml
+  dirAndFileInstaller,
+  renderTemplateFromString
 } from './filesystem';
 
-export { readEnvAsJson, writeToEnv, env } from './environment';
+export type { DirAndFileInstaller } from './filesystem';
+
+export { jsonToYaml, yamlToJson, writeJsonToYaml, appendJsonToYaml, readYamlAsJson } from './yaml';
+export { createTempCfg, CfgValueType, readKeyFromCfg, readCfg } from './cfg';
+
+export { envToJson, jsonToEnv, env } from './environment';
 
 export {
   normalize,
@@ -48,5 +51,5 @@ export { ResourceManager, ResourceConfigCreator } from './libs/resources';
 
 export { convertNamedImports } from './transformers/convertNamedImports';
 
-
+export { relativeId } from './relativeId';
 

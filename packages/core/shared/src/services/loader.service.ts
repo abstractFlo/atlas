@@ -11,160 +11,160 @@ import { UtilsService } from './utils.service';
 @Singleton
 export class LoaderService {
 
-	/**
-	 * Subscription for finish booting
-	 *
-	 * @type {Subject<boolean>}
-	 * @private
-	 */
-	private finishSubject: Subject<boolean> = new Subject<boolean>();
+  /**
+   * Subscription for finish booting
+   *
+   * @type {Subject<boolean>}
+   * @private
+   */
+  private finishSubject: Subject<boolean> = new Subject<boolean>();
 
-	/**
-	 * Contains all queued items sorted by loadingOrder
-	 *
-	 * @type {LoaderQueueItemModel[]}
-	 * @private
-	 */
-	private queueItems: LoaderQueueItemModel[];
+  /**
+   * Contains all queued items sorted by loadingOrder
+   *
+   * @type {LoaderQueueItemModel[]}
+   * @private
+   */
+  private queueItems: LoaderQueueItemModel[];
 
-	/**
-	 * Define the loading order for queue
-	 *
-	 * @type {symbol[]}
-	 * @private
-	 */
-	private loadingOrder: symbol[] = [
-		LoaderConstant.QUEUE_INIT,
-		LoaderConstant.QUEUE_BEFORE,
-		LoaderConstant.QUEUE_AFTER,
-		LoaderConstant.QUEUE_LAST
-	];
+  /**
+   * Define the loading order for queue
+   *
+   * @type {symbol[]}
+   * @private
+   */
+  private loadingOrder: symbol[] = [
+    LoaderConstant.QUEUE_INIT,
+    LoaderConstant.QUEUE_BEFORE,
+    LoaderConstant.QUEUE_AFTER,
+    LoaderConstant.QUEUE_LAST
+  ];
 
-	/**
-	 * BehaviorSubject for delay the bootstrap
-	 *
-	 * @type {BehaviorSubject<boolean>}
-	 * @private
-	 */
-	private waitBeforeStart: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  /**
+   * BehaviorSubject for delay the bootstrap
+   *
+   * @type {BehaviorSubject<boolean>}
+   * @private
+   */
+  private waitBeforeStart: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-	/**
-	 * Contains the current queue count
-	 *
-	 * @type {Subject<number>}
-	 * @private
-	 */
-	private queueCount: Subject<number> = new Subject<number>();
+  /**
+   * Contains the current queue count
+   *
+   * @type {Subject<number>}
+   * @private
+   */
+  private queueCount: Subject<number> = new Subject<number>();
 
-	/**
-	 * Await event before start loader
-	 *
-	 * @param {string} eventName
-	 * @return LoaderService
-	 */
-	public waitFor(eventName: string): LoaderService {
-		this.waitBeforeStart.next(true);
-		UtilsService.eventOnce(eventName, () => {
-			this.waitBeforeStart.next(false);
-			this.waitBeforeStart.complete();
-		});
+  /**
+   * Await event before start loader
+   *
+   * @param {string} eventName
+   * @return LoaderService
+   */
+  public waitFor(eventName: string): LoaderService {
+    this.waitBeforeStart.next(true);
+    UtilsService.eventOnce(eventName, () => {
+      this.waitBeforeStart.next(false);
+      this.waitBeforeStart.complete();
+    });
 
-		return this;
-	}
+    return this;
+  }
 
-	/**
-	 * Start loader and process queue before resolve the given token
-	 *
-	 * @param {InjectionToken} token
-	 * @return {LoaderService}
-	 */
-	public bootstrap(token: InjectionToken): LoaderService {
-		this.waitBeforeStart
-			.asObservable()
-			.pipe(filter((value: boolean) => !value))
-			.subscribe(() => {
-				this.resolveMetaData();
+  /**
+   * Start loader and process queue before resolve the given token
+   *
+   * @param {InjectionToken} token
+   * @return {LoaderService}
+   */
+  public bootstrap(token: InjectionToken): LoaderService {
+    this.waitBeforeStart
+        .asObservable()
+        .pipe(filter((value: boolean) => !value))
+        .subscribe(() => {
+          this.resolveMetaData();
 
-				this.queueCount
-					.asObservable()
-					.pipe(
-						filter((value) => value === this.queueItems.length)
-					)
-					.subscribe(() => {
-						app.afterResolution(token, () => {
-							this.finishSubject.next(true);
-							this.finishSubject.complete();
-						});
+          this.queueCount
+              .asObservable()
+              .pipe(
+                  filter((value) => value === this.queueItems.length)
+              )
+              .subscribe(() => {
+                app.afterResolution(token, () => {
+                  this.finishSubject.next(true);
+                  this.finishSubject.complete();
+                });
 
-						app.resolve(token);
-					});
+                app.resolve(token);
+              });
 
-				this.startLoading();
-			});
+          this.startLoading();
+        });
 
-		return this;
-	}
+    return this;
+  }
 
-	/**
-	 * Can be used after booting is finished
-	 *
-	 * @param {(...args: any[]) => void} callback
-	 */
-	public done(callback: (...args: any[]) => void): void {
-		this.finishSubject.asObservable().subscribe(callback);
-	}
+  /**
+   * Can be used after booting is finished
+   *
+   * @param {(...args: any[]) => void} callback
+   */
+  public done(callback: (...args: any[]) => void): void {
+    this.finishSubject.asObservable().subscribe(callback);
+  }
 
-	/**
-	 * Process the queue step by step
-	 *
-	 * @param {number} index
-	 * @return {Promise<void>}
-	 * @private
-	 */
-	private async startLoading(index: number = 0): Promise<void> {
-		const nextIndex = index + 1;
-		const item = this.queueItems[index];
-		const instance = app.resolveAll(item.target).find((instance) => instance.constructor === item.targetHash);
+  /**
+   * Process the queue step by step
+   *
+   * @param {number} index
+   * @return {Promise<void>}
+   * @private
+   */
+  private async startLoading(index: number = 0): Promise<void> {
+    const nextIndex = index + 1;
+    const item = this.queueItems[index];
+    const instance = app.resolveAll(item.target).find((instance) => instance.constructor === item.targetHash);
 
-		const method = instance[item.methodName];
-		await method.bind(instance)();
+    const method = instance[item.methodName];
+    await method.bind(instance)();
 
-		this.queueCount.next(nextIndex);
+    this.queueCount.next(nextIndex);
 
-		// Complete subscription if last item done
-		if (nextIndex === this.queueItems.length) this.queueCount.complete();
+    // Complete subscription if last item done
+    if (nextIndex === this.queueItems.length) this.queueCount.complete();
 
-		// Recursive if queueItems contains more
-		if (nextIndex < this.queueItems.length) UtilsService.nextTick(() => this.startLoading(nextIndex));
+    // Recursive if queueItems contains more
+    if (nextIndex < this.queueItems.length) UtilsService.nextTick(() => this.startLoading(nextIndex));
 
-	}
+  }
 
-	/**
-	 * Prepare queue items from reflection api
-	 *
-	 * @private
-	 */
-	private resolveMetaData(): void {
-		const queueItems = getFrameworkMetaData<LoaderQueueItemModel[]>(
-			LoaderConstant.QUEUE_ITEM,
-			app.resolve(LoaderService)
-		);
-		this.queueItems = this.sortItems(queueItems);
+  /**
+   * Prepare queue items from reflection api
+   *
+   * @private
+   */
+  private resolveMetaData(): void {
+    const queueItems = getFrameworkMetaData<LoaderQueueItemModel[]>(
+        LoaderConstant.QUEUE_ITEM,
+        app.resolve(LoaderService)
+    );
+    this.queueItems = this.sortItems(queueItems);
 
-		this.queueCount.next(this.queueItems.length);
-	}
+    this.queueCount.next(this.queueItems.length);
+  }
 
-	/**
-	 * Sort items by defined load order
-	 *
-	 * @param {LoaderQueueItemModel[]} items
-	 * @return {LoaderQueueItemModel[]}
-	 * @private
-	 */
-	private sortItems(items: LoaderQueueItemModel[]): LoaderQueueItemModel[] {
-		return items.sort(
-			(a: LoaderQueueItemModel, b: LoaderQueueItemModel) =>
-				(this.loadingOrder.indexOf(a.type) - this.loadingOrder.indexOf(b.type)) + (a.order - b.order)
-		);
-	}
+  /**
+   * Sort items by defined load order
+   *
+   * @param {LoaderQueueItemModel[]} items
+   * @return {LoaderQueueItemModel[]}
+   * @private
+   */
+  private sortItems(items: LoaderQueueItemModel[]): LoaderQueueItemModel[] {
+    return items.sort(
+        (a: LoaderQueueItemModel, b: LoaderQueueItemModel) =>
+            (this.loadingOrder.indexOf(a.type) - this.loadingOrder.indexOf(b.type)) + (a.order - b.order)
+    );
+  }
 }

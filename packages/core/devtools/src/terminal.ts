@@ -1,6 +1,6 @@
 import { bold, cyan, dim, green, red } from 'colorette';
 import { RollupError, WatcherOptions } from 'rollup';
-import { relativeId } from './filesystem';
+import { relativeId } from './relativeId';
 
 const CLEAR_SCREEN = '\u001Bc';
 

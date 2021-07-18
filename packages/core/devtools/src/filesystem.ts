@@ -1,9 +1,8 @@
 import { ExistsResult, FindOptions, FSJetpack } from 'fs-jetpack/types';
 import jetpack from 'fs-jetpack';
-import { isAbsolute, relative, resolve } from 'path';
-import { renderFile } from 'ejs';
+import { render, renderFile } from 'ejs';
 import { dotCase, normalize, pascalCase } from './string';
-import { dump, load } from 'js-yaml';
+import { successMessage } from './terminal';
 
 /**
  * Check if given path exists under current working dir
@@ -48,17 +47,6 @@ export function resolvePath(pathParts: string[], fsJetpack: FSJetpack = jetpack)
 }
 
 /**
- * Get the relativeId for given id
- *
- * @param {string} id
- * @return {string}
- */
-export function relativeId(id: string) {
-  if (!isAbsolute(id)) return id;
-  return relative(resolve(), id);
-}
-
-/**
  * Render ejs template from given path
  *
  * @param {string} template
@@ -68,6 +56,18 @@ export function relativeId(id: string) {
 export async function renderTemplateFromPath(template: string, replacers: { [key: string]: any }): Promise<string> {
   return await renderFile(template, replacers);
 }
+
+/**
+ * Render ejs from given string
+ *
+ * @param {string} templateString
+ * @param {[p: string]: any} replacers
+ * @return {Promise<string>}
+ */
+export async function renderTemplateFromString(templateString: string, replacers: { [key: string]: any }): Promise<string> {
+  return await render(templateString, replacers, { async: true });
+}
+
 
 /**
  * Convert given name and type to useable object for file creation
@@ -95,60 +95,33 @@ export function convertNameType(name: string, type: string): { className: string
     path: splitted.join('/'),
     completePath: [...splitted, fileName].join('/')
   };
-
 }
 
 /**
- * Read given path as yaml and convert to json
+ * Install helper for creating files and folders
  *
- * @param {string} path
- * @return {object}
+ * @param installConfig
+ * @param jetpack
  */
-export function readYamlAsJson(path: string): Promise<{ path: string, message: string } | object> {
-  const jetpack = fsJetpack();
+export function dirAndFileInstaller(installConfig: DirAndFileInstaller[], jetpack: FSJetpack): void {
+  installConfig
+      .forEach((step: { name: string, file?: any }) => {
+        if (!step.file) {
+          jetpack.dir(step.name);
+        } else {
+          jetpack.file(step.name, {
+            content: step.file
+          });
+        }
 
-  return new Promise((resolve, reject) => {
-
-    if (!jetpack.exists(path)) {
-      reject({ path: jetpack.path(path), message: 'Not Exists' });
-    }
-
-    const content = jetpack.read(path, 'utf8');
-
-    resolve(load(content) as object);
-  });
+        successMessage(jetpack.path(step.name), 'Created');
+      });
 }
 
 /**
- * Convert json to yaml and store on given path
- *
- * @param {string} path
- * @param {object} content
- * @param {boolean} force
+ * Interface for dirAndFileInstaller function
  */
-export function writeJsonToYaml(path: string, content: object, force: boolean = false): Promise<{ path: string, message: string }> {
-  return new Promise((resolve, reject) => {
-    const jetpack = fsJetpack();
-
-    if (!force && jetpack.exists(path)) {
-      reject({ path: jetpack.path(path), message: 'Already Exists' });
-    }
-
-    const yamlContent = dump(content, { quotingType: '"', lineWidth: 120 });
-    jetpack.write(path, yamlContent);
-    resolve({ path: jetpack.path(path), message: 'Created:' });
-  });
-}
-
-/**
- * Append new content to existing yaml
- *
- * @param {string} path
- * @param {object} content
- */
-export async function appendJsonToYaml(path: string, content: object): Promise<{ path: string, message: string }> {
-  const oldContent = await readYamlAsJson(path);
-  const appendContent = { ...oldContent, ...content };
-
-  return await writeJsonToYaml(path, appendContent, true);
+export interface DirAndFileInstaller {
+  name: string;
+  file?: string | object | number | boolean;
 }
