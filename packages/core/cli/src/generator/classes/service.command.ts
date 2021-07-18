@@ -1,5 +1,4 @@
 import { Arguments, CommandModule } from 'yargs';
-import { ejsClassTemplate, moduleClass } from '../file-object-stubs';
 import {
   convertNameType,
   errorMessage,
@@ -7,29 +6,30 @@ import {
   renderTemplateFromString,
   successMessage
 } from '@abstractflo/atlas-devtools';
+import { ejsClassTemplate, serviceClass } from '../../file-object-stubs';
 
-export const ModuleCommand: CommandModule = {
+export const ServiceCommand: CommandModule = {
 
   /**
    * Command name
    */
-  command: 'module <name>',
+  command: 'service <name>',
 
   /**
    * Command Alias
    */
-  aliases: 'm',
+  aliases: 's',
 
   /**
    * Command description
    */
-  describe: 'Generate new module',
+  describe: 'Generate service',
 
   /**
    * Process the command
    */
   async handler(args: Arguments<{ name: string }>): Promise<void> {
-    const converted = convertNameType(args.name, '-module');
+    const converted = convertNameType(args.name, '-service');
 
     if (fsJetpack().exists(converted.completePath)) {
       return errorMessage(converted.completePath, 'Already exists');
@@ -37,7 +37,7 @@ export const ModuleCommand: CommandModule = {
 
     const template = await renderTemplateFromString(
         ejsClassTemplate,
-        { className: converted.className, ...moduleClass }
+        { className: converted.className, ...serviceClass }
     );
 
     fsJetpack().file(converted.completePath, { content: template });

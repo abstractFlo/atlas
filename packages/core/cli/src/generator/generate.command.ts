@@ -1,7 +1,7 @@
 import { Argv, CommandModule } from 'yargs';
-import { ComponentCommand } from './component.command';
-import { ServiceCommand } from './service.command';
-import { ModuleCommand } from './module.command';
+import { ComponentCommand } from './classes/component.command';
+import { ServiceCommand } from './classes/service.command';
+import { ModuleCommand } from './classes/module.command';
 import { ResourceCommand } from './resource.command';
 
 export const GenerateCommand: CommandModule = {
