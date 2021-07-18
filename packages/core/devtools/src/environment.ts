@@ -11,8 +11,11 @@ import { constantCase } from './string';
  */
 export function env<T = string>(key: string, defaultValue: T = null): T {
   const env = envToJson();
+  const envVar = env[key];
 
-  return env[key] || defaultValue;
+  return envVar !== undefined && envVar !== null && envVar !== ''
+      ? envVar
+      : defaultValue;
 }
 
 /**

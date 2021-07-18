@@ -10,7 +10,7 @@ export class ResourceManager {
    */
   public async findAvailableResources(): Promise<GameResourceModel[]> {
     const jetpack = fsJetpack();
-    const outDir = env('ATLAS_BUILD_OUTPUT', '');
+    const outDir = env('ATLAS_BUILD_OUTPUT', 'dist');
 
     return jetpack
         .find('.', { matching: 'atlas-resource.json', files: true, directories: false })

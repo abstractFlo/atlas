@@ -8,9 +8,19 @@ import {
   VERSION,
   watch
 } from 'rollup';
-import { getResetScreen, handleError, isTTY, relativeId, stderr } from '@abstractflo/atlas-devtools';
+import {
+  env,
+  fsJetpack,
+  getResetScreen,
+  handleError,
+  isTTY,
+  relativeId,
+  stderr,
+  successMessage
+} from '@abstractflo/atlas-devtools';
 import { bold, cyan, green, underline } from 'colorette';
 import ms from 'pretty-ms';
+import { getDefinedPreserves } from './builder.helpers';
 
 export class Builder {
 
@@ -22,6 +32,14 @@ export class Builder {
    */
   private readonly watch: boolean;
 
+  /**
+   * Contains the buildOutput
+   *
+   * @type {string}
+   * @private
+   */
+  private readonly buildOutput: string = env('ATLAS_BUILD_OUTPUT', 'dist');
+
   constructor(watch: boolean) {
     this.watch = watch;
   }
@@ -32,9 +50,11 @@ export class Builder {
    * @param {RollupOptions[]} configs
    */
   public async run(configs: RollupOptions[]): Promise<void> {
-    this.watch
+    await this.prepare();
+
+    /*this.watch
         ? await this.startWatching(configs)
-        : await this.buildAll(configs);
+        : await this.buildAll(configs);*/
   }
 
   /**
@@ -153,5 +173,59 @@ export class Builder {
    * @return {Promise<void>}
    * @private
    */
-  private async prepare(): Promise<void> {}
+  private prepare(): Promise<void> {
+    return new Promise((resolve) => {
+      this.cleanup();
+      this.copyFiles();
+      resolve();
+    });
+  }
+
+  /**
+   * Cleanup the build output
+   *
+   * @private
+   */
+  private cleanup(): void {
+
+    if (!env('ATLAS_CLEAR_BEFORE_BUILD', false) || !fsJetpack().exists(this.buildOutput)) return;
+
+
+    const preserved = getDefinedPreserves();
+    const removeablePaths = fsJetpack().find(this.buildOutput, {
+      matching: [
+        '!(node_modules|map)',
+        ...preserved.map((preserve: string) => `!${preserve}*`)
+      ],
+      recursive: false
+    });
+
+    removeablePaths.forEach((path: string) => {
+      fsJetpack().remove(path);
+      successMessage(path, 'Removed');
+    });
+  }
+
+  /**
+   * Copy all static files they needed
+   * @private
+   */
+  private copyFiles(): void {
+    const filesForCopy = [
+      { from: 'package.json', to: `${this.buildOutput}/package.json` }
+    ];
+
+    const staticFolder = env('ATLAS_RETAIL_FOLDER', 'retail');
+
+    const removeablePaths = fsJetpack().find(staticFolder, {
+      matching: [
+        '!(node_modules|_*|.*|*.example.*)'
+      ],
+      directories: true,
+      recursive: false
+    });
+
+
+    console.log(removeablePaths);
+  }
 }
