@@ -8,7 +8,8 @@ import {
   errorMessage,
   fsJetpack,
   jsonToEnv,
-  jsonToYaml
+  jsonToYaml,
+  sanitizedCfg
 } from '@abstractflo/atlas-devtools';
 import { atlasJson, baseEnv, dockerCompose, pkgJson, serverCfgBase, tsConfig, tsEslint } from '../file-object-stubs';
 
@@ -93,23 +94,14 @@ function dockerFile(): string {
  * @return {string}
  */
 function getServerCfgBase(): string {
-  return createTempCfg(serverCfgBase)
+  const cfg = createTempCfg(serverCfgBase)
       .serialize()
-      .replace(/,/g, '')
-      .replace('token', '#token')
-      .replace('password', '#password')
-      .replace('voice', '#voice')
-      .replace('bitrate', '#bitrate')
-      .replace('externalSecret', '#externalSecret')
-      .replace('externalHost', '#externalHost')
-      .replace('externalPort', '#externalPort')
-      .replace('externalPublicHost', '#externalPublicHost')
-      .replace('externalPublicPort', '#externalPublicPort')
-      .replace('}', '#}')
-      .replace('timeout', '#timeout')
-      .replace('streamingDistance', '#streamingDistance')
-      .replace('migrationDistance', '#migrationDistance')
-      //@ts-ignore
-      .replace(/'(true|false|[0-9.]+)'/g, (a: string, b: string) => b);
+      .replace(
+          /(token|password|voice|bitrate|external|}|timeout|streamingDistance|migrationDistance)/g,
+          //@ts-ignore
+          (a: string, b: string) => `#${b}`
+      );
+
+  return sanitizedCfg(cfg);
 }
 
