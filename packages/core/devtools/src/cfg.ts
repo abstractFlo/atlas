@@ -33,6 +33,28 @@ export function createTempCfg(data: { [key: string]: any }): Config {
 }
 
 /**
+ * Remove all not used characters from cfg string
+ *
+ * @param {string} cfg
+ * @return {string}
+ */
+export function sanitizedCfg(cfg: string): string {
+  return cfg.replace(/,/g, '')
+      //@ts-ignore
+      .replace(/'(true|false|[0-9.]+)'/g, (a: string, b: string) => b);
+}
+
+/**
+ * Generate cfg config string
+ *
+ * @param {[p: string]: any} data
+ * @return {string}
+ */
+export function cfgFromObject(data: { [key: string]: any }): string {
+  return createTempCfg(data).serialize();
+}
+
+/**
  * Cfg-Reader types
  * @type {{Number: number, Dict: number, List: number, String: number, Boolean: number}}
  */
