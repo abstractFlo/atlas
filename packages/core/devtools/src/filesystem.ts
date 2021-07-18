@@ -110,7 +110,7 @@ export function dirAndFileInstaller(installConfig: DirAndFileInstaller[], jetpac
           jetpack.dir(step.name);
         } else {
           jetpack.file(step.name, {
-            content: step.file
+            content: step.file === 'empty' ? '': step.file
           });
         }
 
