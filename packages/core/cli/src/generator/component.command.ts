@@ -6,7 +6,7 @@ import {
   renderTemplateFromString,
   successMessage
 } from '@abstractflo/atlas-devtools';
-import { componentClass, ejsClassTemplate, moduleClass } from '../file-object-stubs';
+import { componentClass, ejsClassTemplate } from '../file-object-stubs';
 
 export const ComponentCommand: CommandModule = {
 
