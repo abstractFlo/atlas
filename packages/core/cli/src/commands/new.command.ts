@@ -10,8 +10,8 @@ import {
   jsonToYaml,
   sanitizedCfg
 } from '@abstractflo/atlas-devtools';
-import { atlasJson, baseEnv, dockerCompose, pkgJson, serverCfgBase, tsConfig, tsEslint } from '../file-object-stubs';
-import { gameResourceInstallerFiles } from '../generator/resource/game-resource.helper';
+import { atlasJson, baseEnv, dockerCompose, pkgJson, serverCfgBase, tsConfig, tsEslint } from '../helpers/file-object-stubs';
+import { gameResourceInstallerFiles } from '../helpers/game-resource.helper';
 
 export const NewCommand: CommandModule = {
 

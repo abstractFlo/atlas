@@ -1,24 +1,37 @@
 import { Arguments, Argv, CommandModule } from 'yargs';
 import { cfgFromObject, dirAndFileInstaller, normalize, sanitizedCfg } from '@abstractflo/atlas-devtools';
-import { streamCfg } from '../../file-object-stubs';
+import { streamCfg } from '../helpers/file-object-stubs';
 import {
-  baseData, clothesStreamCfg, clothesTmpFiles,
+  baseData,
+  clothesStreamCfg,
+  clothesTmpFiles,
   generateDirAndFileSetup,
   interiorProxiesStreamCfg,
   interiorProxiesTmpFiles,
-  mloTmpFiles, pedStreamCfg, pedTmpFiles, soundStreamCfg, soundTmpFiles, tattooStreamCfg, tattooTmpFiles,
+  mloTmpFiles,
+  pedStreamCfg,
+  pedTmpFiles,
+  soundStreamCfg,
+  soundTmpFiles,
+  tattooStreamCfg,
+  tattooTmpFiles,
   vehicleStreamCfg,
   vehicleTmpFiles,
   weaponStreamCfg,
   weaponTmpFiles
-} from './dlc-resource.helper';
+} from '../helpers/dlc-resource.helper';
 
 export const DlcResourceCommand: CommandModule = {
 
   /**
    * Command Name
    */
-  command: 'dlc <name>',
+  command: 'generate:dlc <name>',
+
+  /**
+   * Command Alias
+   */
+  aliases: 'gdlc',
 
   /**
    * Command Description
@@ -31,11 +44,22 @@ export const DlcResourceCommand: CommandModule = {
    * @return {Argv}
    */
   builder(yargs: Argv): Argv {
-    return yargs.option('type', {
-      choices: ['vehicle', 'weapon', 'cloth', 'tattoo', 'mlo', 'ped', 'sound', 'proxi', 'base'],
-      type: 'string',
-      default: 'base'
-    });
+    return yargs
+        .usage('Usage: $0 generate:dlc <name> --type=xxx')
+        .example('$0 generate:dlc myVehicle --type=vehicle', 'Generate vehicle dlc template')
+        .example('$0 generate:dlc myWeapon --type=weapon', 'Generate weapon dlc template')
+        .example('$0 generate:dlc myCloth --type=cloth', 'Generate cloth dlc template')
+        .example('$0 generate:dlc myTattoo --type=tattoo', 'Generate tattoo dlc template')
+        .example('$0 generate:dlc myMlo --type=mlo', 'Generate mlo dlc template')
+        .example('$0 generate:dlc myPed --type=ped', 'Generate ped dlc template')
+        .example('$0 generate:dlc mySound --type=sound', 'Generate sound dlc template')
+        .example('$0 generate:dlc myInteriorProxy --type=proxi', 'Generate interiorProxies dlc template')
+        .example('$0 generate:dlc myCustom', 'Generate base dlc template')
+        .option('type', {
+          choices: ['vehicle', 'weapon', 'cloth', 'tattoo', 'mlo', 'ped', 'sound', 'proxi', 'base'],
+          type: 'string',
+          default: 'base'
+        });
   },
 
   /**
@@ -97,13 +121,13 @@ export const DlcResourceCommand: CommandModule = {
         );
         break;
 
-      /*case 'map':
-        streamData = generateDirAndFileSetup(
-            weaponTmpFiles(resourceName),
-            weaponStreamCfg(resourceName),
-            baseData(resourceName, args.type)
-        );
-        break;*/
+        /*case 'map':
+          streamData = generateDirAndFileSetup(
+              weaponTmpFiles(resourceName),
+              weaponStreamCfg(resourceName),
+              baseData(resourceName, args.type)
+          );
+          break;*/
 
       case 'ped':
         streamData = generateDirAndFileSetup(

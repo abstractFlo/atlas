@@ -1,18 +1,18 @@
 import { Arguments, CommandModule } from 'yargs';
 import { cfgFromObject, dirAndFileInstaller, normalize, paramCase, sanitizedCfg } from '@abstractflo/atlas-devtools';
-import { assetPackResource } from '../../file-object-stubs';
+import { assetPackResource } from '../helpers/file-object-stubs';
 
 export const AssetResourceCommand: CommandModule = {
 
   /**
    * Command Name
    */
-  command: 'asset <name>',
+  command: 'generate:asset <name>',
 
   /**
    * Command Alias
    */
-  aliases: 'a',
+  aliases: 'ga',
 
   /**
    * Command Description

@@ -1,18 +1,18 @@
 import { Arguments, Argv, CommandModule } from 'yargs';
 import { DirAndFileInstaller, dirAndFileInstaller, normalize } from '@abstractflo/atlas-devtools';
-import { gameResourceInstallerFiles } from './game-resource.helper';
+import { gameResourceInstallerFiles } from '../helpers/game-resource.helper';
 
 export const GameResourceCommand: CommandModule = {
 
   /**
    * Command name
    */
-  command: 'game <name>',
+  command: 'generate:game <name>',
 
   /**
    * Command alias
    */
-  aliases: 'g',
+  aliases: 'gg',
 
   /**
    * Command description

@@ -6,7 +6,7 @@ import {
   gameResource,
   moduleClass,
   serverEntryFileTemplate
-} from '../../file-object-stubs';
+} from './file-object-stubs';
 
 /**
  * Gameresource installer file setup array

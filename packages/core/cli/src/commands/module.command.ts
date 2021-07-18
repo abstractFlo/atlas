@@ -1,5 +1,5 @@
 import { Arguments, CommandModule } from 'yargs';
-import { ejsClassTemplate, moduleClass } from '../../file-object-stubs';
+import { ejsClassTemplate, moduleClass } from '../helpers/file-object-stubs';
 import {
   convertNameType,
   errorMessage,
@@ -13,12 +13,12 @@ export const ModuleCommand: CommandModule = {
   /**
    * Command name
    */
-  command: 'module <name>',
+  command: 'generate:module <name>',
 
   /**
    * Command Alias
    */
-  aliases: 'm',
+  aliases: 'gm',
 
   /**
    * Command description

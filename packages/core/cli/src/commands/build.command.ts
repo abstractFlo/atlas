@@ -1,5 +1,5 @@
 import { Arguments, Argv, CommandModule } from 'yargs';
-import { Builder } from './builder';
+import { Builder } from '../builder/builder';
 import { ResourceConfigCreator, ResourceManager } from '@abstractflo/atlas-devtools';
 
 export const BuildCommand: CommandModule = {

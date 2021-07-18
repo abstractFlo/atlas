@@ -1,5 +1,5 @@
 import { camelCase, cfgFromObject, pascalCase, sanitizedCfg, snakeCase } from '@abstractflo/atlas-devtools';
-import { dlcResource, streamCfg } from '../../file-object-stubs';
+import { dlcResource, streamCfg } from './file-object-stubs';
 import { interproxiesMeta, pedMeta, tattooMeta, tattooOverlayXml } from './dlc-xml-meta';
 
 /**

@@ -6,19 +6,19 @@ import {
   renderTemplateFromString,
   successMessage
 } from '@abstractflo/atlas-devtools';
-import { ejsClassTemplate, serviceClass } from '../../file-object-stubs';
+import { ejsClassTemplate, serviceClass } from '../helpers/file-object-stubs';
 
 export const ServiceCommand: CommandModule = {
 
   /**
    * Command name
    */
-  command: 'service <name>',
+  command: 'generate:service <name>',
 
   /**
    * Command Alias
    */
-  aliases: 's',
+  aliases: 'gs',
 
   /**
    * Command description
