@@ -34,7 +34,7 @@ export const dockerCompose = {
 export const gameResource = {
   type: 'js',
   main: 'server.js',
-  'client-main': 'client-js',
+  'client-main': 'client.js',
   'client-files': [],
   deps: []
 };
@@ -144,10 +144,23 @@ export const baseEnv = {
 };
 
 /**
- * Atlas JSON RC
+ * atlas.json stub
+ *
  * @type {{}}
  */
 export const atlasJson = {};
+
+/**
+ * atlas-resurce.json stub
+ *
+ * @param {string} name
+ * @param {boolean} standalone
+ * @return {{isGameResource: boolean, name: string}}
+ */
+export const atlasResourceJson = (name: string, standalone: boolean) => ({
+  name,
+  isGameResource: standalone
+});
 
 /**
  * Template for base server.cfg
@@ -230,3 +243,42 @@ export const ejsClassTemplate = [
   '<%- decorator; %>\n' +
   'export class <%- className; %> {}\n'
 ].join('');
+
+/**
+ * Server Entry File
+ *
+ * @param {string} name
+ * @return {string[]}
+ */
+export const serverEntryFileTemplate = (name: string) => ([
+  'import \'@abstractflo/atlas-server\';',
+  'import { app, LoaderService, UtilsService } from \'@abstractflo/atlas-shared\';',
+  'import { ServerModule } from \'./server.module\';\n',
+  'const loaderService = app.resolve(LoaderService);\n',
+  'loaderService',
+  '\t.bootstrap(ServerModule)',
+  '\t.done(() => {',
+  `\t\tUtilsService.log(\`~g~${name} loaded~w~\`);`,
+  '\t});'
+].join('\n'));
+
+/**
+ * Client Entry File
+ *
+ * @param {string} name
+ * @return {string[]}
+ */
+export const clientEntryFileTemplate = (name: string) => ([
+  'import { EventService } from \'@abstractflo/atlas-client\';',
+  'import { app, LoaderService, UtilsService } from \'@abstractflo/atlas-shared\';',
+  'import { ClientModule } from \'./client.module\';\n',
+  'const loaderService = app.resolve(LoaderService);\n',
+  'loaderService',
+  '\t.waitFor(\'connectionComplete\')',
+  '\t.bootstrap(ClientModule)',
+  '\t.done(() => {',
+  `\t\tconst eventService = app.resolve(EventService);`,
+  `\t\teventService.emitServer('playerConnected')`,
+  `\t\tUtilsService.log(\`~g~${name} loaded~w~\`);`,
+  '\t});'
+].join('\n'));

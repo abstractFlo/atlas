@@ -105,7 +105,7 @@ export function convertNameType(name: string, type: string): { className: string
  * @param force
  * @param fsJetpack
  */
-export function dirAndFileInstaller(path: string, installConfig: DirAndFileInstaller[], force: boolean = false, fsJetpack: FSJetpack = jetpack): void {
+export function dirAndFileInstaller<T = any>(path: string, installConfig: (DirAndFileInstaller & T)[], force: boolean = false, fsJetpack: FSJetpack = jetpack): void {
   let jetpack = fsJetpack.cwd(path);
 
   if (!force && jetpack.exists('')) {

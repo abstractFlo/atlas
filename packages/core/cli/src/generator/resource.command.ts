@@ -27,7 +27,7 @@ export const ResourceCommand: CommandModule = {
    */
   builder(yargs: Argv): Argv {
     return yargs
-        .wrap(140)
+        .wrap(120)
         .demandCommand()
         .command(GameResourceCommand)
         .command(DlcResourceCommand)

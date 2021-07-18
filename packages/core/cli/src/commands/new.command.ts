@@ -11,6 +11,7 @@ import {
   sanitizedCfg
 } from '@abstractflo/atlas-devtools';
 import { atlasJson, baseEnv, dockerCompose, pkgJson, serverCfgBase, tsConfig, tsEslint } from '../file-object-stubs';
+import { gameResourceInstallerFiles } from '../generator/resource/game-resource.helper';
 
 export const NewCommand: CommandModule = {
 
@@ -54,6 +55,11 @@ export const NewCommand: CommandModule = {
     );
 
     dirAndFileInstaller(args.name, installConfig, force);
+    dirAndFileInstaller(
+        `${args.name}/resources`,
+        await gameResourceInstallerFiles('gamemode', true),
+        force
+    );
   }
 };
 
@@ -61,16 +67,14 @@ export const NewCommand: CommandModule = {
  * Project Installer
  */
 const newProjectInstaller = [
-  { name: 'resources' },
-  { name: 'retail' },
   { name: 'tsconfig.json', file: tsConfig },
   { name: 'tsconfig.eslint.json', file: tsEslint },
   { name: 'package.json', file: pkgJson },
   { name: '.env', file: jsonToEnv(baseEnv) },
-  { name: 'docker-compose.yaml', file: jsonToYaml(dockerCompose), dockerOnly: true },
-  { name: '.docker/Dockerfile', file: dockerFile(), dockerOnly: true },
+  { name: 'atlas.json', file: atlasJson },
   { name: 'retail/server.cfg', file: getServerCfgBase().replace(/}/g, '#}') },
-  { name: 'atlas.json', file: atlasJson }
+  { name: '.docker/Dockerfile', file: dockerFile(), dockerOnly: true },
+  { name: 'docker-compose.yaml', file: jsonToYaml(dockerCompose), dockerOnly: true }
 ];
 
 /**
