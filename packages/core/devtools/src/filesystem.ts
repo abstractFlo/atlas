@@ -1,4 +1,4 @@
-import { ExistsResult, FindOptions, FSJetpack } from 'fs-jetpack/types';
+import { CopyOptions, ExistsResult, FindOptions, FSJetpack } from 'fs-jetpack/types';
 import jetpack from 'fs-jetpack';
 import { render, renderFile } from 'ejs';
 import { dotCase, normalize, pascalCase } from './string';
@@ -124,6 +124,17 @@ export function dirAndFileInstaller<T = any>(path: string, installConfig: (DirAn
 
         successMessage(jetpack.path(step.name), 'Created');
       });
+}
+
+/**
+ * Copy given source to destination
+ *
+ * @param {string} source
+ * @param {string} destination
+ * @param {CopyOptions} options
+ */
+export function copy(source: string, destination: string, options: CopyOptions = { overwrite: true }): void {
+  return fsJetpack().copy(source, destination, options);
 }
 
 /**

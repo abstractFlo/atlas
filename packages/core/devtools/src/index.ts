@@ -10,7 +10,8 @@ export {
   renderTemplateFromPath,
   convertNameType,
   dirAndFileInstaller,
-  renderTemplateFromString
+  renderTemplateFromString,
+  copy
 } from './filesystem';
 
 export type { DirAndFileInstaller } from './filesystem';

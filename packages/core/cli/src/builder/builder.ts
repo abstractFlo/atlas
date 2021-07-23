@@ -9,7 +9,9 @@ import {
   watch
 } from 'rollup';
 import {
+  copy,
   env,
+  errorMessage,
   fsJetpack,
   getResetScreen,
   handleError,
@@ -51,10 +53,11 @@ export class Builder {
    */
   public async run(configs: RollupOptions[]): Promise<void> {
     await this.prepare();
+    successMessage('Waiting...', 'Start Bundle')
 
-    /*this.watch
+    this.watch
         ? await this.startWatching(configs)
-        : await this.buildAll(configs);*/
+        : await this.buildAll(configs);
   }
 
   /**
@@ -188,21 +191,20 @@ export class Builder {
    */
   private cleanup(): void {
 
-    if (!env('ATLAS_CLEAR_BEFORE_BUILD', false) || !fsJetpack().exists(this.buildOutput)) return;
+    if (env<string>('ATLAS_CLEAR_BEFORE_BUILD', 'false') !== 'true' || !fsJetpack().exists(this.buildOutput)) return;
 
 
     const preserved = getDefinedPreserves();
-    const removeablePaths = fsJetpack().find(this.buildOutput, {
-      matching: [
-        '!(node_modules|map)',
-        ...preserved.map((preserve: string) => `!${preserve}*`)
-      ],
-      recursive: false
-    });
+    const removeablePaths = fsJetpack()
+        .find(this.buildOutput, {
+          matching: preserved.map((path: string) => `!${path}`),
+          directories: false
+
+        });
 
     removeablePaths.forEach((path: string) => {
       fsJetpack().remove(path);
-      successMessage(path, 'Removed');
+      errorMessage(path, 'Removed');
     });
   }
 
@@ -217,15 +219,19 @@ export class Builder {
 
     const staticFolder = env('ATLAS_RETAIL_FOLDER', 'retail');
 
-    const removeablePaths = fsJetpack().find(staticFolder, {
-      matching: [
-        '!(node_modules|_*|.*|*.example.*)'
-      ],
-      directories: true,
-      recursive: false
-    });
+    fsJetpack()
+        .find(staticFolder, { matching: ['!*.example.*', '!node_modules', '!.*', '!_*'], directories: false })
+        .filter((path: string) => !path.includes('\\_'))
+        .forEach((path: string) => {
+          const buildOutput = fsJetpack().path(this.buildOutput, path.slice(
+              env('ATLAS_RETAIL_FOLDER').length + 1
+          ));
 
+          copy(path, buildOutput);
+          successMessage(buildOutput, 'Copied');
+        });
 
-    console.log(removeablePaths);
+    copy('package.json', `${this.buildOutput}/package.json`);
+    successMessage(`${this.buildOutput}/package.json`, 'Copied');
   }
 }

@@ -27,7 +27,6 @@
     "@rollup/plugin-node-resolve": "^13.0.2",
     "@swc/core": "^1.2.64",
     "@types/yargs": "^17.0.2",
-    "cfg-reader": "^2.0.0-rc8",
     "eslint": "^7.30.0"
   },
   "dependencies": {

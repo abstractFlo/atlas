@@ -1959,19 +1959,10 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-cfg-reader@^2.0.0-rc12:
-  version "2.0.0-rc12"
-  resolved "https://registry.yarnpkg.com/cfg-reader/-/cfg-reader-2.0.0-rc12.tgz#a19e064ba410fdcf5fba14f8aa8e17e834ccd624"
-  integrity sha512-CCYFGuo/MIfr2KT07eHNUefLuc7gFqvw/C6AgO1RuxrJSWGRfWAfbfiB1bNTGcFEPaX/UCvvvehSYd0QOZ13VQ==
-  dependencies:
-    bindings "^1.5.0"
-    fs "0.0.1-security"
-    node-addon-api "^3.1.0"
-
-cfg-reader@^2.0.0-rc8:
-  version "2.0.0-rc9"
-  resolved "https://registry.yarnpkg.com/cfg-reader/-/cfg-reader-2.0.0-rc9.tgz#780daf04510b20d65ed56b8048672b05e2e1b64d"
-  integrity sha512-yloxSETzk3s+4bl+Ipcsa/03NDSBsUVqiObRjXtEdQCFLHp67DNmkZ+TyQSXPr4ptQHdV9Em/c07mintbJev6A==
+cfg-reader@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/cfg-reader/-/cfg-reader-2.0.0.tgz#b6e5aa575084ef1bd20adb76384a95604ad96030"
+  integrity sha512-bk1cZzr0VYsE2Rkd1HBiAk4QHEPXdmbvZfDYG4/6w+CjyGT4BTej/1XL0x5HuMLzZWshhH8P/5Yog6PUqW7XXA==
   dependencies:
     bindings "^1.5.0"
     fs "0.0.1-security"

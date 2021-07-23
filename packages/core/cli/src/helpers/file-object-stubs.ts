@@ -168,7 +168,7 @@ export const atlasResourceJson = (name: string, standalone: boolean) => ({
  * @type {{}}
  */
 export const serverCfgBase = {
-  name: '\'New alt:V Server powered by Atlas\'',
+  name: 'New alt:V Server powered by Atlas',
   host: '0.0.0.0',
   port: 7788,
   players: 10,
@@ -176,9 +176,9 @@ export const serverCfgBase = {
   announce: false,
   '#token': 'noToken',
   gamemode: 'unknown',
-  website: '\'https://atlas.abstractmedia.de\'',
+  website: 'https://atlas.abstractmedia.de',
   language: 'English',
-  description: '\'A new awesome gamemode written in TypeScript powered by Atlas\'',
+  description: 'A new awesome gamemode written in TypeScript powered by Atlas',
   debug: true,
   '#streamingDistance': '',
   '#migrationDistance': 150,
@@ -199,9 +199,9 @@ export const serverCfgBase = {
     'oop'
   ],
   '#useEarlyAuth': false,
-  '#earlyAuthUrl': '\'https://your.url.de\'',
+  '#earlyAuthUrl': 'https://your.url.de',
   '#useCdn': false,
-  '#cdnUrl': '\'https://your.url.de\''
+  '#cdnUrl': 'https://your.url.de'
 };
 
 /**

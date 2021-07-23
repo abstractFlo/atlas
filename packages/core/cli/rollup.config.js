@@ -16,6 +16,11 @@ export default [
     plugins: [
       swc({
         jsc: {
+          paths: {
+            '@plugins/foo': [
+              '../../../packages/plugins/foo',
+            ],
+          },
           parser: {
             syntax: 'typescript',
             dynamicImport: true,
