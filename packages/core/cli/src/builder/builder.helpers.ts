@@ -9,18 +9,19 @@ export function getDefinedPreserves(): string[] {
   const hasDefinedPreserves = env<string>('ATLAS_CLEAR_PRESERVE', '');
 
   const out = [
-    'node_modules*',
+    'node_modules/**/*',
     'altv-server',
     '.env',
     'start.sh',
-    'cache',
-    'data',
-    'modules',
+    'cache/**/*',
+    'data/**/*',
+    'modules/**/*',
     'package-lock.json',
     'yarn.lock',
     'server.log',
     '.docker',
-    'docker*',
+    'docker/**/*',
+    'docker-compose.*'
     //'resources'
   ];
 
