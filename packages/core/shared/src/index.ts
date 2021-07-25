@@ -35,3 +35,6 @@ export {
   castFromJson,
   JsonEntityModel
 } from './libs/json-entity';
+
+
+export { BasePool } from './pools/base.pool';
