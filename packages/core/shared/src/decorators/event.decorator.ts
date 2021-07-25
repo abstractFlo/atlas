@@ -13,25 +13,25 @@ import { Internal } from '../internal';
  * @constructor
  */
 export const On = (name?: string): MethodDecorator => {
-	return function (
-		target: Record<string, unknown>,
-		propertyKey: string,
-		descriptor: PropertyDescriptor
-	): PropertyDescriptor {
-		const eventName = name || propertyKey;
+  return function (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor {
+    const eventName = name || propertyKey;
 
-		setEventServiceReflectMetaData(Internal.Events_On, {
-			type: 'on',
-			eventName,
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				name: eventName
-			}
-		});
+    setEventServiceReflectMetaData(Internal.Events_On, {
+      type: 'on',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        name: eventName
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -42,22 +42,48 @@ export const On = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const Once = (name?: string): MethodDecorator => {
-	return function (
-		target: Record<string, unknown>,
-		propertyKey: string,
-		descriptor: PropertyDescriptor
-	): PropertyDescriptor {
-		const eventName = name || propertyKey;
+  return function (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor {
+    const eventName = name || propertyKey;
 
-		setEventServiceReflectMetaData(Internal.Events_Once, {
-			type: 'once',
-			eventName,
-			methodName: propertyKey,
-			targetName: target.constructor.name
-		});
+    setEventServiceReflectMetaData(Internal.Events_Once, {
+      type: 'once',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
+};
+
+/**
+ * Register decorated method for off handler
+ *
+ * @param {string} name
+ * @return {MethodDecorator}
+ * @constructor
+ */
+export const Off = (name?: string): MethodDecorator => {
+  return function (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor {
+    const eventName = name || propertyKey;
+
+    setEventServiceReflectMetaData(Internal.Events_Once, {
+      type: 'off',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name
+    });
+
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -68,29 +94,29 @@ export const Once = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const Cmd = (name?: string): MethodDecorator => {
-	return function (
-		target: Record<string, unknown>,
-		propertyKey: string,
-		descriptor: PropertyDescriptor
-	): PropertyDescriptor {
-		const commandName = name || propertyKey;
-		const events = getFrameworkMetaData<EventModel[]>(Internal.Events_Console_Command, eventServiceTarget());
-		const alreadyExists = events.find((event: EventModel) => event.eventName === commandName);
+  return function (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor {
+    const commandName = name || propertyKey;
+    const events = getFrameworkMetaData<EventModel[]>(Internal.Events_Console_Command, eventServiceTarget());
+    const alreadyExists = events.find((event: EventModel) => event.eventName === commandName);
 
-		if (!alreadyExists) {
-			setEventServiceReflectMetaData(Internal.Events_Console_Command, {
-				type: 'consoleCommand',
-				eventName: commandName,
-				methodName: propertyKey,
-				targetName: target.constructor.name,
-				validateOptions: {
-					name: commandName
-				}
-			});
-		}
+    if (!alreadyExists) {
+      setEventServiceReflectMetaData(Internal.Events_Console_Command, {
+        type: 'consoleCommand',
+        eventName: commandName,
+        methodName: propertyKey,
+        targetName: target.constructor.name,
+        validateOptions: {
+          name: commandName
+        }
+      });
+    }
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -100,13 +126,13 @@ export const Cmd = (name?: string): MethodDecorator => {
  * @param {Partial<EventModel>} data
  */
 export function setEventServiceReflectMetaData(key: string, data: Partial<EventModel>): void {
-	const target = eventServiceTarget();
-	const events = getFrameworkMetaData<EventModel[]>(key, target);
-	const eventModel = new EventModel().cast(data);
+  const target = eventServiceTarget();
+  const events = getFrameworkMetaData<EventModel[]>(key, target);
+  const eventModel = new EventModel().cast(data);
 
-	events.push(eventModel);
+  events.push(eventModel);
 
-	Reflect.defineMetadata<EventModel[]>(key, events, target);
+  Reflect.defineMetadata<EventModel[]>(key, events, target);
 }
 
 /**
@@ -115,5 +141,5 @@ export function setEventServiceReflectMetaData(key: string, data: Partial<EventM
  * @return {EventServiceInterface}
  */
 export function eventServiceTarget(): EventServiceInterface {
-	return app.resolve<EventServiceInterface>(BaseEventService);
+  return app.resolve<EventServiceInterface>(BaseEventService);
 }

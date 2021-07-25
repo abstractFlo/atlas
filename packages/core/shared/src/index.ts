@@ -21,7 +21,7 @@ export { Singleton, Injectable, RegisterClassAsString } from './decorators/frame
 export { Init, Before, After, Last } from './decorators/loader.decorator';
 export { Component, Module } from './decorators/module-loader.decorator';
 export { EveryTick, Interval } from './decorators/timer.decorator';
-export { On, Once, Cmd, setEventServiceReflectMetaData, eventServiceTarget } from './decorators/event.decorator';
+export { On, Once, Off, Cmd, setEventServiceReflectMetaData, eventServiceTarget } from './decorators/event.decorator';
 
 // Models
 export { TimerModel } from './models/timer.model';
