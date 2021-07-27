@@ -11,6 +11,7 @@ import { BaseObjectType } from 'alt-client';
 function OnServer(name: string): MethodDecorator;
 function OnServer(resetable: boolean): MethodDecorator;
 function OnServer(name: string, resetable: boolean): MethodDecorator;
+function OnServer(name?: string, resetable?: boolean): MethodDecorator;
 function OnServer(name?: string | boolean, resetable?: boolean): MethodDecorator {
   return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
     const eventName = typeof name !== 'boolean' && name || propertyKey;

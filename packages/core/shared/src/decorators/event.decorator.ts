@@ -15,6 +15,7 @@ import { Internal } from '../internal';
 function On(name: string): MethodDecorator;
 function On(resetable: boolean): MethodDecorator;
 function On(name: string, resetable: boolean): MethodDecorator;
+function On(name?: string, resetable?: boolean): MethodDecorator;
 function On(name?: string | boolean, resetable?: boolean): MethodDecorator {
   return function (
       target: Record<string, unknown>,

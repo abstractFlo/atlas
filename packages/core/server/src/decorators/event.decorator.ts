@@ -11,6 +11,7 @@ import { BaseObjectType, ColShapeType } from 'alt-server';
 function OnClient(name: string): MethodDecorator;
 function OnClient(resetable: boolean): MethodDecorator;
 function OnClient(name: string, resetable: boolean): MethodDecorator;
+function OnClient(name?: string, resetable?: boolean): MethodDecorator;
 function OnClient(name?: string | boolean, resetable?: boolean): MethodDecorator {
   return (
       target: Record<string, unknown>,
