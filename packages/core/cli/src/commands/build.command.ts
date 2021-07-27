@@ -18,8 +18,8 @@ export const BuildCommand: CommandModule = {
     const manager = new ResourceManager();
 
     const availableResources = await manager.findAvailableResources();
-    const configs = new ResourceConfigCreator(availableResources).getConfigs();
+    const creator = new ResourceConfigCreator(availableResources).getConfigs();
 
-    await builder.run(configs);
+    await builder.run(creator);
   }
 };

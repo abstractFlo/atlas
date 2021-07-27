@@ -6,8 +6,8 @@ import { fsJetpack, resolvePath } from '../../filesystem';
 import convertNamedImports from '../../transformers/convertNamedImports';
 import json from '@rollup/plugin-json';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import swc from 'rollup-plugin-swc';
-import { env } from '../../environment';
+import { ResourceCreateConfigInterface } from './resource-create-config.interface';
+import typescript from '@rollup/plugin-typescript';
 
 export class ResourceConfigCreator {
 
@@ -43,23 +43,7 @@ export class ResourceConfigCreator {
       plugins: [
         json(),
         nodeResolve(),
-        swc({
-          jsc: {
-            parser: {
-              syntax: 'typescript',
-              dynamicImport: true,
-              decorators: true
-            },
-            transform: {
-              legacyDecorator: true,
-              decoratorMetadata: true
-            },
-            loose: true,
-            target: 'es2020',
-            keepClassNames: true
-          },
-          minify: env<boolean>('atlasProduction', false)
-        })
+        typescript()
       ]
     });
 
@@ -70,12 +54,13 @@ export class ResourceConfigCreator {
   }
 
   /**
-   * Return the final configs
+   * Return the final configs and copy sources
    *
-   * @return {RollupOptions[]}
+   * @return {{configs: RollupOptions[], prepareForCopy: {from: string, to: string}[]}}
    */
-  public getConfigs(): RollupOptions[] {
+  public getConfigs(): ResourceCreateConfigInterface {
     const configs = [];
+    const prepareForCopy: { from: string, to: string }[] = [];
 
     this.resources.forEach((resource: GameResourceModel) => {
       if (resource.isServer) {
@@ -89,13 +74,15 @@ export class ResourceConfigCreator {
       }
 
       if (resource.hasAssets) {
-        // Get all files for copy
-        // Don't copy directly
+        prepareForCopy.push({
+          from: fsJetpack().path(resource.source, 'assets'),
+          to: resource.output
+        });
       }
 
     });
 
-    return configs;
+    return { configs, prepareForCopy };
   }
 
   /**

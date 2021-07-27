@@ -49,6 +49,7 @@ export {
 } from './libs/json-entity';
 
 export { ResourceManager, ResourceConfigCreator } from './libs/resources';
+export type { ResourceCreateConfigInterface, PrepareForCopyInterface } from './libs/resources';
 
 export { convertNamedImports } from './transformers/convertNamedImports';
 

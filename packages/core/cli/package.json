@@ -6,6 +6,7 @@
   "homepage": "",
   "license": "MIT",
   "main": "dist/atlas-cli.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/*",
     "stubs/*"
@@ -14,13 +15,13 @@
     "atlas": "dist/atlas-cli.js"
   },
   "scripts": {
-    "prebuild": "yarn clean",
+    "prebuild": "yarn clean && yarn types",
     "postbuild": "yarn local:pack",
     "prewatch": "yarn clean",
     "build": "rollup -c",
     "watch": "rollup -cw",
     "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
-    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts",
+    "types": "dts-bundle-generator -o dist/index.d.ts src/atlas-cli.ts",
     "local:pack": "yarn pack --filename cli.tgz"
   },
   "devDependencies": {

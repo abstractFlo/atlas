@@ -16,11 +16,13 @@ import {
   getResetScreen,
   handleError,
   isTTY,
+  PrepareForCopyInterface,
   relativeId,
+  ResourceCreateConfigInterface,
   stderr,
   successMessage
 } from '@abstractflo/atlas-devtools';
-import { bold, cyan, green, underline } from 'colorette';
+import { blueBright, bold, cyan, green, underline } from 'colorette';
 import ms from 'pretty-ms';
 import { getDefinedPreserves } from './builder.helpers';
 
@@ -49,15 +51,17 @@ export class Builder {
   /**
    * Run the build process
    *
-   * @param {RollupOptions[]} configs
+   * @param creator
    */
-  public async run(configs: RollupOptions[]): Promise<void> {
+  public async run(creator: ResourceCreateConfigInterface): Promise<void> {
     await this.prepare();
-    successMessage('Waiting...', 'Start Bundle')
+    await this.copyResourceAssets(creator.prepareForCopy);
+
+    successMessage('Waiting...', 'Start Bundle');
 
     this.watch
-        ? await this.startWatching(configs)
-        : await this.buildAll(configs);
+        ? await this.startWatching(creator.configs)
+        : await this.buildAll(creator.configs);
   }
 
   /**
@@ -228,10 +232,28 @@ export class Builder {
           ));
 
           copy(path, buildOutput);
-          successMessage(buildOutput, 'Copied');
+          successMessage(blueBright(`${path} -> ${buildOutput}`), 'Copied');
         });
 
     copy('package.json', `${this.buildOutput}/package.json`);
-    successMessage(`${this.buildOutput}/package.json`, 'Copied');
+    successMessage(blueBright(`package.json -> ${this.buildOutput}/package.json`), 'Copied');
+  }
+
+  /**
+   * Copy all resource assets
+   *
+   * @return {Promise<void>}
+   * @private
+   */
+  private async copyResourceAssets(filesAndFolders: PrepareForCopyInterface[]): Promise<void> {
+    return new Promise((resolve) => {
+
+      filesAndFolders.forEach((item: PrepareForCopyInterface) => {
+        copy(item.from, item.to);
+        successMessage(blueBright(`${item.from} -> ${item.to}...`), 'Copied');
+      });
+
+      resolve();
+    });
   }
 }

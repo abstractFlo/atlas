@@ -7,5 +7,3 @@ declare module 'alt-server' {
 }
 
 Colshape.prototype = new ColShapeClass();
-
-export default {};

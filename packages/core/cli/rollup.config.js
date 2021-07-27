@@ -1,7 +1,7 @@
-import swc from 'rollup-plugin-swc';
 import pkg from './package.json';
 import pkgRoot from '../../../package.json';
 import builtinModules from 'builtin-modules';
+import typescript from '@rollup/plugin-typescript';
 
 export default [
   {
@@ -14,28 +14,7 @@ export default [
       },
     ],
     plugins: [
-      swc({
-        jsc: {
-          paths: {
-            '@plugins/foo': [
-              '../../../packages/plugins/foo',
-            ],
-          },
-          parser: {
-            syntax: 'typescript',
-            dynamicImport: true,
-            decorators: true,
-          },
-          transform: {
-            legacyDecorator: true,
-            decoratorMetadata: true,
-          },
-          loose: true,
-          target: 'es2020',
-          keepClassNames: true,
-        },
-        minify: true,
-      }),
+      typescript(),
     ],
     external: [
       'yargs/helpers',

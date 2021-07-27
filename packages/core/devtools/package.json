@@ -23,13 +23,14 @@
     "build": "rollup -c",
     "watch": "rollup -cw",
     "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
-    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts",
+    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts --inline-declare-externals --sort",
     "local:pack": "yarn pack --filename devtools.tgz"
   },
   "dependencies": {
     "@abraham/reflection": "^0.8.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.2",
+    "@rollup/plugin-typescript": "^8.2.3",
     "@swc/core": "^1.2.64",
     "cfg-reader": "^2.0.0",
     "change-case": "^4.1.2",
@@ -41,7 +42,9 @@
     "js-yaml": "^4.1.0",
     "jscodeshift": "^0.13.0",
     "rollup": "2.52.7",
-    "rollup-plugin-swc": "leonardssh/rollup-plugin-swc#build"
+    "rollup-plugin-swc": "leonardssh/rollup-plugin-swc#build",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.5"
   },
   "devDependencies": {
     "@types/ejs": "^3.0.7",
