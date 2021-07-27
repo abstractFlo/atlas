@@ -12,17 +12,21 @@ import { Internal } from '../internal';
  * @return {MethodDecorator}
  * @constructor
  */
-export const On = (name?: string): MethodDecorator => {
+function On(name: string): MethodDecorator;
+function On(resetable: boolean): MethodDecorator;
+function On(name: string, resetable: boolean): MethodDecorator;
+function On(name?: string | boolean, resetable?: boolean): MethodDecorator {
   return function (
       target: Record<string, unknown>,
       propertyKey: string,
       descriptor: PropertyDescriptor
   ): PropertyDescriptor {
-    const eventName = name || propertyKey;
+    const eventName = typeof name !== 'boolean' && name || propertyKey;
 
     setEventServiceReflectMetaData(Internal.Events_On, {
       type: 'on',
       eventName,
+      resetable: typeof name !== 'boolean' ? resetable : name,
       methodName: propertyKey,
       targetName: target.constructor.name,
       validateOptions: {
@@ -75,7 +79,7 @@ export const Off = (name?: string): MethodDecorator => {
   ): PropertyDescriptor {
     const eventName = name || propertyKey;
 
-    setEventServiceReflectMetaData(Internal.Events_Once, {
+    setEventServiceReflectMetaData(Internal.Events_Off, {
       type: 'off',
       eventName,
       methodName: propertyKey,
@@ -143,3 +147,5 @@ export function setEventServiceReflectMetaData(key: string, data: Partial<EventM
 export function eventServiceTarget(): EventServiceInterface {
   return app.resolve<EventServiceInterface>(BaseEventService);
 }
+
+export { On };

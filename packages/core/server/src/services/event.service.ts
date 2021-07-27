@@ -3,87 +3,105 @@ import { Colshape, emitClient, Entity, offClient, onceClient, onClient, Player }
 
 @Singleton
 export class EventService extends BaseEventService {
-	/**
-	 * Receive event from client
-	 */
-	public onClient(eventName: string, listener: (...args: any[]) => void) {
-		onClient(eventName, listener);
-	}
 
-	/**
-	 * Unsubscribe from client event
-	 */
-	public offClient(eventName: string, listener: (...args: any[]) => void) {
-		offClient(eventName, listener);
-	}
+  /**
+   * Contains the off event methods
+   *
+   * @type {Map<string, any>}
+   * @private
+   */
+  protected offClientEventsMap: Map<string, CallableFunction[]> = new Map<string, CallableFunction[]>();
 
-	/**
-	 * Emit event to one or all players
-	 */
-	public emitClient(player: Player | null, eventName: string, ...args: any[]) {
-		emitClient(player, eventName, ...args);
-	}
+  /**
+   * Receive event from client
+   */
+  public onClient(eventName: string, listener: (...args: any[]) => void): void;
+  public onClient(eventName: string, listener: (...args: any[]) => void, resetable: boolean): void;
+  public onClient(eventName: string, listener: (...args: any[]) => void, resetable?: boolean) {
+    onClient(eventName, listener);
 
-	/**
-	 * Receive once event from client
-	 */
-	public onceClient(eventName: string, listener: (...args: any[]) => void) {
-		onceClient(eventName, listener);
-	}
+    if (resetable) {
+      this.registerAnonymusOffEvents(this.offClient, eventName, listener);
+    }
+  }
 
+  /**
+   * Unsubscribe from client event
+   */
+  public offClient(eventName: string): void;
+  public offClient(eventName: string, listener: (...args: any[]) => void): void;
+  public offClient(eventName: string, listener?: (...args: any[]) => void) {
+    listener
+        ? offClient(eventName, listener)
+        : this.processOffEvent(eventName, this.offClientEventsMap);
+  }
 
-	/**
-	 * Override base startEventListeners to fit server needs
-	 */
-	@Last
-	protected async start(): Promise<void> {
-		await super.startEventListeners();
-		await this.resolveAndLoadEvents(this.colShapeEvents, 'ColShapeEvents', this.startColShapeEvents.bind(this));
-	}
+  /**
+   * Emit event to one or all players
+   */
+  public emitClient(player: Player | null, eventName: string, ...args: any[]) {
+    emitClient(player, eventName, ...args);
+  }
 
-	/**
-	 * Start the colShape event listener
-	 */
-	private startColShapeEvents(events: EventModel[]) {
-		const eventType = events[0].type;
+  /**
+   * Receive once event from client
+   */
+  public onceClient(eventName: string, listener: (...args: any[]) => void) {
+    onceClient(eventName, listener);
+  }
 
-		this.on(eventType, (colShape: Colshape, entity: Entity) => {
-			this.handleColShapeEvents(events, colShape, entity);
-		});
-	}
+  /**
+   * Override base startEventListeners to fit server needs
+   */
+  @Last
+  protected async start(): Promise<void> {
+    await super.startEventListeners();
+    await this.resolveAndLoadEvents(this.colShapeEvents, 'ColShapeEvents', this.startColShapeEvents.bind(this));
+  }
 
-	/**
-	 * Handle all colShape events
-	 */
-	private handleColShapeEvents(events: EventModel[], colShape: Colshape, entity: Entity) {
-		events.forEach((event: EventModel) => {
-			if (colShape.colshapeType !== event.validateOptions.colShapeType) {
-				return;
-			}
+  /**
+   * Start the colShape event listener
+   */
+  private startColShapeEvents(events: EventModel[]) {
+    const eventType = events[0].type;
 
-			if (event.validateOptions.name !== undefined && colShape.name !== event.validateOptions.name) {
-				return;
-			}
+    this.on(eventType, (colShape: Colshape, entity: Entity) => {
+      this.handleColShapeEvents(events, colShape, entity);
+    });
+  }
 
-			if (
-				event.validateOptions.entity !== undefined &&
-				!this.isEntityType(entity.type, event.validateOptions.entity)
-			) {
-				return;
-			}
+  /**
+   * Handle all colShape events
+   */
+  private handleColShapeEvents(events: EventModel[], colShape: Colshape, entity: Entity) {
+    events.forEach((event: EventModel) => {
+      if (colShape.colshapeType !== event.validateOptions.colShapeType) {
+        return;
+      }
 
-			const instances = app.resolveAll<constructor<any>>(event.targetName);
+      if (event.validateOptions.name !== undefined && colShape.name !== event.validateOptions.name) {
+        return;
+      }
 
-			instances.forEach(async (instance: constructor<any>) => {
-				const instanceMethod = instance[event.methodName];
+      if (
+          event.validateOptions.entity !== undefined &&
+          !this.isEntityType(entity.type, event.validateOptions.entity)
+      ) {
+        return;
+      }
 
-				if (!instanceMethod) {
-					return;
-				}
+      const instances = app.resolveAll<constructor<any>>(event.targetName);
 
-				const method = instanceMethod.bind(instance);
-				await method(colShape, entity);
-			});
-		});
-	}
+      instances.forEach(async (instance: constructor<any>) => {
+        const instanceMethod = instance[event.methodName];
+
+        if (!instanceMethod) {
+          return;
+        }
+
+        const method = instanceMethod.bind(instance);
+        await method(colShape, entity);
+      });
+    });
+  }
 }

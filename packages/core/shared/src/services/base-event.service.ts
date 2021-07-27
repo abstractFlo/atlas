@@ -32,6 +32,14 @@ export class BaseEventService implements EventServiceInterface {
   protected colShapeEvents: string[] = [Internal.Events_Entity_Enter_Col_Shape, Internal.Events_Entity_Leave_Col_Shape];
 
   /**
+   * Contains the off event methods
+   *
+   * @type {Map<string, any>}
+   * @private
+   */
+  protected offEventsMap: Map<string, CallableFunction[]> = new Map<string, CallableFunction[]>();
+
+  /**
    * Contains all base event keys
    *
    * @type {string[]}
@@ -45,7 +53,6 @@ export class BaseEventService implements EventServiceInterface {
     Internal.Events_On_Server,
     Internal.Events_Once_Server
   ];
-
   /**
    * Contains the off event keys
    * @type {string[]}
@@ -56,14 +63,6 @@ export class BaseEventService implements EventServiceInterface {
     Internal.Events_OffServer,
     Internal.Events_OffClient
   ];
-
-  /**
-   * Contains the off event methods
-   *
-   * @type {Map<string, any>}
-   * @private
-   */
-  private offEventsMap: Map<string, CallableFunction[]> = new Map<string, CallableFunction[]>();
 
   constructor(protected readonly commandService: CommandService) {}
 
@@ -77,32 +76,36 @@ export class BaseEventService implements EventServiceInterface {
     UtilsService.eventEmit(eventName, ...args);
   }
 
+
   /**
-   * Unsubscribe from server/client event
-   *
+   * Off Event Implementation
    * @param {string} eventName
    * @param {(...args: any[]) => void} listener
    */
-  public off(eventName: string, listener: (...args: any[]) => void): void {
-    if (listener) {
-      UtilsService.eventOff(eventName, listener);
-    } else {
-      const methods = this.offEventsMap.get(eventName) || [];
-      if (!methods.length) return;
-      methods.forEach(async (method: CallableFunction) => {
-        await method();
-      });
-    }
+  public off(eventName: string): void;
+  public off(eventName: string, listener: (...args: any[]) => void): void;
+  public off(eventName: string, listener?: (...args: any[]) => void): void {
+    listener
+        ? UtilsService.eventOff(eventName, listener)
+        : this.processOffEvent(eventName, this.offEventsMap);
   }
+
 
   /**
    * Receive event from server/client
    *
    * @param {string} eventName
    * @param {(...args: any[]) => void} listener
+   * @param {boolean} resetable
    */
-  public on(eventName: string, listener: (...args: any[]) => void): void {
+  public on(eventName: string, listener: (...args: any[]) => void, resetable: boolean): void;
+  public on(eventName: string, listener: (...args: any[]) => void): void;
+  public on(eventName: string, listener: (...args: any[]) => void, resetable?: boolean): void {
     UtilsService.eventOn(eventName, listener);
+
+    if (resetable) {
+      this.registerAnonymusOffEvents(this.off, eventName, listener);
+    }
   }
 
   /**
@@ -230,6 +233,37 @@ export class BaseEventService implements EventServiceInterface {
    */
   protected isEntityType(entityType: number, type: number): boolean {
     return entityType === type;
+  }
+
+  /**
+   * Register anonymus methods for off events
+   *
+   * @param {string} eventName
+   * @param {Function} internalMethod
+   * @param {(...args: any[]) => void} listener
+   * @protected
+   */
+  protected registerAnonymusOffEvents(internalMethod: Function, eventName: string, listener: (...args: any[]) => void): void {
+    const alreadyRegisteredMethods = this.offEventsMap.get(eventName) || [];
+    const method = internalMethod.bind(this, eventName, listener);
+    alreadyRegisteredMethods.push(method);
+    this.offEventsMap.set(eventName, alreadyRegisteredMethods);
+  }
+
+  /**
+   * Process the offEvent handler
+   *
+   * @param {string} eventName
+   * @private
+   */
+  protected processOffEvent(eventName: string, offEventsMap: Map<string, CallableFunction[]>): void {
+    const methods = offEventsMap.get(eventName) || [];
+
+    if (!methods.length) return;
+
+    methods.forEach(async (method: CallableFunction) => {
+      await method();
+    });
   }
 
   /**

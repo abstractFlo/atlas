@@ -35,4 +35,7 @@ export class EventModel extends JsonEntityModel {
 
   @Cast()
   public validateOptions: Partial<ValidateOptionsModel>;
+
+  @Cast()
+  public resetable: boolean = false;
 }

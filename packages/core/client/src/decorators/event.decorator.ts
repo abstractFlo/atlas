@@ -8,23 +8,27 @@ import { BaseObjectType } from 'alt-client';
  * @return {MethodDecorator}
  * @constructor
  */
-export const OnServer = (name?: string): MethodDecorator => {
-	return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-		const eventName = name || propertyKey;
+function OnServer(name: string): MethodDecorator;
+function OnServer(resetable: boolean): MethodDecorator;
+function OnServer(name: string, resetable: boolean): MethodDecorator;
+function OnServer(name?: string | boolean, resetable?: boolean): MethodDecorator {
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    const eventName = typeof name !== 'boolean' && name || propertyKey;
 
-		setEventServiceReflectMetaData(Internal.Events_On_Server, {
-			type: 'onServer',
-			eventName,
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				name: eventName
-			}
-		});
+    setEventServiceReflectMetaData(Internal.Events_On_Server, {
+      type: 'onServer',
+      eventName,
+      resetable: typeof name !== 'boolean' ? resetable : name,
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        name: eventName
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
-};
+    return registerDescriptor(descriptor);
+  };
+}
 
 /**
  * Register @OnceServer decorator
@@ -34,21 +38,47 @@ export const OnServer = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const OnceServer = (name?: string): MethodDecorator => {
-	return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-		const eventName = name || propertyKey;
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    const eventName = name || propertyKey;
 
-		setEventServiceReflectMetaData(Internal.Events_Once_Server, {
-			type: 'onceServer',
-			eventName,
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				name: eventName
-			}
-		});
+    setEventServiceReflectMetaData(Internal.Events_Once_Server, {
+      type: 'onceServer',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        name: eventName
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
+};
+
+/**
+ * Register decorated method for offServer handler
+ *
+ * @param {string} name
+ * @return {MethodDecorator}
+ * @constructor
+ */
+export const OffServer = (name?: string): MethodDecorator => {
+  return function (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor {
+    const eventName = name || propertyKey;
+
+    setEventServiceReflectMetaData(Internal.Events_OffServer, {
+      type: 'offServer',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name
+    });
+
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -59,21 +89,21 @@ export const OnceServer = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const OnGui = (name?: string): MethodDecorator => {
-	return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-		const eventName = name || propertyKey;
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    const eventName = name || propertyKey;
 
-		setEventServiceReflectMetaData(Internal.Events_On_Gui, {
-			type: 'onGui',
-			eventName,
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				name: eventName
-			}
-		});
+    setEventServiceReflectMetaData(Internal.Events_On_Gui, {
+      type: 'onGui',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        name: eventName
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -84,18 +114,18 @@ export const OnGui = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator => {
-	return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-		setEventServiceReflectMetaData(Internal.Events_Game_Entity_Create, {
-			type: 'gameEntityCreate',
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				entity: entityType
-			}
-		});
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    setEventServiceReflectMetaData(Internal.Events_Game_Entity_Create, {
+      type: 'gameEntityCreate',
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        entity: entityType
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -106,18 +136,18 @@ export const GameEntityCreate = (entityType: BaseObjectType): MethodDecorator =>
  * @constructor
  */
 export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator => {
-	return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-		setEventServiceReflectMetaData(Internal.Events_Game_Entity_Destroy, {
-			type: 'gameEntityDestroy',
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				entity: entityType
-			}
-		});
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    setEventServiceReflectMetaData(Internal.Events_Game_Entity_Destroy, {
+      type: 'gameEntityDestroy',
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        entity: entityType
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -129,19 +159,19 @@ export const GameEntityDestroy = (entityType: BaseObjectType): MethodDecorator =
  * @constructor
  */
 export const StreamSyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
-	return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-		setEventServiceReflectMetaData(Internal.Events_Stream_Synced_Meta_Change, {
-			type: 'streamSyncedMetaChange',
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				entity: entityType,
-				metaKey
-			}
-		});
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    setEventServiceReflectMetaData(Internal.Events_Stream_Synced_Meta_Change, {
+      type: 'streamSyncedMetaChange',
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        entity: entityType,
+        metaKey
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -153,17 +183,20 @@ export const StreamSyncedMetaChange = (entityType: BaseObjectType, metaKey?: str
  * @constructor
  */
 export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
-	return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-		setEventServiceReflectMetaData(Internal.Events_Synced_Meta_Change, {
-			type: 'syncedMetaChange',
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				entity: entityType,
-				metaKey
-			}
-		});
+  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
+    setEventServiceReflectMetaData(Internal.Events_Synced_Meta_Change, {
+      type: 'syncedMetaChange',
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        entity: entityType,
+        metaKey
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
+
+
+export { OnServer };

@@ -8,26 +8,30 @@ import { BaseObjectType, ColShapeType } from 'alt-server';
  * @return {MethodDecorator}
  * @constructor
  */
-export const OnClient = (name?: string): MethodDecorator => {
-	return (
-		target: Record<string, unknown>,
-		propertyKey: string,
-		descriptor: PropertyDescriptor
-	): PropertyDescriptor | void => {
-		const eventName = name || propertyKey;
+function OnClient(name: string): MethodDecorator;
+function OnClient(resetable: boolean): MethodDecorator;
+function OnClient(name: string, resetable: boolean): MethodDecorator;
+function OnClient(name?: string | boolean, resetable?: boolean): MethodDecorator {
+  return (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor | void => {
+    const eventName = typeof name !== 'boolean' && name || propertyKey;
 
-		setEventServiceReflectMetaData(Internal.Events_On_Client, {
-			type: 'onClient',
-			eventName,
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				name: eventName
-			}
-		});
+    setEventServiceReflectMetaData(Internal.Events_On_Client, {
+      type: 'onClient',
+      eventName,
+      resetable: typeof name !== 'boolean' ? resetable : name,
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        name: eventName
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -38,25 +42,51 @@ export const OnClient = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const OnceClient = (name?: string): MethodDecorator => {
-	return (
-		target: Record<string, unknown>,
-		propertyKey: string,
-		descriptor: PropertyDescriptor
-	): PropertyDescriptor | void => {
-		const eventName = name || propertyKey;
+  return (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor | void => {
+    const eventName = name || propertyKey;
 
-		setEventServiceReflectMetaData(Internal.Events_Once_Client, {
-			type: 'onceClient',
-			eventName,
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				name: eventName
-			}
-		});
+    setEventServiceReflectMetaData(Internal.Events_Once_Client, {
+      type: 'onceClient',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        name: eventName
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
+};
+
+/**
+ * Register decorated method for offClient handler
+ *
+ * @param {string} name
+ * @return {MethodDecorator}
+ * @constructor
+ */
+export const OffClient = (name?: string): MethodDecorator => {
+  return function (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor {
+    const eventName = name || propertyKey;
+
+    setEventServiceReflectMetaData(Internal.Events_OffClient, {
+      type: 'offServer',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name
+    });
+
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -68,23 +98,23 @@ export const OnceClient = (name?: string): MethodDecorator => {
  * @constructor
  */
 export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): MethodDecorator => {
-	return (
-		target: Record<string, unknown>,
-		propertyKey: string,
-		descriptor: PropertyDescriptor
-	): PropertyDescriptor | void => {
-		setEventServiceReflectMetaData(Internal.Events_Synced_Meta_Change, {
-			type: 'syncedMetaChange',
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				entity: entityType,
-				metaKey
-			}
-		});
+  return (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor | void => {
+    setEventServiceReflectMetaData(Internal.Events_Synced_Meta_Change, {
+      type: 'syncedMetaChange',
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        entity: entityType,
+        metaKey
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -97,31 +127,31 @@ export const SyncedMetaChange = (entityType: BaseObjectType, metaKey?: string): 
  * @constructor
  */
 export const EntityEnterColShape = (
-	colShapeType: ColShapeType,
-	name?: string,
-	entity?: BaseObjectType
+    colShapeType: ColShapeType,
+    name?: string,
+    entity?: BaseObjectType
 ): MethodDecorator => {
-	return (
-		target: Record<string, unknown>,
-		propertyKey: string,
-		descriptor: PropertyDescriptor
-	): PropertyDescriptor | void => {
-		const eventName = name || propertyKey;
+  return (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor | void => {
+    const eventName = name || propertyKey;
 
-		setEventServiceReflectMetaData(Internal.Events_Entity_Enter_Col_Shape, {
-			type: 'entityEnterColshape',
-			eventName,
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				colShapeType,
-				name,
-				entity
-			}
-		});
+    setEventServiceReflectMetaData(Internal.Events_Entity_Enter_Col_Shape, {
+      type: 'entityEnterColshape',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        colShapeType,
+        name,
+        entity
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
 
 /**
@@ -134,29 +164,31 @@ export const EntityEnterColShape = (
  * @constructor
  */
 export const EntityLeaveColShape = (
-	colShapeType: ColShapeType,
-	name?: string,
-	entity?: BaseObjectType
+    colShapeType: ColShapeType,
+    name?: string,
+    entity?: BaseObjectType
 ): MethodDecorator => {
-	return (
-		target: Record<string, unknown>,
-		propertyKey: string,
-		descriptor: PropertyDescriptor
-	): PropertyDescriptor | void => {
-		const eventName = name || propertyKey;
+  return (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor | void => {
+    const eventName = name || propertyKey;
 
-		setEventServiceReflectMetaData(Internal.Events_Entity_Leave_Col_Shape, {
-			type: 'entityLeaveColshape',
-			eventName,
-			methodName: propertyKey,
-			targetName: target.constructor.name,
-			validateOptions: {
-				colShapeType,
-				name,
-				entity
-			}
-		});
+    setEventServiceReflectMetaData(Internal.Events_Entity_Leave_Col_Shape, {
+      type: 'entityLeaveColshape',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+      validateOptions: {
+        colShapeType,
+        name,
+        entity
+      }
+    });
 
-		return registerDescriptor(descriptor);
-	};
+    return registerDescriptor(descriptor);
+  };
 };
+
+export { OnClient };
