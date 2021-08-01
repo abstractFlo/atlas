@@ -90,7 +90,6 @@ export class BaseEventService implements EventServiceInterface {
         : this.processOffEvent(eventName, this.offEventsMap);
   }
 
-
   /**
    * Receive event from server/client
    *
@@ -254,6 +253,7 @@ export class BaseEventService implements EventServiceInterface {
    * Process the offEvent handler
    *
    * @param {string} eventName
+   * @param offEventsMap
    * @private
    */
   protected processOffEvent(eventName: string, offEventsMap: Map<string, CallableFunction[]>): void {
