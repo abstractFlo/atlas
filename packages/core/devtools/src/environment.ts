@@ -36,3 +36,10 @@ export function envToJson(): Record<string, any> {
   const env = fsJetpack().read('.env');
   return parse(env);
 }
+
+/**
+ * Return if atlas is running as production
+ *
+ * @type {boolean}
+ */
+export const isProduction: boolean = env<string>('ATLAS_PRODUCTION', 'false') === 'true';

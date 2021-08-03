@@ -8,6 +8,8 @@ import json from '@rollup/plugin-json';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import { ResourceCreateConfigInterface } from './resource-create-config.interface';
 import typescript from '@rollup/plugin-typescript';
+import { isProduction } from '../../environment';
+import { terser } from 'rollup-plugin-terser';
 
 export class ResourceConfigCreator {
 
@@ -37,14 +39,27 @@ export class ResourceConfigCreator {
    * @return {RollupOptions}
    */
   public createConfig(config: ResourceConfigModel): RollupOptions {
+
+    const plugins = [
+      json(),
+      nodeResolve(),
+      typescript()
+    ];
+
+    if(isProduction) {
+      plugins.push(terser({
+        keep_classnames: true,
+        keep_fnames: true,
+        output: {
+          comments: false,
+        },
+      }))
+    }
+
     const base = new ResourceConfigModel().cast({
       input: config.input,
       output: config.output,
-      plugins: [
-        json(),
-        nodeResolve(),
-        typescript()
-      ]
+      plugins
     });
 
     base.plugins = unique<Plugin>([...base.plugins, ...config.plugins]);
