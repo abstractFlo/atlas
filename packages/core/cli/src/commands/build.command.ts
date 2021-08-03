@@ -20,6 +20,7 @@ export const BuildCommand: CommandModule = {
     const availableResources = await manager.findAvailableResources();
     const creator = new ResourceConfigCreator(availableResources).getConfigs();
 
+    await builder.addResourcesToServerCfg(availableResources);
     await builder.run(creator);
   }
 };

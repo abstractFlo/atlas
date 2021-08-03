@@ -13,16 +13,18 @@ import {
   env,
   errorMessage,
   fsJetpack,
+  GameResourceModel,
   getResetScreen,
   handleError,
   isTTY,
   PrepareForCopyInterface,
+  readCfg,
   relativeId,
   ResourceCreateConfigInterface,
   stderr,
   successMessage
 } from '@abstractflo/atlas-devtools';
-import { blueBright, bold, cyan, green, underline } from 'colorette';
+import { blueBright, bold, cyan, green, underline, yellow } from 'colorette';
 import ms from 'pretty-ms';
 import { getDefinedPreserves } from './builder.helpers';
 
@@ -62,6 +64,26 @@ export class Builder {
     this.watch
         ? await this.startWatching(creator.configs)
         : await this.buildAll(creator.configs);
+  }
+
+  /**
+   *
+   * @return {Promise<void>}
+   * @private
+   */
+  public addResourcesToServerCfg(availableResources: GameResourceModel[]): void {
+    const addResources = env<string>('ATLAS_AUTO_ADD_RESOURCE', 'false') === 'true';
+
+    if (!addResources) return;
+
+    const pathToServerCfg = fsJetpack().path(env<string>('ATLAS_RETAIL_FOLDER'), 'server.cfg');
+    const serverCfg = readCfg(pathToServerCfg);
+    const resources = availableResources.map((resource: GameResourceModel) => resource.config.name);
+
+    serverCfg.set('resources', resources);
+
+    fsJetpack().write(pathToServerCfg, serverCfg.serialize());
+    successMessage(`${yellow(JSON.stringify(resources))}`, 'Added');
   }
 
   /**
@@ -194,9 +216,9 @@ export class Builder {
    * @private
    */
   private cleanup(): void {
+    const cleanBeforeBuild = env<string>('ATLAS_CLEAR_BEFORE_BUILD', 'false') !== 'true';
 
-    if (env<string>('ATLAS_CLEAR_BEFORE_BUILD', 'false') !== 'true' || !fsJetpack().exists(this.buildOutput)) return;
-
+    if (cleanBeforeBuild || !fsJetpack().exists(this.buildOutput)) return;
 
     const preserved = getDefinedPreserves();
     const removeablePaths = fsJetpack()
@@ -217,10 +239,6 @@ export class Builder {
    * @private
    */
   private copyFiles(): void {
-    const filesForCopy = [
-      { from: 'package.json', to: `${this.buildOutput}/package.json` }
-    ];
-
     const staticFolder = env('ATLAS_RETAIL_FOLDER', 'retail');
 
     fsJetpack()

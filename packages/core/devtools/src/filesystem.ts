@@ -22,7 +22,7 @@ export function hasFolder(path: string, fsJetpack: FSJetpack = jetpack): ExistsR
  * @param {FSJetpack} fsJetpack
  * @return Promise<string[]>
  */
-export function findByMatching(folder: string, options: FindOptions, fsJetpack: FSJetpack = jetpack): Promise<string[]> {
+export function findByMatching(folder: string, options: FindOptions = {}, fsJetpack: FSJetpack = jetpack): Promise<string[]> {
   return fsJetpack.findAsync(folder, options);
 }
 

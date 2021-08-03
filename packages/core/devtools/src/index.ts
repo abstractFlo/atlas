@@ -55,3 +55,4 @@ export { convertNamedImports } from './transformers/convertNamedImports';
 
 export { relativeId } from './relativeId';
 
+export { getAtlasRc } from './atlas';
