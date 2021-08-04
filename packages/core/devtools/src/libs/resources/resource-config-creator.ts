@@ -46,14 +46,14 @@ export class ResourceConfigCreator {
       typescript()
     ];
 
-    if(isProduction) {
+    if (isProduction) {
       plugins.push(terser({
         keep_classnames: true,
         keep_fnames: true,
         output: {
-          comments: false,
-        },
-      }))
+          comments: false
+        }
+      }));
     }
 
     const base = new ResourceConfigModel().cast({

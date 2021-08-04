@@ -41,6 +41,7 @@
     "import-meta-resolve": "^1.1.1",
     "js-yaml": "^4.1.0",
     "jscodeshift": "^0.13.0",
+    "lodash": "^4.17.21",
     "rollup": "2.52.7",
     "rollup-plugin-swc": "leonardssh/rollup-plugin-swc#build",
     "rollup-plugin-terser": "^7.0.2",
@@ -49,6 +50,7 @@
   },
   "devDependencies": {
     "@types/ejs": "^3.0.7",
-    "@types/js-yaml": "^4.0.2"
+    "@types/js-yaml": "^4.0.2",
+    "@types/lodash": "^4.14.172"
   }
 }
