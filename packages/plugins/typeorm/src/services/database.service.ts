@@ -6,14 +6,6 @@ import { Internals } from '../internals';
 export class DatabaseService {
 
   /**
-   * Contains the database connection info
-   *
-   * @type {ConnectionOptions}
-   * @private
-   */
-  private config: ConnectionOptions;
-
-  /**
    * Contains if database already conntected
    *
    * @type {boolean}
@@ -21,36 +13,39 @@ export class DatabaseService {
    */
   private connected: boolean = false;
 
-  @Init(-2)
-  public getReflectEntities(): Promise<void> {
-    return new Promise(async (resolve) => {
-      const entities = getFrameworkMetaData<constructor<any>[]>(Internals.DATABASE_ENTITIES, this);
-
-      if (entities.length) {
-        this.config = await getConnectionOptions();
-        this.config.entities.push(...entities);
-      }
-
-      resolve();
-    });
-  }
-
   /**
    * Setup database connection
    *
    * @return {Promise<void>}
    * @protected
    */
-  @Init(-1)
+  @Init()
   protected async connect(): Promise<void> {
     if (this.connected) return;
 
-    await createConnection(this.config);
+    const config = await this.getConfig();
+    await createConnection(config);
 
     UtilsService.logLoaded('DatabaseService');
 
     this.connected = true;
   }
 
+  /**
+   * Return TypeORM Connection Options with added entities
+   *
+   * @return {Promise<ConnectionOptions>}
+   * @private
+   */
+  private async getConfig(): Promise<ConnectionOptions> {
+    const entities = getFrameworkMetaData<constructor<any>[]>(Internals.DATABASE_ENTITIES, this);
+    const config = await getConnectionOptions();
+
+    if (entities.length) {
+      config.entities.push(...entities);
+    }
+
+    return config;
+  }
 }
 
