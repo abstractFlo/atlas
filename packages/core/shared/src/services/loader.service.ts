@@ -135,7 +135,7 @@ export class LoaderService {
     if (nextIndex === this.queueItems.length) this.queueCount.complete();
 
     // Recursive if queueItems contains more
-    if (nextIndex < this.queueItems.length) UtilsService.nextTick(() => this.startLoading(nextIndex));
+    if (nextIndex < this.queueItems.length) await this.startLoading(nextIndex);
 
   }
 
