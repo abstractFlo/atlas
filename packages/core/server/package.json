@@ -28,7 +28,7 @@
   },
   "peerDependencies": {
     "@abstractflo/atlas-shared": "^3.1.0",
-    "@altv/types-server": "^1.9.5"
+    "@altv/types-server": "^1.9.7"
   },
   "devDependencies": {
     "@abstractflo/atlas-shared": "*",
