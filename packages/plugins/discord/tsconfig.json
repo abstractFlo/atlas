@@ -2,6 +2,11 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "outDir": "build",
+    "lib": [
+      "es6",
+      "esnext",
+      "dom"
+    ]
   },
   "include": [
     "src"

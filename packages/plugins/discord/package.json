@@ -27,15 +27,18 @@
     "local:pack": "yarn pack --filename plugin-discord.tgz"
   },
   "peerDependencies": {
-    "@abstractflo/atlas-shared": "^3.1.0"
+    "@abstractflo/atlas-shared": "^3.1.0",
+    "eris": "^0.15.1"
   },
   "devDependencies": {
-    "@abstractflo/atlas-shared": "*"
+    "@abstractflo/atlas-shared": "*",
+    "@types/node": "^16.4.13",
+    "@types/ws": "^7.4.7",
+    "eris": "^0.15.1"
   },
   "dependencies": {
     "@overnightjs/core": "^1.7.6",
     "axios": "^0.21.1",
-    "cors": "^2.8.5",
-    "eris": "^0.15.1"
+    "cors": "^2.8.5"
   }
 }
