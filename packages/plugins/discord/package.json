@@ -37,8 +37,8 @@
     "eris": "^0.15.1"
   },
   "dependencies": {
-    "@overnightjs/core": "^1.7.6",
     "axios": "^0.21.1",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "fastify": "^3.20.1"
   }
 }

@@ -12,7 +12,7 @@ export class DiscordBotService {
    * @type {string}
    * @private
    */
-  private bot_secret: string = process.env.DISCORD_BOT_SECRET;
+  private bot_secret: string = process.env.DISCORD_BOT_SECRET || '';
 
   /**
    * Contains the the discord client
