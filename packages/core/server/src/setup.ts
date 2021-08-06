@@ -1,5 +1,6 @@
 import * as alt from 'alt-server';
+import { config } from 'dotenv';
+import { app, registerAltLib } from '@abstractflo/atlas-shared';
 
-import {app, registerAltLib} from "@abstractflo/atlas-shared";
-
-registerAltLib(app, alt)
+config();
+registerAltLib(app, alt);
