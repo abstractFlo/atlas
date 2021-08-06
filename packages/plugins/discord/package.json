@@ -36,6 +36,6 @@
     "@overnightjs/core": "^1.7.6",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
-    "discord.js": "^12.5.3"
+    "eris": "^0.15.1"
   }
 }

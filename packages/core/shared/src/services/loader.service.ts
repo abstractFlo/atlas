@@ -1,5 +1,5 @@
 import { InjectionToken } from 'tsyringe';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, delay, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LoaderQueueItemModel } from '../models/loader-queue-item.model';
 import { Singleton } from '../decorators/framework-di.decorator';
@@ -81,7 +81,7 @@ export class LoaderService {
   public bootstrap(token: InjectionToken): LoaderService {
     this.waitBeforeStart
         .asObservable()
-        .pipe(filter((value: boolean) => !value))
+        .pipe(filter((value: boolean) => !value), delay(125))
         .subscribe(() => {
           this.resolveMetaData();
 
