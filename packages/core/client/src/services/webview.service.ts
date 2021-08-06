@@ -4,26 +4,53 @@ import { WebView } from 'alt-client';
 @Singleton
 export class WebviewService {
 
-	public url: string;
+  /**
+   * Url for webview
+   *
+   * @type {string}
+   */
+  public url: string;
 
-	protected routeToEventName: string = 'routeTo';
-	private webView: WebView;
+  /**
+   * Route name event if the webview is an spa
+   * @type {string}
+   * @protected
+   */
+  protected routeToEventName: string = 'routeTo';
 
-	public getInstance(): WebView {
-		return this.webView;
-	}
+  /**
+   * Contains the webview instance
+   *
+   * @type {WebView}
+   * @private
+   */
+  private webView: WebView;
 
-	public start(): Promise<WebView | Error> {
-		return new Promise((resolve, reject) => {
-			if (!this.url) {
-				reject(new Error('No route defined'));
-			}
+  /**
+   * Return the webview instance
+   *
+   * @return {WebView}
+   */
+  public getInstance(): WebView {
+    return this.webView;
+  }
 
-			this.webView = new WebView(this.url, false);
+  /**
+   * Start the webview instance
+   *
+   * @return {Promise<WebView | Error>}
+   */
+  public start(): Promise<WebView | Error> {
+    return new Promise((resolve, reject) => {
+      if (!this.url) {
+        reject(new Error('No route defined'));
+      }
 
-			this.webView.on('load', () => {
-				resolve(this.webView);
-			});
-		});
-	}
+      this.webView = new WebView(this.url, false);
+
+      this.webView.on('load', () => {
+        resolve(this.webView);
+      });
+    });
+  }
 }
