@@ -9,7 +9,6 @@ import { ComponentCommand } from './commands/component.command';
 import { ModuleCommand } from './commands/module.command';
 import { ServiceCommand } from './commands/service.command';
 
-
 const program = yargs(hideBin(process.argv))
     .scriptName('atlas')
     .usage('Usage: $0 <cmd> [options]')
@@ -25,7 +24,6 @@ program.command(ComponentCommand);
 program.command(ModuleCommand);
 program.command(ServiceCommand);
 program.command(NewCommand);
-
 
 program
     .help('h')
