@@ -18,7 +18,7 @@ export function getDiscordBotClient() {
  * @param {string} token
  * @return {string}
  */
-export function getAuthUrl(token: string): string {
+export function getDiscordAuthUrl(token: string): string {
   const apiProvider = app.resolve(DiscordApiProvider);
   return apiProvider.getAuthUrl(token);
 }

@@ -23,12 +23,13 @@
     "build": "rollup -c",
     "watch": "rollup -cw",
     "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
-    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts",
+    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts --inline-declare-externals --disable-symlinks-following",
     "local:pack": "yarn pack --filename plugin-discord.tgz"
   },
   "peerDependencies": {
     "@abstractflo/atlas-server": "^3.1.0",
     "@abstractflo/atlas-shared": "^3.1.0",
+    "@altv/types-server": "^1.9.7",
     "eris": "^0.15.1"
   },
   "devDependencies": {

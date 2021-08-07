@@ -20,6 +20,7 @@ export default [
       typescript(),
     ],
     external: [
+      'alt-server',
       ...builtinModules,
       ...Object.keys(pkg.devDependencies || {}),
       ...Object.keys(pkg.dependencies || {}),

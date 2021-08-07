@@ -12,5 +12,5 @@ export {
   OffClient
 } from './decorators/event.decorator';
 
-export type { ColShapeInterface } from './extends/colshape/colshape.interface';
+export { ColShapeInterface } from './extends/colshape/colshape.interface';
 export { defaultErrorHandling } from './helpers';

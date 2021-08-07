@@ -43,7 +43,13 @@ export class ApiServer {
    */
   private doneEventName: string = process.env.DISCORD_AUTH_DONE || 'discord-api:auth:done';
 
-  private redirecteAfterAuth: string = process.env.DISCORD_REDIRECT_AFTER_AUTH || '/auth/done';
+  /**
+   * Url for redirect can be set by environment
+   *
+   * @type {string}
+   * @private
+   */
+  private redirectedAfterAuth: string = process.env.DISCORD_REDIRECT_AFTER_AUTH || '/auth/done';
 
   /**
    * Contains if the server already started
@@ -106,7 +112,7 @@ export class ApiServer {
   private discordRoute(request: FastifyRequest, reply: FastifyReply) {
     const { code, state } = request.query as { code: string, state: string };
 
-    if (!code || !state) reply.redirect(this.redirecteAfterAuth);
+    if (!code || !state) reply.redirect(this.redirectedAfterAuth);
 
     this.discordApiService
         .getToken(code)
@@ -121,7 +127,7 @@ export class ApiServer {
         .subscribe({
           next: (user: DiscordUserModel) => {
             this.eventService.emit(this.doneEventName, state, user);
-            reply.redirect(this.redirecteAfterAuth);
+            reply.redirect(this.redirectedAfterAuth);
           },
           error: (err) => {
             this.loggerService.error(err);
