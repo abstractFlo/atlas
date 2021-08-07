@@ -10,7 +10,7 @@ export function getDefinedPreserves(): string[] {
 
   const out = [
     'node_modules/**/*',
-    'altv-server',
+    'altv-server*',
     '.env',
     'start.sh',
     'cache/**/*',
