@@ -4,15 +4,22 @@ import { Singleton } from '@abstractflo/atlas-shared';
 export class DiscordApiProvider {
 
   /**
+   * Discord Auth URL
+   *
+   * @type {string}
+   * @private
+   */
+  private authUrl: string = 'https://discord.com/api/oauth2/authorize';
+
+  /**
    * Return the auth url
    *
    * @param {string} state
    * @return {string}
    */
   public getAuthUrl(state: string): string {
-    const url = process.env.DISCORD_AUTH_URL;
     const params = this.getAuthUrlParams(state);
-    return `${url}?${params}`;
+    return `${this.authUrl}?${params}`;
   }
 
   /**
@@ -27,7 +34,6 @@ export class DiscordApiProvider {
       client_secret: process.env.DISCORD_CLIENT_SECRET,
       grant_type: 'authorization_code',
       code,
-      scope: 'identify',
       redirect_uri: encodeURI(`${process.env.DISCORD_REDIRECT_URI}/auth/discord`)
     });
   }
