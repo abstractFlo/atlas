@@ -45,7 +45,8 @@ export class DiscordBotService {
   @Init()
   public connect(): Promise<void> {
     return new Promise(async (resolve) => {
-      if (this.connected || !this.bot_secret) return resolve();
+
+      if (this.connected || !this.bot_secret || this.eventsMap.size === 0) return resolve();
 
       this.setupReflection();
 
