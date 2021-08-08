@@ -2,6 +2,7 @@ import { app, constructor, getFrameworkMetaData, Singleton, UtilsService } from 
 import { Vector2, WebView } from 'alt-client';
 import { removeAllCursors, removeCursor, showCursor, WebviewOnEvent } from '../helpers';
 import { OnGuiModel } from '../models/on-gui.model';
+import { EventService } from './event.service';
 
 @Singleton
 export class WebviewService {
@@ -78,6 +79,10 @@ export class WebviewService {
     return this.webView;
   }
 
+  constructor(
+      private readonly eventService: EventService
+  ) {}
+
   /**
    * Start the webview instance
    *
@@ -93,6 +98,8 @@ export class WebviewService {
 
       this.webView.on('load', () => {
         this.setupReflection();
+        this.setupSendEventToServer();
+        this.setupReceiveFromServer();
         resolve(this.webView);
       });
 
@@ -242,5 +249,27 @@ export class WebviewService {
     if (neededEvents.length) {
       UtilsService.logRegisteredHandlers(`[${this.name}]: WebViewService`, neededEvents.length);
     }
+  }
+
+  /**
+   * Listen to event from gui and emit to server
+   *
+   * @private
+   */
+  private setupSendEventToServer(): void {
+    this.on('gui:send-server', (eventName: string, ...args: any[]) => {
+      this.eventService.emitServer(eventName, ...args);
+    });
+  }
+
+  /**
+   * Receive event from server and emit to all webviews
+   *
+   * @private
+   */
+  private setupReceiveFromServer(): void {
+    this.eventService.onServer('sever:send-gui', (eventName: string, ...args: any[]) => {
+      this.emit(eventName, ...args);
+    });
   }
 }
