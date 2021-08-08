@@ -83,31 +83,6 @@ export const OffServer = (name?: string): MethodDecorator => {
 };
 
 /**
- * Register @OnGui decorator
- *
- * @param {string} name
- * @return {MethodDecorator}
- * @constructor
- */
-export const OnGui = (name?: string): MethodDecorator => {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void => {
-    const eventName = name || propertyKey;
-
-    setEventServiceReflectMetaData(Internal.Events_On_Gui, {
-      type: 'onGui',
-      eventName,
-      methodName: propertyKey,
-      targetName: target.constructor.name,
-      validateOptions: {
-        name: eventName
-      }
-    });
-
-    return registerDescriptor(descriptor);
-  };
-};
-
-/**
  * Register @GameEntityCreate decorator
  *
  * @param {BaseObjectType} entityType

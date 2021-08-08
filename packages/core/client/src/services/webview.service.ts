@@ -1,6 +1,7 @@
-import { Last, Singleton } from '@abstractflo/atlas-shared';
+import { app, constructor, getFrameworkMetaData, Singleton, UtilsService } from '@abstractflo/atlas-shared';
 import { Vector2, WebView } from 'alt-client';
-import { removeAllCursors, removeCursor, showCursor } from '../helpers';
+import { removeAllCursors, removeCursor, showCursor, WebviewOnEvent } from '../helpers';
+import { OnGuiModel } from '../models/on-gui.model';
 
 @Singleton
 export class WebviewService {
@@ -11,6 +12,13 @@ export class WebviewService {
    * @type {string}
    */
   public url: string;
+
+  /**
+   * Contains the name as identifier for reflection
+   *
+   * @type {string}
+   */
+  public name: string;
 
   /**
    * Render as overlay
@@ -84,8 +92,11 @@ export class WebviewService {
       this.webView = this.loadSpecificWebview();
 
       this.webView.on('load', () => {
+        this.setupReflection();
         resolve(this.webView);
       });
+
+
     });
   }
 
@@ -200,5 +211,36 @@ export class WebviewService {
     }
 
     return webview;
+  }
+
+  /**
+   * Setup decorator reflection
+   * @private
+   */
+  private setupReflection(): void {
+    const events = getFrameworkMetaData<OnGuiModel[]>(WebviewOnEvent, app.resolve(WebviewService));
+    const neededEvents = events.filter((event: OnGuiModel) => event.identifier === this.name);
+
+    neededEvents.forEach((event: OnGuiModel) => {
+      const instances = app.resolveAll<constructor<any>>(event.targetName);
+
+      instances.forEach((instance: constructor<any>) => {
+        const instanceMethod = instance[event.methodName];
+
+        if (!instanceMethod) return;
+
+        const method = this.on.bind(
+            this,
+            event.eventName,
+            instanceMethod.bind(instance)
+        );
+
+        method();
+      });
+    });
+
+    if (neededEvents.length) {
+      UtilsService.logRegisteredHandlers(`[${this.name}]: WebViewService`, neededEvents.length);
+    }
   }
 }

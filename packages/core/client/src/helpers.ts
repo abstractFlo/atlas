@@ -3,6 +3,13 @@ import { app, constructor } from '@abstractflo/atlas-shared';
 import { WebviewService } from './services/webview.service';
 
 /**
+ * Symbol for reflection
+ *
+ * @type {typeof WebviewOnEvent}
+ */
+export const WebviewOnEvent = Symbol('webiew:on:event');
+
+/**
  * Contains the cursor count
  *
  * @type {number}

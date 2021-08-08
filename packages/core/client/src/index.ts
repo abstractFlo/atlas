@@ -8,11 +8,12 @@ export {
   StreamSyncedMetaChange,
   GameEntityDestroy,
   GameEntityCreate,
-  OnGui,
   OnceServer,
   OnServer,
   OffServer
 } from './decorators/event.decorator';
+
+export { OnGui } from './decorators/webview.decorators';
 
 export { removeAllCursors, showCursor, removeCursor, getWebviewInstance } from './helpers';
 
