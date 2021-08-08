@@ -22,7 +22,6 @@ export function getDefinedPreserves(): string[] {
     '.docker',
     'docker/**/*',
     'docker-compose.*'
-    //'resources'
   ];
 
   if (hasDefinedPreserves) {
