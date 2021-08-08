@@ -1,4 +1,4 @@
-import { app, BaseEventService, constructor, EventModel, Last, Singleton } from '@abstractflo/atlas-shared';
+import { app, BaseEventService, constructor, EventModel, Internal, Last, Singleton } from '@abstractflo/atlas-shared';
 import { Colshape, emitClient, Entity, offClient, onceClient, onClient, Player } from 'alt-server';
 
 @Singleton
@@ -55,14 +55,20 @@ export class EventService extends BaseEventService {
    */
   @Last
   protected async start(): Promise<void> {
-    await super.startEventListeners();
-    await this.resolveAndLoadEvents(this.colShapeEvents, 'ColShapeEvents', this.startColShapeEvents.bind(this));
+    await super.listenToEvents();
+
+    await this.resolveAndLoadEvents(this.colShapeEvents, 'ColShapeEvents', this.listenToColShapeEvents.bind(this));
+    await this.resolveAndLoadEvents(
+        [Internal.Events_Gui_Server],
+        'GuiServerEvents',
+        this.listenToGuiServerEvents.bind(this)
+    );
   }
 
   /**
    * Start the colShape event listener
    */
-  private startColShapeEvents(events: EventModel[]) {
+  private listenToColShapeEvents(events: EventModel[]) {
     const eventType = events[0].type;
 
     this.on(eventType, (colShape: Colshape, entity: Entity) => {
@@ -101,6 +107,41 @@ export class EventService extends BaseEventService {
 
         const method = instanceMethod.bind(instance);
         await method(colShape, entity);
+      });
+    });
+  }
+
+  /**
+   * Start gui server events listener
+   *
+   * @param {EventModel[]} events
+   * @private
+   */
+  private listenToGuiServerEvents(events: EventModel[]): void {
+    this.onClient(Internal.Events_Gui_Server, (eventName: string, ...args: any[]) => {
+      const neededEvents = events.filter((event: EventModel) => event.eventName === eventName);
+      this.handleGuiServerEvents(neededEvents, ...args);
+    });
+  }
+
+  /**
+   * Handle guiServer Events
+   *
+   * @param {EventModel[]} events
+   * @param args
+   * @private
+   */
+  private handleGuiServerEvents(events: EventModel[], ...args: any[]): void {
+    events.forEach((event: EventModel) => {
+      const instances = app.resolveAll<constructor<any>>(event.targetName);
+
+      instances.forEach(async (instance: constructor<any>) => {
+        const instanceMetod = instance[event.methodName];
+
+        if (!instanceMetod) return;
+
+        const method = instanceMetod.bind(instance, ...args);
+        await method();
       });
     });
   }

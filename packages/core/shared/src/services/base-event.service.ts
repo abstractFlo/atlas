@@ -64,7 +64,9 @@ export class BaseEventService implements EventServiceInterface {
     Internal.Events_OffClient
   ];
 
-  constructor(protected readonly commandService: CommandService) {}
+  constructor(
+      protected readonly commandService: CommandService
+  ) {}
 
   /**
    * Emit event server/client
@@ -166,20 +168,20 @@ export class BaseEventService implements EventServiceInterface {
    * @return {Promise<void>}
    * @protected
    */
-  protected async startEventListeners(): Promise<void> {
-    await this.resolveAndLoadEvents(this.baseEvents, 'BaseEvents', this.startBaseMethod.bind(this));
+  protected async listenToEvents(): Promise<void> {
+    await this.resolveAndLoadEvents(this.baseEvents, 'BaseEvents', this.listenToBaseMethod.bind(this));
     await this.resolveAndLoadEvents(this.offEvents, 'OffEvents', this.registerOffEvents.bind(this));
 
     await this.resolveAndLoadEvents(
         this.entityChangeEvents,
         'EntityChangeEvents',
-        this.startMetaChangeEvents.bind(this)
+        this.listenToMetaChangeEvents.bind(this)
     );
 
     await this.resolveAndLoadEvents(
         [Internal.Events_Console_Command],
         'ConsoleCommandEvents',
-        this.startConsoleCommandEvents.bind(this)
+        this.listenToConsoleCommandEvents.bind(this)
     );
   }
 
@@ -272,7 +274,7 @@ export class BaseEventService implements EventServiceInterface {
    * @param {EventModel[]} events
    * @private
    */
-  private startBaseMethod(events: EventModel[]): void {
+  private listenToBaseMethod(events: EventModel[]): void {
     events.forEach((event: EventModel) => {
       const instances = app.resolveAll<constructor<any>>(event.targetName);
       const internalMethod = this[event.type];
@@ -321,7 +323,7 @@ export class BaseEventService implements EventServiceInterface {
    * @param {EventModel[]} events
    * @private
    */
-  private startMetaChangeEvents<T extends { type: number }>(events: EventModel[]): void {
+  private listenToMetaChangeEvents<T extends { type: number }>(events: EventModel[]): void {
     const eventType = events[0].type;
 
     this.on(eventType, (entity: T, key?: string, value?: any, oldValue?: any) => {
@@ -335,7 +337,7 @@ export class BaseEventService implements EventServiceInterface {
    * @param {EventModel[]} events
    * @private
    */
-  private startConsoleCommandEvents(events: EventModel[]): void {
+  private listenToConsoleCommandEvents(events: EventModel[]): void {
     this.commandService.setupCommands(events);
 
     this.on('consoleCommand', this.commandService.run.bind(this.commandService));

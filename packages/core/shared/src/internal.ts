@@ -34,6 +34,8 @@ export const Internal = {
   Events_Once_Client: 'events:onceClient',
   Events_Once_Server: 'events:onceServer',
   Events_On_Gui: 'events:onGui',
+  Events_Gui_Server: 'gui:send-server',
+  Events_Server_Gui: 'server:send-gui',
   Events_Game_Entity_Create: 'events:gameEntityCreate',
   Events_Game_Entity_Destroy: 'events:gameEntityDestroy',
   Events_Stream_Synced_Meta_Change: 'events:streamSyncedMetaChange',

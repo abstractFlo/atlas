@@ -93,8 +93,8 @@ export class EventService extends BaseEventService {
    */
   @Last
   protected async start(): Promise<void> {
-    await super.startEventListeners();
-    await this.resolveAndLoadEvents(this.keyEvents, 'KeyEvents', this.startKeyEvents.bind(this));
+    await super.listenToEvents();
+    await this.resolveAndLoadEvents(this.keyEvents, 'KeyEvents', this.listenToKeyEvents.bind(this));
   }
 
   /**
@@ -103,7 +103,7 @@ export class EventService extends BaseEventService {
    * @param {EventModel[]} events
    * @private
    */
-  private startKeyEvents(events: EventModel[]): void {
+  private listenToKeyEvents(events: EventModel[]): void {
     const eventType = events[0].type;
     this.keyEventService.setupKeys(events);
 

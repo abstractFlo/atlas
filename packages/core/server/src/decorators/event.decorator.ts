@@ -192,4 +192,34 @@ export const EntityLeaveColShape = (
   };
 };
 
+/**
+ * Register @EntityLeaveColShape decorator
+ *
+ * @param {ColShapeType} colShapeType
+ * @param {string} name
+ * @param {BaseObjectType} entity
+ * @return {MethodDecorator}
+ * @constructor
+ */
+export const OnGui = (
+    name?: string
+): MethodDecorator => {
+  return (
+      target: Record<string, unknown>,
+      propertyKey: string,
+      descriptor: PropertyDescriptor
+  ): PropertyDescriptor | void => {
+    const eventName = name || propertyKey;
+
+    setEventServiceReflectMetaData(Internal.Events_Gui_Server, {
+      type: 'onGui',
+      eventName,
+      methodName: propertyKey,
+      targetName: target.constructor.name,
+    });
+
+    return registerDescriptor(descriptor);
+  };
+};
+
 export { OnClient };

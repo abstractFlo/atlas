@@ -1,4 +1,4 @@
-import { app, constructor, getFrameworkMetaData, Singleton, UtilsService } from '@abstractflo/atlas-shared';
+import { app, constructor, getFrameworkMetaData, Internal, Singleton, UtilsService } from '@abstractflo/atlas-shared';
 import { Vector2, WebView } from 'alt-client';
 import { removeAllCursors, removeCursor, showCursor, WebviewOnEvent } from '../helpers';
 import { OnGuiModel } from '../models/on-gui.model';
@@ -98,8 +98,8 @@ export class WebviewService {
 
       this.webView.on('load', () => {
         this.setupReflection();
-        this.setupSendEventToServer();
-        this.setupReceiveFromServer();
+        this.sendEventToServer();
+        this.receiveEventFromServer();
         resolve(this.webView);
       });
 
@@ -256,8 +256,8 @@ export class WebviewService {
    *
    * @private
    */
-  private setupSendEventToServer(): void {
-    this.on('gui:send-server', (eventName: string, ...args: any[]) => {
+  private sendEventToServer(): void {
+    this.on(Internal.Events_Gui_Server, (eventName: string, ...args: any[]) => {
       this.eventService.emitServer(eventName, ...args);
     });
   }
@@ -267,8 +267,8 @@ export class WebviewService {
    *
    * @private
    */
-  private setupReceiveFromServer(): void {
-    this.eventService.onServer('sever:send-gui', (eventName: string, ...args: any[]) => {
+  private receiveEventFromServer(): void {
+    this.eventService.onServer(Internal.Events_Gui_Server, (eventName: string, ...args: any[]) => {
       this.emit(eventName, ...args);
     });
   }
