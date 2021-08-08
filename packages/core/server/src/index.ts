@@ -9,7 +9,8 @@ export {
   SyncedMetaChange,
   EntityLeaveColShape,
   EntityEnterColShape,
-  OffClient
+  OffClient,
+  OnGui
 } from './decorators/event.decorator';
 
 export { ColShapeInterface } from './extends/colshape/colshape.interface';

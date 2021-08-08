@@ -1,5 +1,5 @@
 import { app, BaseEventService, constructor, EventModel, Internal, Last, Singleton } from '@abstractflo/atlas-shared';
-import { Colshape, emitClient, Entity, offClient, onceClient, onClient, Player } from 'alt-server';
+import { Colshape, emitAllClients, emitClient, Entity, offClient, onceClient, onClient, Player } from 'alt-server';
 
 @Singleton
 export class EventService extends BaseEventService {
@@ -15,9 +15,9 @@ export class EventService extends BaseEventService {
   /**
    * Receive event from client
    */
-  public onClient(eventName: string, listener: (...args: any[]) => void): void;
-  public onClient(eventName: string, listener: (...args: any[]) => void, resetable: boolean): void;
-  public onClient(eventName: string, listener: (...args: any[]) => void, resetable?: boolean) {
+  public onClient(eventName: string, listener: (player: Player, ...args: any[]) => void): void;
+  public onClient(eventName: string, listener: (player: Player, ...args: any[]) => void, resetable: boolean): void;
+  public onClient(eventName: string, listener: (player: Player, ...args: any[]) => void, resetable?: boolean) {
     onClient(eventName, listener);
 
     if (resetable) {
@@ -29,8 +29,8 @@ export class EventService extends BaseEventService {
    * Unsubscribe from client event
    */
   public offClient(eventName: string): void;
-  public offClient(eventName: string, listener: (...args: any[]) => void): void;
-  public offClient(eventName: string, listener?: (...args: any[]) => void) {
+  public offClient(eventName: string, listener: (player: Player, ...args: any[]) => void): void;
+  public offClient(eventName: string, listener?: (player: Player, ...args: any[]) => void) {
     listener
         ? offClient(eventName, listener)
         : this.processOffEvent(eventName, this.offClientEventsMap);
@@ -39,15 +39,50 @@ export class EventService extends BaseEventService {
   /**
    * Emit event to one or all players
    */
-  public emitClient(player: Player | null, eventName: string, ...args: any[]) {
+  public emitClient(player: Player, eventName: string, ...args: any[]): void;
+  public emitClient(player: Player[], eventName: string, ...args: any[]): void;
+  public emitClient(player: null, eventName: string, ...args: any[]): void {
     emitClient(player, eventName, ...args);
+  }
+
+  /**
+   * Emit event to all clients
+   *
+   * @param {string} eventName
+   * @param args
+   */
+  public emitAllClients(eventName: string, ...args: any[]): void {
+    emitAllClients(eventName, ...args);
   }
 
   /**
    * Receive once event from client
    */
-  public onceClient(eventName: string, listener: (...args: any[]) => void) {
+  public onceClient(eventName: string, listener: (player: Player, ...args: any[]) => void) {
     onceClient(eventName, listener);
+  }
+
+  /**
+   * Emit Gui event to list of players
+   *
+   * @param {Player} player
+   * @param {string} eventName
+   * @param args
+   */
+  public emitGui(player: Player, eventName: string, ...args: any[]): void;
+  public emitGui(player: Player[], eventName: string, ...args: any[]): void;
+  public emitGui(player: null, eventName: string, ...args: any[]): void {
+    this.emitClient(player, Internal.Events_Server_Gui, eventName, ...args);
+  }
+
+  /**
+   * Emit gui event to all clients
+   *
+   * @param {string} eventName
+   * @param args
+   */
+  public emitGuiAll(eventName: string, ...args: any[]): void {
+    this.emitAllClients(Internal.Events_Server_Gui, eventName, ...args);
   }
 
   /**
@@ -118,9 +153,9 @@ export class EventService extends BaseEventService {
    * @private
    */
   private listenToGuiServerEvents(events: EventModel[]): void {
-    this.onClient(Internal.Events_Gui_Server, (eventName: string, ...args: any[]) => {
+    this.onClient(Internal.Events_Gui_Server, (player: Player, eventName: string, ...args: any[]) => {
       const neededEvents = events.filter((event: EventModel) => event.eventName === eventName);
-      this.handleGuiServerEvents(neededEvents, ...args);
+      this.handleGuiServerEvents(neededEvents, player, ...args);
     });
   }
 
@@ -128,19 +163,20 @@ export class EventService extends BaseEventService {
    * Handle guiServer Events
    *
    * @param {EventModel[]} events
+   * @param {Player} player
    * @param args
    * @private
    */
-  private handleGuiServerEvents(events: EventModel[], ...args: any[]): void {
+  private handleGuiServerEvents(events: EventModel[], player: Player, ...args: any[]): void {
     events.forEach((event: EventModel) => {
       const instances = app.resolveAll<constructor<any>>(event.targetName);
 
       instances.forEach(async (instance: constructor<any>) => {
-        const instanceMetod = instance[event.methodName];
+        const instanceMethod = instance[event.methodName];
 
-        if (!instanceMetod) return;
+        if (!instanceMethod) return;
 
-        const method = instanceMetod.bind(instance, ...args);
+        const method = instanceMethod.bind(instance, player, ...args);
         await method();
       });
     });

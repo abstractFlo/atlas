@@ -236,11 +236,7 @@ export class WebviewService {
 
         if (!instanceMethod) return;
 
-        const method = this.on.bind(
-            this,
-            event.eventName,
-            instanceMethod.bind(instance)
-        );
+        const method = this.on.bind(this, event.eventName, instanceMethod.bind(instance));
 
         method();
       });
@@ -258,7 +254,7 @@ export class WebviewService {
    */
   private sendEventToServer(): void {
     this.on(Internal.Events_Gui_Server, (eventName: string, ...args: any[]) => {
-      this.eventService.emitServer(eventName, ...args);
+      this.eventService.emitServer(Internal.Events_Gui_Server, eventName, ...args);
     });
   }
 
@@ -268,7 +264,7 @@ export class WebviewService {
    * @private
    */
   private receiveEventFromServer(): void {
-    this.eventService.onServer(Internal.Events_Gui_Server, (eventName: string, ...args: any[]) => {
+    this.eventService.onServer(Internal.Events_Server_Gui, (eventName: string, ...args: any[]) => {
       this.emit(eventName, ...args);
     });
   }
