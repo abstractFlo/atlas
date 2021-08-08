@@ -14,4 +14,6 @@ export {
   OffServer
 } from './decorators/event.decorator';
 
+export { removeAllCursors, showCursor, removeCursor, getWebviewInstance } from './helpers';
+
 export { KeyUp, KeyDown } from './decorators/key-event.decorator';

@@ -1,5 +1,6 @@
-import { Singleton } from '@abstractflo/atlas-shared';
-import { WebView } from 'alt-client';
+import { Last, Singleton } from '@abstractflo/atlas-shared';
+import { Vector2, WebView } from 'alt-client';
+import { removeAllCursors, removeCursor, showCursor } from '../helpers';
 
 @Singleton
 export class WebviewService {
@@ -10,6 +11,40 @@ export class WebviewService {
    * @type {string}
    */
   public url: string;
+
+  /**
+   * Render as overlay
+   *
+   * @type {boolean}
+   */
+  public isOverlay: boolean = false;
+
+  /**
+   * Custom webview postion
+   * @type {Vector2}
+   */
+  public position: Vector2;
+
+  /**
+   * Custom Webview Size
+   *
+   * @type {Vector2}
+   */
+  public size: Vector2;
+
+  /**
+   * Hash of objet to render on
+   *
+   * @type {number}
+   */
+  public propHash: number;
+
+  /**
+   * Name of objects texture to replace
+   *
+   * @type {string}
+   */
+  public targetTexture: string;
 
   /**
    * Route name event if the webview is an spa
@@ -27,11 +62,11 @@ export class WebviewService {
   private webView: WebView;
 
   /**
-   * Return the webview instance
+   * Return the alt:V CEF Instance
    *
    * @return {WebView}
    */
-  public getInstance(): WebView {
+  get webviewInstance(): WebView {
     return this.webView;
   }
 
@@ -46,11 +81,124 @@ export class WebviewService {
         reject(new Error('No route defined'));
       }
 
-      this.webView = new WebView(this.url, false);
+      this.webView = this.loadSpecificWebview();
 
       this.webView.on('load', () => {
         resolve(this.webView);
       });
     });
+  }
+
+  /**
+   * Add cursor for gui
+   *
+   * @return {WebviewService}
+   */
+  public showCursor(): WebviewService {
+    showCursor();
+    return this;
+  }
+
+  /**
+   * Remove cursor from gui
+   *
+   * @return {WebviewService}
+   */
+  public removeCursor(): WebviewService {
+    removeCursor();
+    return this;
+  }
+
+  /**
+   * Remove all cursors from gui
+   *
+   * @return {WebviewService}
+   */
+  public removeAllCursor(): WebviewService {
+    removeAllCursors();
+    return this;
+  }
+
+  /**
+   * Focus the webview
+   *
+   * @return {WebviewService}
+   */
+  public focus(): WebviewService {
+    this.webView.focus();
+    return this;
+  }
+
+  /**
+   * Unfocus the webview
+   *
+   * @return {WebviewService}
+   */
+  public unfocus(): WebviewService {
+    this.webView.unfocus();
+    return this;
+  }
+
+  /**
+   * Destroy the webview
+   */
+  public destroy(): void {
+    if (this.webView.valid) {
+      this.webView.destroy();
+    }
+  }
+
+  /**
+   * Emit event to webview
+   *
+   * @param {string} eventName
+   * @param args
+   * @return {WebviewService}
+   */
+  public emit(eventName: string, ...args: any[]): WebviewService {
+    this.webView.emit(eventName, ...args);
+    return this;
+  }
+
+  /**
+   * Listen to webview Event
+   *
+   * @param {string} eventName
+   * @param {(...args: any[]) => void} listener
+   */
+  public on(eventName: string, listener: (...args: any[]) => void) {
+    this.webView.on(eventName, listener);
+  }
+
+  /**
+   * Listen to webview Event once
+   *
+   * @param {string} eventName
+   * @param {(...args: any[]) => void} listener
+   */
+  public once(eventName: string, listener: (...args: any[]) => void) {
+    this.webView.once(eventName, listener);
+  }
+
+  /**
+   * Render a webview based on given params
+   *
+   * @return {WebView}
+   * @private
+   */
+  private loadSpecificWebview(): WebView {
+    let webview: WebView;
+
+    if (this.propHash && this.targetTexture) {
+      webview = new WebView(this.url, this.propHash, this.targetTexture);
+    } else if (this.position || (this.position && this.size)) {
+      webview = new WebView(this.url, this.position, this?.size);
+    } else if (this.isOverlay && this.position && this.size) {
+      webview = new WebView(this.url, this.isOverlay, this.position, this.size);
+    } else {
+      webview = new WebView(this.url, this.isOverlay);
+    }
+
+    return webview;
   }
 }
