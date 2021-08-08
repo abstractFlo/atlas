@@ -12,11 +12,11 @@ import { app } from '../di-container';
  * @constructor
  */
 export const RegisterClassAsString = (targetConstructor: constructor<any>) => {
-	app.register(
-		targetConstructor.name,
-		{ useFactory: instanceCachingFactory((c) => c.resolve(targetConstructor)) }
-	);
-	return targetConstructor;
+  app.register(
+      targetConstructor.name,
+      { useFactory: instanceCachingFactory((c) => c.resolve(targetConstructor)) }
+  );
+  return targetConstructor;
 };
 
 /**
@@ -26,9 +26,9 @@ export const RegisterClassAsString = (targetConstructor: constructor<any>) => {
  * @constructor
  */
 export const Singleton = (targetConstructor: constructor<any>) => {
-	singleton()(targetConstructor);
-	RegisterClassAsString(targetConstructor);
-	return targetConstructor;
+  singleton()(targetConstructor);
+  RegisterClassAsString(targetConstructor);
+  return targetConstructor;
 };
 
 /**
@@ -38,8 +38,8 @@ export const Singleton = (targetConstructor: constructor<any>) => {
  * @constructor
  */
 export const Injectable = (targetConstructor: constructor<any>) => {
-	injectable()(targetConstructor);
-	RegisterClassAsString(targetConstructor);
-	return targetConstructor;
+  injectable()(targetConstructor);
+  RegisterClassAsString(targetConstructor);
+  return targetConstructor;
 };
 

@@ -14,13 +14,13 @@ import { LoaderQueueItemModel } from '../models/loader-queue-item.model';
  * @param {number} order
  */
 export const Init = (order?: number) => (target: Object, propertyKey: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor =>
-	createLoaderDecorator(
-		target,
-		propertyKey,
-		descriptor,
-		LoaderConstant.QUEUE_INIT,
-		order
-	);
+    createLoaderDecorator(
+        target,
+        propertyKey,
+        descriptor,
+        LoaderConstant.QUEUE_INIT,
+        order
+    );
 
 /**
  * Decorates a method to run before after init decorators finished
@@ -32,12 +32,12 @@ export const Init = (order?: number) => (target: Object, propertyKey: PropertyKe
  * @constructor
  */
 export const Before = (target: Object, propertyKey: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor =>
-	createLoaderDecorator(
-		target,
-		propertyKey,
-		descriptor,
-		LoaderConstant.QUEUE_BEFORE
-	);
+    createLoaderDecorator(
+        target,
+        propertyKey,
+        descriptor,
+        LoaderConstant.QUEUE_BEFORE
+    );
 
 /**
  * Decorates a method to run after the before decorator finished
@@ -49,12 +49,12 @@ export const Before = (target: Object, propertyKey: PropertyKey, descriptor: Pro
  * @constructor
  */
 export const After = (target: Object, propertyKey: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor =>
-	createLoaderDecorator(
-		target,
-		propertyKey,
-		descriptor,
-		LoaderConstant.QUEUE_AFTER
-	);
+    createLoaderDecorator(
+        target,
+        propertyKey,
+        descriptor,
+        LoaderConstant.QUEUE_AFTER
+    );
 
 /**
  * This decorator is only for plugins they want to load  method completely after all others
@@ -68,12 +68,12 @@ export const After = (target: Object, propertyKey: PropertyKey, descriptor: Prop
  * @constructor
  */
 export const Last = (target: Object, propertyKey: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor =>
-	createLoaderDecorator(
-		target,
-		propertyKey,
-		descriptor,
-		LoaderConstant.QUEUE_LAST
-	);
+    createLoaderDecorator(
+        target,
+        propertyKey,
+        descriptor,
+        LoaderConstant.QUEUE_LAST
+    );
 
 /**
  * Add new item to LoaderService
@@ -81,13 +81,13 @@ export const Last = (target: Object, propertyKey: PropertyKey, descriptor: Prope
  * @param {Omit<LoaderQueueItemModel, "cast">} config
  */
 function addLoaderMetaData(config: Omit<LoaderQueueItemModel, 'cast'>): void {
-	const loaderService = app.resolve(LoaderService);
-	const queueItems = getFrameworkMetaData<LoaderQueueItemModel[]>(LoaderConstant.QUEUE_ITEM, loaderService);
+  const loaderService = app.resolve(LoaderService);
+  const queueItems = getFrameworkMetaData<LoaderQueueItemModel[]>(LoaderConstant.QUEUE_ITEM, loaderService);
 
-	const item = new LoaderQueueItemModel().cast(config);
-	queueItems.push(item);
+  const item = new LoaderQueueItemModel().cast(config);
+  queueItems.push(item);
 
-	Reflect.defineMetadata<LoaderQueueItemModel[]>(LoaderConstant.QUEUE_ITEM, queueItems, loaderService);
+  Reflect.defineMetadata<LoaderQueueItemModel[]>(LoaderConstant.QUEUE_ITEM, queueItems, loaderService);
 }
 
 /**
@@ -101,13 +101,13 @@ function addLoaderMetaData(config: Omit<LoaderQueueItemModel, 'cast'>): void {
  * @return {PropertyDescriptor}
  */
 function createLoaderDecorator(target: Object, propertyKey: PropertyKey, descriptor: PropertyDescriptor, type: symbol, order?: number) {
-	addLoaderMetaData({
-		type,
-		target: target.constructor.name,
-		methodName: propertyKey.toLocaleString(),
-		targetHash: target.constructor,
-		order
-	});
+  addLoaderMetaData({
+    type,
+    target: target.constructor.name,
+    methodName: propertyKey.toLocaleString(),
+    targetHash: target.constructor,
+    order
+  });
 
-	return registerDescriptor(descriptor);
+  return registerDescriptor(descriptor);
 }

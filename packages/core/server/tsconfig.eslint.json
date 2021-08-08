@@ -1,4 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src", "rollup.config.js"]
+  "include": [
+    "src",
+    "rollup.config.js"
+  ]
 }

@@ -24,14 +24,14 @@ export const Component = (targetConstructor: constructor<any>) => Singleton(targ
  */
 export function Module(options?: ModuleOptionsDecoratorInterface): (targetConstructor: constructor<any>) => void {
 
-	if (options && (options.components || options.imports)) {
-		const moduleLoaderService = app.resolve(ModuleLoaderService);
+  if (options && (options.components || options.imports)) {
+    const moduleLoaderService = app.resolve(ModuleLoaderService);
 
-		addMetaData(LoaderConstant.COMPONENT, moduleLoaderService, options.components || []);
-		addMetaData(LoaderConstant.MODULE, moduleLoaderService, options.imports || []);
-	}
+    addMetaData(LoaderConstant.COMPONENT, moduleLoaderService, options.components || []);
+    addMetaData(LoaderConstant.MODULE, moduleLoaderService, options.imports || []);
+  }
 
-	return (targetConstructor: constructor<any>) => Singleton(targetConstructor);
+  return (targetConstructor: constructor<any>) => Singleton(targetConstructor);
 }
 
 /**
@@ -42,14 +42,14 @@ export function Module(options?: ModuleOptionsDecoratorInterface): (targetConstr
  * @param {constructor<any>[]} newProperties
  */
 function addMetaData(key: symbol, target: any, newProperties: constructor<any>[]): void {
-	newProperties.forEach((newProperty: constructor<any>) => {
-		const properties = getFrameworkMetaData<constructor<any>[]>(key, target);
-		const alreadyExists = properties.find((property: constructor<any>) => property === newProperty);
+  newProperties.forEach((newProperty: constructor<any>) => {
+    const properties = getFrameworkMetaData<constructor<any>[]>(key, target);
+    const alreadyExists = properties.find((property: constructor<any>) => property === newProperty);
 
-		if (alreadyExists) return;
+    if (alreadyExists) return;
 
-		properties.push(newProperty);
+    properties.push(newProperty);
 
-		Reflect.defineMetadata<constructor<any>[]>(key, properties, target);
-	});
+    Reflect.defineMetadata<constructor<any>[]>(key, properties, target);
+  });
 }

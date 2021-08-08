@@ -3,5 +3,5 @@ export interface AtlasRcInterface {
 }
 
 interface AtlasHooksInterface {
-  cmd: string[]
+  cmd: string[];
 }

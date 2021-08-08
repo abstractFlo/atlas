@@ -9,7 +9,7 @@ import { MetadataKey, Target } from '@abraham/reflection';
  * @return {T}
  */
 export function getFrameworkMetaData<T>(key: MetadataKey, target: Target, defaultValue: any | any[] = []): T {
-	return (Reflect.getMetadata<T>(key, target) || defaultValue) as T;
+  return (Reflect.getMetadata<T>(key, target) || defaultValue) as T;
 }
 
 /**
@@ -19,11 +19,11 @@ export function getFrameworkMetaData<T>(key: MetadataKey, target: Target, defaul
  * @return {PropertyDescriptor}
  */
 export function registerDescriptor(descriptor: PropertyDescriptor): PropertyDescriptor {
-	const original = descriptor.value;
+  const original = descriptor.value;
 
-	descriptor.value = function (...args: any[]) {
-		return original.apply(this, args);
-	};
+  descriptor.value = function (...args: any[]) {
+    return original.apply(this, args);
+  };
 
-	return descriptor;
+  return descriptor;
 }

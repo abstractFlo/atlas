@@ -13,8 +13,8 @@ import { Internal } from '../internal';
  * @constructor
  */
 export const Interval = (name: string, duration: number): MethodDecorator =>
-	(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void =>
-		addTimerMetaData(name, duration, 'interval', target, propertyKey, descriptor);
+    (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void =>
+        addTimerMetaData(name, duration, 'interval', target, propertyKey, descriptor);
 
 /**
  * Create @EveryTick decorator
@@ -24,8 +24,8 @@ export const Interval = (name: string, duration: number): MethodDecorator =>
  * @constructor
  */
 export const EveryTick = (name: string): MethodDecorator =>
-	(target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void =>
-		addTimerMetaData(name, 0, 'everyTick', target, propertyKey, descriptor);
+    (target: Object, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor | void =>
+        addTimerMetaData(name, 0, 'everyTick', target, propertyKey, descriptor);
 
 
 /**
@@ -40,26 +40,26 @@ export const EveryTick = (name: string): MethodDecorator =>
  * @return {PropertyDescriptor}
  */
 function addTimerMetaData(
-	name: string,
-	duration: number,
-	type: string, target: Object,
-	propertyKey: string,
-	descriptor: PropertyDescriptor
+    name: string,
+    duration: number,
+    type: string, target: Object,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
 ): PropertyDescriptor {
-	const timeManager = app.resolve(TimerManagerService);
-	const timers: TimerModel[] = getFrameworkMetaData(Internal.Timer_Manager, timeManager, []);
+  const timeManager = app.resolve(TimerManagerService);
+  const timers: TimerModel[] = getFrameworkMetaData(Internal.Timer_Manager, timeManager, []);
 
-	const newTimer = new TimerModel().cast({
-		type,
-		duration,
-		identifier: name,
-		methodName: propertyKey,
-		targetName: target.constructor.name
-	});
+  const newTimer = new TimerModel().cast({
+    type,
+    duration,
+    identifier: name,
+    methodName: propertyKey,
+    targetName: target.constructor.name
+  });
 
-	timers.push(newTimer);
+  timers.push(newTimer);
 
-	Reflect.defineMetadata<TimerModel[]>(Internal.Timer_Manager, timers, timeManager);
+  Reflect.defineMetadata<TimerModel[]>(Internal.Timer_Manager, timers, timeManager);
 
-	return registerDescriptor(descriptor);
+  return registerDescriptor(descriptor);
 }

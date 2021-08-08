@@ -9,7 +9,10 @@
         "inlineDeclareExternals": true
       },
       "libraries": {
-        "importedLibraries": ["tsyringe", "@abraham/reflection"]
+        "importedLibraries": [
+          "tsyringe",
+          "@abraham/reflection"
+        ]
       }
     }
   ]
