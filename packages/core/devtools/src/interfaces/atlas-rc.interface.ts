@@ -2,6 +2,6 @@ export interface AtlasRcInterface {
   hooks: AtlasHooksInterface;
 }
 
-interface AtlasHooksInterface {
+export interface AtlasHooksInterface {
   cmd: string[];
 }

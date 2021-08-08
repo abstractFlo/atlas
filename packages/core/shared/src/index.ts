@@ -28,13 +28,14 @@ export { TimerModel } from './models/timer.model';
 export { EventModel } from './models/event.model';
 export { ValidateOptionsModel } from './models/validate-options.model';
 
-export {
-  HasOne,
-  HasMany,
-  Cast,
-  castFromJson,
-  JsonEntityModel
-} from './libs/json-entity';
+// JSON Entity
+export { HasOne, HasMany, Cast, castFromJson, JsonEntityModel } from './libs/json-entity';
 
-
+// Base Pool
 export { BasePool } from './pools/base.pool';
+
+// Interfaces
+export type { EventServiceInterface } from './interfaces/event-service.interface';
+export type { ModuleOptionsDecoratorInterface } from './interfaces/module-loader-options.interfac';
+export type { RunningTimerInterface } from './interfaces/running-timer.interface';
+export type { CastConfig, CastCallback } from './libs/json-entity/decorators/cast';

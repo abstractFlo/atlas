@@ -6,3 +6,4 @@ export { OnDiscord } from './decorators/on-discord.decorator';
 export { getDiscordBotClient, getDiscordAuthUrl } from './helpers';
 export { DiscordUserModel } from './models/discord-user.model';
 export { PlayerInterface } from './extends/player/player.interface';
+export { ClientEvents } from './interfaces/eris.interface';

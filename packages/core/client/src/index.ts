@@ -2,6 +2,7 @@ import './setup';
 
 export { WebviewService } from './services/webview.service';
 export { EventService } from './services/event.service';
+export { KeyEventService } from './services/key-event.service';
 
 export {
   SyncedMetaChange,
@@ -10,7 +11,7 @@ export {
   GameEntityCreate,
   OnceServer,
   OnServer,
-  OffServer
+  OffServer,
 } from './decorators/event.decorator';
 
 export { OnGui } from './decorators/webview.decorators';

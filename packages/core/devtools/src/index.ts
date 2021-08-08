@@ -11,7 +11,7 @@ export {
   convertNameType,
   dirAndFileInstaller,
   renderTemplateFromString,
-  copy
+  copy,
 } from './filesystem';
 
 export type { DirAndFileInstaller } from './filesystem';
@@ -33,23 +33,24 @@ export {
   capitalCase,
   snakeCase,
   pathCase,
-  sentenceCase
+  sentenceCase,
 } from './string';
 
 export { getResetScreen, stderr, handleError, isTTY, successMessage, errorMessage } from './terminal';
 
 export { GameResourceModel } from './models/game-resource.model';
+export { GameResourceConfigModel } from './models/game-resource-config.model';
+export { ResourceConfigModel } from './models/resource-config.model';
+export { ResourceOutputModel } from './models/resource-output.model';
 
-export {
-  HasOne,
-  HasMany,
-  Cast,
-  castFromJson,
-  JsonEntityModel
-} from './libs/json-entity';
+export { HasOne, HasMany, Cast, castFromJson, JsonEntityModel } from './libs/json-entity';
+
+export type { CastCallback, CastConfig } from './libs/json-entity/decorators/cast';
+export type { ResourceCreateConfigInterface, PrepareForCopyInterface } from './libs/resources';
+
+export { AtlasRcInterface, AtlasHooksInterface } from './interfaces/atlas-rc.interface';
 
 export { ResourceManager, ResourceConfigCreator } from './libs/resources';
-export type { ResourceCreateConfigInterface, PrepareForCopyInterface } from './libs/resources';
 
 export { convertNamedImports } from './transformers/convertNamedImports';
 

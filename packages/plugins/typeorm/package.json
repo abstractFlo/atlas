@@ -18,12 +18,12 @@
   },
   "scripts": {
     "prebuild": "yarn clean",
-    "postbuild": "yarn types && yarn local:pack",
-    "prewatch": "yarn clean",
     "build": "rollup -c",
+    "postbuild": "yarn local:pack && yarn types && rimraf ./dist/packages",
+    "prewatch": "yarn clean",
     "watch": "rollup -cw",
     "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
-    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts",
+    "types": "api-extractor run --local --verbose",
     "local:pack": "yarn pack --filename plugin-typeorm.tgz"
   },
   "peerDependencies": {

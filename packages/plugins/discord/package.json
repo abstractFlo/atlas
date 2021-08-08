@@ -17,13 +17,13 @@
     "import": "./dist/index.esm.js"
   },
   "scripts": {
-    "prebuild": "yarn clean && yarn types",
-    "postbuild": "yarn local:pack",
-    "prewatch": "yarn clean",
+    "prebuild": "yarn clean",
     "build": "rollup -c",
+    "postbuild": "yarn local:pack && yarn types && rimraf ./dist/packages",
+    "prewatch": "yarn clean",
     "watch": "rollup -cw",
     "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
-    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts --inline-declare-externals --disable-symlinks-following",
+    "types": "api-extractor run --local --verbose",
     "local:pack": "yarn pack --filename plugin-discord.tgz"
   },
   "peerDependencies": {
