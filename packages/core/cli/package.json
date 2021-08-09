@@ -17,7 +17,7 @@
   "scripts": {
     "prebuild": "yarn clean",
     "build": "rollup -c",
-    "postbuild": "yarn local:pack && yarn types && rimraf ./dist/packages",
+    "postbuild": "yarn types && rimraf ./dist/packages && yarn local:pack",
     "prewatch": "yarn clean",
     "watch": "rollup -cw",
     "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
