@@ -17,7 +17,8 @@
     "import": "./dist/index.esm.js"
   },
   "scripts": {
-    "prebuild": "yarn clean && yarn types",
+    "prebuild": "yarn clean",
+    "postbuild": "yarn types && rimraf ./dist/packages && yarn local:pack",
     "prewatch": "yarn clean",
     "build": "rollup -c",
     "watch": "rollup -cw",
