@@ -1,9 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "include": [
-    "packages/**/*.cjs",
-    "packages/**/*.ts",
-    "packages/**/rollup.config.js",
-    "packages/**/dts-generator.cjs"
-  ]
+  "include": ["packages/**/*.cjs", "packages/**/*.ts", "packages/**/rollup.config.js", "packages/**/dts-generator.cjs", "scripts", "stubs"]
 }
