@@ -22,7 +22,7 @@
     "build": "rollup -c",
     "watch": "rollup -cw",
     "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
-    "types": "dts-bundle-generator -o dist/index.d.ts src/index.ts",
+    "types": "api-extractor run --local --verbose",
     "local:pack": "yarn pack --filename package-name.tgz"
   }
 }

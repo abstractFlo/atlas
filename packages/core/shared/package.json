@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@abraham/reflection": "^0.8.0",
-    "@rollup/plugin-typescript": "^8.2.3",
     "rxjs": "^7.2.0",
     "tslib": "^2.3.0",
     "tsyringe": "^4.6.0",

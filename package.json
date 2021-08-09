@@ -14,7 +14,6 @@
   ],
   "devDependencies": {
     "@microsoft/api-extractor": "^7.18.4",
-    "@rollup/plugin-typescript": "^8.2.3",
     "@swc/core": "^1.2.64",
     "@types/node": "^16.3.3",
     "@typescript-eslint/parser": "^4.28.3",
