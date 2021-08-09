@@ -20,7 +20,8 @@ const outputConfigs = {
 
 const allFormats = Object.keys(outputConfigs);
 const packageFormats = allFormats;
-const packageConfigs = packageFormats.map((format) => createConfig(outputConfigs[format]));
+const packageConfigs = packageFormats.map(
+    (format) => createConfig(outputConfigs[format]));
 
 export default packageConfigs;
 
@@ -60,5 +61,5 @@ function createConfig(output) {
     external,
     plugins: [tsPlugin],
     output,
-  };
+  }
 }
