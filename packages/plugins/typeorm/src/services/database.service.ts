@@ -19,13 +19,14 @@ export class DatabaseService {
    * @return {Promise<void>}
    * @protected
    */
-  @Init()
+  @Init(-1)
   protected async connect(): Promise<void> {
     if (this.connected) return;
 
     const config = await this.getConfig();
     await createConnection(config);
 
+    UtilsService.logRegisteredHandlers('DatabaseService', config.entities.length);
     UtilsService.logLoaded('DatabaseService');
 
     this.connected = true;
