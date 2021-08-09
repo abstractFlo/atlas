@@ -7,13 +7,21 @@ import pkgRoot from '../package.json';
 let hasTSChecked = false;
 
 const createRollupConfig = (options) => {
-  if (!Reflect.has(options, 'output')) options.output = {};
+  if (!Reflect.has(options, 'output')) options.output = {
+    esm: {
+      file: options.pkg.module,
+      format: `es`,
+    },
+    cjs: {
+      file: options.pkg.main,
+      format: `cjs`,
+    },
+  };
 
-  const allFormats = Object.keys(options.output);
-  const packageFormats = allFormats;
-  const packageConfigs = packageFormats.map((format) => createConfig(options, options.output[format]));
+  const packageFormats = Object.keys(options.output);
 
-  return packageConfigs;
+  return packageFormats.map(
+      (format) => createConfig(options, options.output[format]));
 };
 
 function createConfig(options, output) {
@@ -22,7 +30,7 @@ function createConfig(options, output) {
   if (!Reflect.has(options, 'plugins')) options.plugins = [];
   if (!Reflect.has(options, 'pkg')) options.pkg = {};
 
-  const { input, external, plugins, pkg } = options;
+  const {input, external, plugins, pkg} = options;
 
   const shouldEmitDeclarations = !hasTSChecked;
 
@@ -41,13 +49,13 @@ function createConfig(options, output) {
   hasTSChecked = true;
 
   external.push(
-    ...builtinModules,
-    ...Object.keys(pkg.devDependencies || {}),
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.peerDependencies || {}),
-    ...Object.keys(pkgRoot.devDependencies || {}),
-    ...Object.keys(pkgRoot.dependencies || {}),
-    ...Object.keys(pkgRoot.peerDependencies || {}),
+      ...builtinModules,
+      ...Object.keys(pkg.devDependencies || {}),
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {}),
+      ...Object.keys(pkgRoot.devDependencies || {}),
+      ...Object.keys(pkgRoot.dependencies || {}),
+      ...Object.keys(pkgRoot.peerDependencies || {}),
   );
 
   return {
