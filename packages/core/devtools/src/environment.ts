@@ -43,3 +43,4 @@ export function envToJson(): Record<string, any> {
  * @type {boolean}
  */
 export const isProduction: boolean = env<string>('ATLAS_PRODUCTION', 'false') === 'true';
+

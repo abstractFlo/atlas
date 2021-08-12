@@ -8,6 +8,9 @@ import { AssetResourceCommand } from './commands/asset-resource.command';
 import { ComponentCommand } from './commands/component.command';
 import { ModuleCommand } from './commands/module.command';
 import { ServiceCommand } from './commands/service.command';
+import { PluginInstallCommand } from './commands/plugin-install.command';
+import { PluginUpdateCommand } from './commands/plugin-update.command';
+import { PluginRemoveCommand } from './commands/plugin-remove.command';
 
 const program = yargs(hideBin(process.argv))
     .scriptName('atlas')
@@ -23,6 +26,9 @@ program.command(AssetResourceCommand);
 program.command(ComponentCommand);
 program.command(ModuleCommand);
 program.command(ServiceCommand);
+program.command(PluginInstallCommand);
+program.command(PluginUpdateCommand);
+program.command(PluginRemoveCommand);
 program.command(NewCommand);
 
 program

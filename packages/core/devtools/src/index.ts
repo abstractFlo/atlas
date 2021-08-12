@@ -11,7 +11,7 @@ export {
   convertNameType,
   dirAndFileInstaller,
   renderTemplateFromString,
-  copy,
+  copy
 } from './filesystem';
 
 export type { DirAndFileInstaller } from './filesystem';
@@ -33,10 +33,20 @@ export {
   capitalCase,
   snakeCase,
   pathCase,
-  sentenceCase,
+  sentenceCase
 } from './string';
 
-export { getResetScreen, stderr, handleError, isTTY, successMessage, errorMessage } from './terminal';
+export {
+  getResetScreen,
+  stderr,
+  handleError,
+  isTTY,
+  successMessage,
+  errorMessage,
+  createProgressBar
+} from './terminal';
+
+export { formatBytes } from './numbers';
 
 export { GameResourceModel } from './models/game-resource.model';
 export { GameResourceConfigModel } from './models/game-resource-config.model';
@@ -56,4 +66,7 @@ export { convertNamedImports } from './transformers/convertNamedImports';
 
 export { relativeId } from './relativeId';
 
-export { getAtlasRc } from './atlas';
+// Atlas Helpers
+export { projectPkgJson } from './atlas';
+
+export { FSJetpack } from 'fs-jetpack/types';

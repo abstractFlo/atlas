@@ -1,6 +1,7 @@
 import { bold, cyan, dim, green, red } from 'colorette';
 import { RollupError, WatcherOptions } from 'rollup';
 import { relativeId } from './relativeId';
+import ProgressBar, { ProgressBarOptions } from 'progress';
 
 const CLEAR_SCREEN = '\u001Bc';
 
@@ -96,4 +97,30 @@ export function successMessage(message: string, type: string = 'Success'): void 
  */
 export function errorMessage(message: string, type: string = 'Error'): void {
   stderr(`${red(type)} -> ${message}`);
+}
+
+/**
+ * Create a cli progress bar
+ *
+ * @param {string} format
+ * @param {ProgressBar.ProgressBarOptions} options
+ * @param startingMessage
+ * @return {ProgressBar}
+ */
+export function createProgressBar(format: string, options: ProgressBarOptions, startingMessage: string): ProgressBar {
+
+  const defaultOptions: ProgressBarOptions = {
+    width: 40,
+    complete: '=',
+    incomplete: ' ',
+    renderThrottle: 1,
+    total: 0
+  };
+
+  stderr(startingMessage);
+
+  return new ProgressBar(
+      format,
+      { ...defaultOptions, ...options }
+  );
 }

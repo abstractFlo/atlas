@@ -8,16 +8,6 @@ export function normalize(path: string) {
   return path.replace(/\\/g, '/');
 }
 
-/**
- * Return given value as PascalCase
- * @param {string} value
- * @return {string}
- */
-/*export function pascalCase(value: string): string {
-  return value.replace(/\w+/g, (w) => w[0].toUpperCase() + w.slice(1).toLowerCase());
-}*/
-
-
 export {
   camelCase,
   capitalCase,
