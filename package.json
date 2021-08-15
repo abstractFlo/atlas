@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "build": "lerna run build",
-    "cleanAll": "rimraf packages/**/{dist,build,types,*.d.ts,*.tgz}"
+    "cleanAll": "rimraf packages/**/{dist,build,types,*.d.ts,*.tgz}",
+    "lint": "eslint packages/* --ext=ts --fix"
   },
   "workspaces": [
     "packages/core/*",
