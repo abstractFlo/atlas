@@ -26,7 +26,6 @@ export function findByMatching(folder: string, options: FindOptions = {}, fsJetp
   return fsJetpack.findAsync(folder, options);
 }
 
-
 /**
  * Return the jetpack instance
  *
@@ -68,7 +67,6 @@ export async function renderTemplateFromString(templateString: string, replacers
   return await render(templateString, replacers, { async: true });
 }
 
-
 /**
  * Convert given name and type to useable object for file creation
  *
@@ -76,7 +74,7 @@ export async function renderTemplateFromString(templateString: string, replacers
  * @param {string} type
  * @return {className: string, path: string, fileName: string, completePath: string}
  */
-export function convertNameType(name: string, type: string): { className: string, path: string, fileName: string, completePath: string } {
+export function convertNameType(name: string, type: string): { className: string; path: string; fileName: string; completePath: string } {
   const lowerName = name.toLowerCase();
   const sanitized = normalize(lowerName);
   const splitted = sanitized.split('/');
@@ -93,7 +91,7 @@ export function convertNameType(name: string, type: string): { className: string
     className: pascalCase(className),
     fileName,
     path: splitted.join('/'),
-    completePath: [...splitted, fileName].join('/')
+    completePath: [...splitted, fileName].join('/'),
   };
 }
 
@@ -105,25 +103,29 @@ export function convertNameType(name: string, type: string): { className: string
  * @param force
  * @param fsJetpack
  */
-export function dirAndFileInstaller<T = any>(path: string, installConfig: (DirAndFileInstaller & T)[], force: boolean = false, fsJetpack: FSJetpack = jetpack): void {
+export function dirAndFileInstaller<T = any>(
+  path: string,
+  installConfig: (DirAndFileInstaller & T)[],
+  force: boolean = false,
+  fsJetpack: FSJetpack = jetpack,
+): void {
   let jetpack = fsJetpack.cwd(path);
 
   if (!force && jetpack.exists('')) {
     return errorMessage(jetpack.path(''), 'Already Exists');
   }
 
-  installConfig
-      .forEach((step: { name: string, file?: any }) => {
-        if (!step.file) {
-          jetpack.dir(step.name);
-        } else {
-          jetpack.file(step.name, {
-            content: step.file === 'empty' ? '' : step.file
-          });
-        }
-
-        successMessage(jetpack.path(step.name), 'Created');
+  installConfig.forEach((step: { name: string; file?: any }) => {
+    if (!step.file) {
+      jetpack.dir(step.name);
+    } else {
+      jetpack.file(step.name, {
+        content: step.file === 'empty' ? '' : step.file,
       });
+    }
+
+    successMessage(jetpack.path(step.name), 'Created');
+  });
 }
 
 /**

@@ -20,8 +20,8 @@
     "prebuild": "yarn clean",
     "postbuild": "yarn types && rimraf ./dist/packages && yarn local:pack",
     "prewatch": "yarn clean",
-    "build": "rollup -c",
-    "watch": "rollup -cw",
+    "build": "microbundle --no-sourcemap --format=cjs,esm --no-compress",
+    "watch": "microbundle watch --no-sourcemap --format=cjs,esm --no-compress",
     "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
     "types": "api-extractor run --local --verbose",
     "local:pack": "yarn pack --filename package-name.tgz"

@@ -1,5 +1,4 @@
 import { fsJetpack } from './filesystem';
-import { get, set } from 'lodash';
 import { AtlasRcInterface } from './interfaces/atlas-rc.interface';
 
 /**
@@ -24,7 +23,7 @@ export function getAtlasRc() {
 export function getKeyFromAtlasRc(key: string, defaultValue?: any) {
   const config = getAtlasRc();
 
-  return get(config, key, defaultValue);
+  return config[key] ?? defaultValue;
 }
 
 /**
@@ -35,7 +34,7 @@ export function getKeyFromAtlasRc(key: string, defaultValue?: any) {
  */
 export function setKeyToAtlasRc(key: string, value: any) {
   let config = getAtlasRc();
-  config = set(config, key, value);
+  config[key] = value;
+
   fsJetpack().write('atlas-rc.cjs', config, { jsonIndent: 2 });
 }
-

@@ -55,7 +55,7 @@ export class Builder {
    *
    * @param creator
    */
-  public async run(creator: ResourceCreateConfigInterface): Promise<void> {
+  public async run(): Promise<void> {
     await this.prepare();
     await this.copyResourceAssets(creator.prepareForCopy);
 

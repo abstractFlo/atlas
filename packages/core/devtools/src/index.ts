@@ -50,7 +50,7 @@ export type { ResourceCreateConfigInterface, PrepareForCopyInterface } from './l
 
 export { AtlasRcInterface, AtlasHooksInterface } from './interfaces/atlas-rc.interface';
 
-export { ResourceManager, ResourceConfigCreator } from './libs/resources';
+export { ResourceManager } from './libs/resources';
 
 export { convertNamedImports } from './transformers/convertNamedImports';
 

@@ -1,6 +1,6 @@
 import { Arguments, Argv, CommandModule } from 'yargs';
 import { Builder } from '../builder/builder';
-import { ResourceConfigCreator, ResourceManager } from '@abstractflo/atlas-devtools';
+import { ResourceManager } from '@abstractflo/atlas-devtools';
 
 export const BuildCommand: CommandModule = {
   command: 'build',
@@ -10,7 +10,7 @@ export const BuildCommand: CommandModule = {
       alias: 'w',
       describe: 'Watch file changes',
       default: false,
-      type: 'boolean'
+      type: 'boolean',
     });
   },
   async handler(args: Arguments<{ watch: boolean }>): Promise<void> {
@@ -18,9 +18,8 @@ export const BuildCommand: CommandModule = {
     const manager = new ResourceManager();
 
     const availableResources = await manager.findAvailableResources();
-    const creator = new ResourceConfigCreator(availableResources).getConfigs();
 
     await builder.addResourcesToServerCfg(availableResources);
-    await builder.run(creator);
-  }
+    // await builder.run(creator);
+  },
 };

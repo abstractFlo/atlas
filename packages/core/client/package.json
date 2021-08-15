@@ -18,10 +18,10 @@
   },
   "scripts": {
     "prebuild": "yarn clean",
-    "build": "rollup -c",
+    "build": "microbundle --no-sourcemap --format=cjs,esm --no-compress",
     "postbuild": "yarn types && rimraf ./dist/packages && yarn local:pack",
     "prewatch": "yarn clean",
-    "watch": "rollup -cw",
+    "watch": "microbundle watch --no-sourcemap --format=cjs,esm --no-compress",
     "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
     "types": "api-extractor run --local --verbose",
     "local:pack": "yarn pack --filename client.tgz"

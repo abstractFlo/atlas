@@ -1,6 +1,10 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
+  "plugins": ["prettier"],
+  "extends": [
+    "prettier"
+  ],
   "parserOptions": {
     "extraFileExtensions": [
       ".cjs"
@@ -9,5 +13,7 @@
     "sourceType": "module",
     "ecmaVersion": 2020
   },
-  "rules": {}
+  "rules": {
+    "prettier/prettier": "error"
+  }
 }
