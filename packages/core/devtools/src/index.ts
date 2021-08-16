@@ -43,7 +43,8 @@ export {
   isTTY,
   successMessage,
   errorMessage,
-  createProgressBar
+  createProgressBar,
+  executeCommand
 } from './terminal';
 
 export { formatBytes } from './numbers';
@@ -67,6 +68,9 @@ export { convertNamedImports } from './transformers/convertNamedImports';
 export { relativeId } from './relativeId';
 
 // Atlas Helpers
-export { projectPkgJson } from './atlas';
+export { projectPkgJson, writeProjectPkgJson } from './atlas';
 
 export { FSJetpack } from 'fs-jetpack/types';
+
+export { PackageJson } from './types';
+export type { PackageJsonDep } from './types';

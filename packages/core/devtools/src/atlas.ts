@@ -1,6 +1,7 @@
 import { fsJetpack } from './filesystem';
 import { get, set } from 'lodash';
 import { AtlasRcInterface } from './interfaces/atlas-rc.interface';
+import { PackageJson } from './types';
 
 /**
  * Read the complete atlas.json file if exists
@@ -39,3 +40,16 @@ export function setKeyToAtlasRc(key: string, value: any) {
   fsJetpack().write('atlas-rc.cjs', config, { jsonIndent: 2 });
 }
 
+
+/**
+ * Read the package json from project
+ */
+export const projectPkgJson: PackageJson = fsJetpack().read('package.json', 'json') as PackageJson;
+
+/**
+ * Write content to project package.json
+ * @param {PackageJson} content
+ */
+export function writeProjectPkgJson(content: PackageJson): void {
+  fsJetpack().write('package.json', content);
+}

@@ -1,4 +1,4 @@
-import yargs from 'yargs';
+import yargs, { Argv } from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { NewCommand } from './commands/new.command';
 import { BuildCommand } from './commands/build.command';
@@ -11,6 +11,7 @@ import { ServiceCommand } from './commands/service.command';
 import { PluginInstallCommand } from './commands/plugin-install.command';
 import { PluginUpdateCommand } from './commands/plugin-update.command';
 import { PluginRemoveCommand } from './commands/plugin-remove.command';
+import { errorMessage } from '@abstractflo/atlas-devtools';
 
 const program = yargs(hideBin(process.argv))
     .scriptName('atlas')
@@ -34,5 +35,9 @@ program.command(NewCommand);
 program
     .help('h')
     .alias('h', 'help')
-    .fail(() => program.showHelp())
+    .fail((msg: string, _err: Error, _yargs: Argv) => {
+      msg ? errorMessage(msg) : program.showHelp();
+
+      process.exit(1);
+    })
     .argv;

@@ -1,6 +1,16 @@
 import { Arguments, Argv, CommandModule } from 'yargs';
-import { env, errorMessage, projectPkgJson } from '@abstractflo/atlas-devtools';
-import { axiosNoCacheOptions, getDefaultBranch } from '../helpers/plugin-command.helper';
+import {
+  env,
+  errorMessage,
+  executeCommand,
+  fsJetpack,
+  PackageJson,
+  PackageJsonDep,
+  projectPkgJson,
+  successMessage,
+  writeProjectPkgJson
+} from '@abstractflo/atlas-devtools';
+import { axiosNoCacheOptions, downloadBranch, extractBranch } from '../helpers/plugin-command.helper';
 import axios from 'axios';
 import inquirer from 'inquirer';
 
@@ -23,6 +33,10 @@ export const PluginInstallCommand: CommandModule = {
 
   builder(yargs: Argv): Argv {
     return yargs
+        .check((args: Arguments<{ source: string, dest: string }>) => {
+          if(args.source.includes('/')) return true;
+          throw new Error('Please provide author and repo name, e.g abstractflo/atlas-plugin-test');
+        })
         .positional(
             'source', {
               describe: 'Author and Repo name optional with branch hash',
@@ -45,68 +59,55 @@ export const PluginInstallCommand: CommandModule = {
   async handler(args: Arguments<{ source: string, dest: string }>): Promise<void> {
     let [authorRepo, branch] = args.source.split('#');
 
-    const baseUrl = `https://github.com/${authorRepo}`;
+    const rawBaseUrl = `https://raw.githubusercontent.com/${authorRepo}`;
     const apiBaseUrl = `https://api.github.com/repos/${authorRepo}`;
-    const getDownloadUrl = (ref: string) => `${apiBaseUrl}/tarball/${ref}`;
+    const getDownloadUrl = (ref: string) => `https://github.com/${authorRepo}/archive/refs/heads/${ref}.tar.gz`;
 
-    if (!branch) {
-      branch = await getDefaultBranch(apiBaseUrl);
-    }
 
     try {
-      const { data: pluginData } = await axios.get(`${apiBaseUrl}/contents?ref=${branch}`);
-      const pkgJson = pluginData.find((path: any) => path.name === 'package.json');
+      branch = await checkIfRepoExists(apiBaseUrl, branch);
+      const pluginPkgJson = await getPackageJson(rawBaseUrl, branch);
+      checkIfIsValidAtlasPackage(pluginPkgJson);
 
-      if (!pkgJson) throw new Error('This plugin does not contains a package.json');
-
-      const { data: pkgData } = await axios.get(pkgJson.download_url, axiosNoCacheOptions);
-
-      if (!Reflect.has(pkgData, 'atlas-plugin') || !Reflect.get(pkgData, 'atlas-plugin')) {
-        throw new Error('This plugin is not a valid atlas-plugin. Contact the Author if you think this is failure.');
-      }
-
-      const mainPackages = Object.keys(projectPkgJson.dependencies);
-      const pluginPackages = Object.keys(pkgData.dependencies);
+      const tmpDir = fsJetpack().tmpDir();
 
       const packagesReadyForInstall = {
-        dependencies:  {},
-        devDependencies:  {}
+        dependencies: {},
+        devDependencies: {}
       };
 
-      const versionQuestions = [];
+      packagesReadyForInstall.dependencies = await selectPluginPackageVersion(
+          projectPkgJson.dependencies ?? {},
+          pluginPkgJson.dependencies ?? {}
+      );
 
-      pluginPackages.forEach((pluginPkg: string) => {
-        if(mainPackages.includes(pluginPkg)) return;
+      packagesReadyForInstall.devDependencies = await selectPluginPackageVersion(
+          projectPkgJson.devDependencies ?? {},
+          pluginPkgJson.devDependencies ?? {}
+      );
 
-        packagesReadyForInstall.dependencies = {
-          ...packagesReadyForInstall.dependencies,
-          [pluginPkg]: pkgData.dependencies[pluginPkg]
-        }
-      })
+      writeProjectPkgJson({ ...projectPkgJson, ...packagesReadyForInstall });
 
-      pluginPackages
-          .filter((pluginPkg: string) => mainPackages.includes(pluginPkg))
-          .filter((pluginPkg: string) => pkgData.dependencies[pluginPkg] !== projectPkgJson.dependencies[pluginPkg])
-          .forEach((pluginPkg: string) => {
-            const pluginVersion = pkgData.dependencies[pluginPkg];
-            const projectVersion = projectPkgJson.dependencies[pluginPkg];
-            const question = createQuestion(pluginPkg, pluginVersion, projectVersion);
+      await downloadBranch(getDownloadUrl(branch), authorRepo.replace('/', '_'), authorRepo, tmpDir);
+      await extractBranch(authorRepo.replace('/', '_'), authorRepo, tmpDir);
 
-            versionQuestions.push(question);
-          });
+      successMessage('Download complete, install dependencies...');
 
-      const answersVersions = await inquirer.prompt(versionQuestions);
+      const command = env<string>('ATLAS_PLUGIN_INSTALLER_BIN', 'yarn') === 'yarn'
+          ? 'yarn'
+          : 'npm install';
 
-      console.log({
-        ...projectPkgJson.dependencies,
-        ...packagesReadyForInstall.dependencies,
-        ...answersVersions,
-      });
+      await executeCommand(
+          command,
+          'There is an error while installing your dependencies',
+          { stdio: 'inherit' }
+      );
+
+      successMessage('Installation done', 'Complete');
 
     } catch (err) {
       errorMessage(err.message);
     }
-
   }
 };
 
@@ -123,11 +124,101 @@ function createQuestion(pluginPkg, pluginVersion, projectVersion) {
   return {
     type: 'list',
     name: pluginPkg,
-    message: `Please select then version of ${pluginPkg}`,
+    message: `Please select the version of ${pluginPkg}`,
     choices: [
-      { name: `plugin -> ${pluginVersion}`, value: pluginVersion},
-      { name: `project -> ${projectVersion}`, value: projectVersion}
+      { name: `plugin -> ${pluginVersion}`, value: pluginVersion },
+      { name: `project -> ${projectVersion}`, value: projectVersion }
     ]
   };
 }
 
+/**
+ * Return PackageJsonDep with right package versions
+ *
+ * @param {PackageJsonDep} mainPackages
+ * @param {PackageJsonDep} pluginPackages
+ * @return {Promise<PackageJsonDep>}
+ */
+async function selectPluginPackageVersion(
+    mainPackages: PackageJsonDep,
+    pluginPackages: PackageJsonDep
+): Promise<PackageJsonDep> {
+  let readyForInstall = {};
+  let versionQuestions = [];
+
+  // Ready for Install Deps
+  Object.keys(pluginPackages)
+      .filter((pluginPkg: string) => !Object.keys(mainPackages).includes(pluginPkg))
+      .forEach((pluginPkg: string) => readyForInstall = {
+        ...readyForInstall,
+        [pluginPkg]: pluginPackages[pluginPkg]
+      });
+
+  Object.keys(pluginPackages)
+      .filter((pluginPkg: string) => Object.keys(mainPackages).includes(pluginPkg))
+      .filter((pluginPkg: string) => pluginPackages[pluginPkg] !== mainPackages[pluginPkg])
+      .forEach((pluginPkg: string) => {
+        const pluginVersion = pluginPackages[pluginPkg];
+        const projectVersion = mainPackages[pluginPkg];
+        const question = createQuestion(pluginPkg, pluginVersion, projectVersion);
+
+        versionQuestions.push(question);
+      });
+
+  const answerVersions = await inquirer.prompt(versionQuestions);
+
+  return {
+    ...mainPackages,
+    ...pluginPackages,
+    ...answerVersions
+  };
+
+}
+
+/**
+ * Check if repo exists and set default branch
+ *
+ * @param {string} apiBaseUrl
+ * @param {string} branch
+ * @return {Promise<Error | string>}
+ */
+async function checkIfRepoExists(apiBaseUrl: string, branch: string): Promise<string> {
+  try {
+    const { data } = await axios.get(apiBaseUrl, axiosNoCacheOptions);
+    return branch ?? data.default_branch;
+  } catch (err) {
+    throw Error('Could not load repository information. Please check if the repository is available publicy');
+  }
+}
+
+/**
+ * Return the plugin package.json
+ *
+ * @param {string} rawBaseUrl
+ * @param {string} branch
+ * @return {Promise<object>}
+ */
+async function getPackageJson(rawBaseUrl: string, branch: string): Promise<PackageJson> {
+
+  try {
+    const { data } = await axios.get(`${rawBaseUrl}/${branch}/package.json`, axiosNoCacheOptions);
+    return data;
+
+  } catch (err) {
+    throw new Error('This plugin is not a valid atlas-plugin. Contact the author if you think this is a failure.');
+  }
+}
+
+/**
+ * Check if plugin has atlas-plugin key
+ *
+ * @param {PackageJson} pluginPkgJson
+ */
+function checkIfIsValidAtlasPackage(pluginPkgJson: PackageJson): void {
+  const hasKey = Reflect.has(pluginPkgJson, 'atlas-plugin');
+  const isValid = Reflect.get(pluginPkgJson, 'atlas-plugin');
+
+  if (hasKey && isValid) return;
+
+  throw new Error('This plugin is not a valid atlas-plugin. Contact the author if you think this is a failure.');
+}

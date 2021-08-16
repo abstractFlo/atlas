@@ -2,6 +2,8 @@ import { bold, cyan, dim, green, red } from 'colorette';
 import { RollupError, WatcherOptions } from 'rollup';
 import { relativeId } from './relativeId';
 import ProgressBar, { ProgressBarOptions } from 'progress';
+import execa, { Options } from 'execa';
+import { WriteStream } from 'tty';
 
 const CLEAR_SCREEN = '\u001Bc';
 
@@ -123,4 +125,27 @@ export function createProgressBar(format: string, options: ProgressBarOptions, s
       format,
       { ...defaultOptions, ...options }
   );
+}
+
+/**
+ * Run a command on shell
+ *
+ * @param {string} command
+ * @param errorMessage
+ * @param {execa.Options} options
+ * @return {WriteStream}
+ */
+export function executeCommand(command: string, errorMessage: string, options?: Options): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const cmd = execa(command, options);
+
+    cmd.on('error', () => reject(new Error(errorMessage)));
+    cmd.on('exit', (code: number | null) =>
+        code === 0
+            ? resolve()
+            : reject(new Error(errorMessage))
+    );
+    cmd.on('close', resolve);
+  });
+
 }

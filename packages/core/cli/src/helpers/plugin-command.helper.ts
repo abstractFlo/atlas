@@ -82,14 +82,3 @@ export async function downloadBranch(url: string, pluginName: string, downloadRe
   });
 
 }
-
-/**
- * Return the default branch for current repository
- *
- * @param {string} url
- * @return {Promise<string>}
- */
-export async function getDefaultBranch(url: string): Promise<string> {
-  const response = await axios.get(url, axiosNoCacheOptions);
-  return response.data.default_branch;
-}
