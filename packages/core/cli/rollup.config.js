@@ -5,6 +5,12 @@ const outputConfigs = {
   cjs: {
     file: pkg.main,
     format: `cjs`,
+    banner: '#!/usr/bin/env node \n'
+  },
+  esm: {
+    file: pkg.module,
+    format: `esm`,
+    banner: '#!/usr/bin/env node \n'
   },
 };
 

@@ -11,7 +11,8 @@ import { ServiceCommand } from './commands/service.command';
 import { PluginInstallCommand } from './commands/plugin-install.command';
 import { PluginUpdateCommand } from './commands/plugin-update.command';
 import { PluginRemoveCommand } from './commands/plugin-remove.command';
-import { errorMessage } from '@abstractflo/atlas-devtools';
+import { errorMessage, fsJetpack } from '@abstractflo/atlas-devtools';
+import { pathToFileURL } from 'url';
 
 const program = yargs(hideBin(process.argv))
     .scriptName('atlas')
@@ -31,6 +32,18 @@ program.command(PluginInstallCommand);
 program.command(PluginUpdateCommand);
 program.command(PluginRemoveCommand);
 program.command(NewCommand);
+
+program.command({
+  command: 'foo',
+  describe: 'foo Command',
+  handler: () => {
+
+    const pluginFile = fsJetpack().path('plugins/abstractflo/atlas-test-plugin/myFile.js');
+    const fileUrl = pathToFileURL(pluginFile);
+    import(fileUrl.href).then(m => m);
+
+  }
+});
 
 program
     .help('h')

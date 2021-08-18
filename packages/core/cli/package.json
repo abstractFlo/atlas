@@ -6,13 +6,15 @@
   "homepage": "",
   "license": "MIT",
   "main": "dist/atlas-cli.js",
+  "module": "dist/atlas-cli.esm.mjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist/*",
     "stubs/*"
   ],
   "bin": {
-    "atlas": "dist/atlas-cli.js"
+    "atlas": "dist/atlas-cli.js",
+    "atlas-esm": "dist/atlas-cli.esm.mjs"
   },
   "scripts": {
     "prebuild": "yarn clean",
