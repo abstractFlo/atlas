@@ -30,6 +30,16 @@ export function jsonToEnv(data: Record<string, any>): string {
 }
 
 /**
+ * Write data to .env
+ *
+ * @param {Record<string, any>} data
+ */
+export function appendToEnv(data: Record<string, any>): void {
+  const envContent = jsonToEnv(data);
+  fsJetpack().append('.env', `${envContent}\n`);
+}
+
+/**
  * Return .env as json object
  */
 export function envToJson(): Record<string, any> {

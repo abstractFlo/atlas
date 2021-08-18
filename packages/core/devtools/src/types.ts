@@ -5,6 +5,15 @@ export interface PackageJson {
 
   devDependencies: PackageJsonDep,
   dependencies: PackageJsonDep,
+
+  hooks?: PackageJsonAtlasHooks
 }
 
 export type PackageJsonDep = Record<string, string>;
+
+export interface PackageJsonAtlasHooks {
+  postinstall?: string;
+  preinstall?: string;
+  postupdate?: string;
+  preupdate?: string;
+}
