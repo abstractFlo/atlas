@@ -2,6 +2,7 @@ import { fsJetpack } from './filesystem';
 import { get, set } from 'lodash';
 import { AtlasRcInterface } from './interfaces/atlas-rc.interface';
 import { PackageJson } from './types';
+import { env } from './environment';
 
 /**
  * Read the complete atlas.json file if exists
@@ -53,3 +54,10 @@ export const projectPkgJson: PackageJson = fsJetpack().read('package.json', 'jso
 export function writeProjectPkgJson(content: PackageJson): void {
   fsJetpack().write('package.json', content);
 }
+
+/**
+ * Return the plugin folder name
+ *
+ * @type {string}
+ */
+export const pluginFolderName = env<string>('ATLAS_PLUGIN_FOLDER', 'plugins');

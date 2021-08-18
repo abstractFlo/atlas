@@ -68,7 +68,7 @@ export { convertNamedImports } from './transformers/convertNamedImports';
 export { relativeId } from './relativeId';
 
 // Atlas Helpers
-export { projectPkgJson, writeProjectPkgJson } from './atlas';
+export { projectPkgJson, writeProjectPkgJson, pluginFolderName } from './atlas';
 
 export { FSJetpack } from 'fs-jetpack/types';
 
