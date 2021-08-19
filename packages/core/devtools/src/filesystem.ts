@@ -3,6 +3,7 @@ import jetpack from 'fs-jetpack';
 import { render, renderFile } from 'ejs';
 import { dotCase, normalize, pascalCase } from './string';
 import { errorMessage, successMessage } from './terminal';
+import { pathToFileURL } from 'url';
 
 /**
  * Check if given path exists under current working dir
@@ -144,3 +145,15 @@ export interface DirAndFileInstaller {
   name: string;
   file?: string | object | number | boolean;
 }
+
+/**
+ * Load a file based on string path
+ *
+ * @param {string} filePath
+ * @return {Promise<void>}
+ */
+export function resolveAndLoadFile(filePath: string): Promise<void> {
+  const fileUrl = pathToFileURL(filePath);
+  return import(fileUrl.href)
+}
+

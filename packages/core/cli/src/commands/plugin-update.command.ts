@@ -1,5 +1,5 @@
 import { Arguments, Argv, CommandModule } from 'yargs';
-import { errorMessage, fsJetpack, pluginFolderName, successMessage } from '@abstractflo/atlas-devtools';
+import { errorMessage, fsJetpack, pluginFolderName, runHook, successMessage } from '@abstractflo/atlas-devtools';
 import {
   checkIfIsValidAtlasPackage,
   checkIfPluginAlreadyExists,
@@ -7,7 +7,8 @@ import {
   getPackageJson,
   githubApiBaseUrl,
   githubRawBaseUrl,
-  processInstallOrUpdate
+  processInstallDeps,
+  setupAndDownloadPlugin
 } from '../helpers/plugin-command.helper';
 import { green, yellow } from 'colorette';
 
@@ -64,7 +65,11 @@ export const PluginUpdateCommand: CommandModule = {
       checkIfIsValidAtlasPackage(pluginPkgJson);
       checkIfPluginVersionIsSame(authorRepo, pluginPkgJson.version);
 
-      await processInstallOrUpdate(authorRepo, branch, pluginPkgJson, tmpDir);
+      await setupAndDownloadPlugin(authorRepo, branch, pluginPkgJson, tmpDir);
+
+      await runHook('preupdate', authorRepo);
+      await processInstallDeps();
+      await runHook('postupdate', authorRepo);
 
       successMessage('Update done', 'Complete');
 

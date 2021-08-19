@@ -1,11 +1,11 @@
 import { Arguments, Argv, CommandModule } from 'yargs';
-import { errorMessage, fsJetpack, successMessage } from '@abstractflo/atlas-devtools';
+import { errorMessage, fsJetpack, runHook, successMessage } from '@abstractflo/atlas-devtools';
 import {
   checkIfIsValidAtlasPackage,
   checkIfPluginAlreadyExists,
   checkIfRepoExists,
-  getPackageJson,
-  processInstallOrUpdate
+  getPackageJson, githubApiBaseUrl, githubRawBaseUrl, processInstallDeps,
+  setupAndDownloadPlugin
 } from '../helpers/plugin-command.helper';
 import { green } from 'colorette';
 
@@ -49,19 +49,23 @@ export const PluginInstallCommand: CommandModule = {
   async handler(args: Arguments<{ source: string, dest: string }>): Promise<void> {
     let [authorRepo, branch] = args.source.split('#');
 
-    const rawBaseUrl = `https://raw.githubusercontent.com/${authorRepo}`;
-    const apiBaseUrl = `https://api.github.com/repos/${authorRepo}`;
+    const baseUrl = githubRawBaseUrl(authorRepo);
+    const apiUrl = githubApiBaseUrl(authorRepo);
     const tmpDir = fsJetpack().tmpDir();
 
     try {
       checkIfPluginExists(authorRepo);
 
-      branch = await checkIfRepoExists(apiBaseUrl, branch);
-      const pluginPkgJson = await getPackageJson(rawBaseUrl, branch);
+      branch = await checkIfRepoExists(apiUrl, branch);
+      const pluginPkgJson = await getPackageJson(baseUrl, branch);
 
       checkIfIsValidAtlasPackage(pluginPkgJson);
 
-      await processInstallOrUpdate(authorRepo, branch, pluginPkgJson, tmpDir);
+      await setupAndDownloadPlugin(authorRepo, branch, pluginPkgJson, tmpDir);
+
+      await runHook('preinstall', authorRepo)
+      await processInstallDeps();
+      await runHook('postinstall', authorRepo)
 
       successMessage('Installation done', 'Complete');
 
@@ -84,3 +88,4 @@ function checkIfPluginExists(authorRepo: string): void {
     throw new Error(`Plugin ${authorRepo} already exists.\nIf you want to update: ${green(`atlas plugin:update ${authorRepo}`)}`);
   }
 }
+

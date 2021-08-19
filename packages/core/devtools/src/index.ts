@@ -11,6 +11,7 @@ export {
   convertNameType,
   dirAndFileInstaller,
   renderTemplateFromString,
+  resolveAndLoadFile,
   copy
 } from './filesystem';
 
@@ -68,7 +69,14 @@ export { convertNamedImports } from './transformers/convertNamedImports';
 export { relativeId } from './relativeId';
 
 // Atlas Helpers
-export { projectPkgJson, writeProjectPkgJson, pluginFolderName } from './atlas';
+export {
+  projectPkgJson,
+  writeProjectPkgJson,
+  pluginFolderName,
+  getHookByType,
+  checkIfValidHook,
+  runHook
+} from './atlas';
 
 export { FSJetpack } from 'fs-jetpack/types';
 

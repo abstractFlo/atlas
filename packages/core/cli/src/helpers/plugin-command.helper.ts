@@ -31,9 +31,9 @@ export const axiosNoCacheOptions = {
  * @param {string} pluginName
  * @param {string} extractTo
  * @param {FSJetpack} tmpDir
- * @return {Promise<string | void>}
+ * @return {Promise<void>}
  */
-export async function extractBranch(pluginName: string, extractTo: string, tmpDir: FSJetpack): Promise<string | void> {
+export async function extractBranch(pluginName: string, extractTo: string, tmpDir: FSJetpack): Promise<void> {
   const extractionDirPath = `${pluginFolderName}/${extractTo}`;
 
   fsJetpack().remove(extractionDirPath);
@@ -116,12 +116,10 @@ export function checkIfPluginAlreadyExists(authorRepo: string): boolean {
  * @param {PackageJson} pluginPkgJson
  */
 export function checkIfIsValidAtlasPackage(pluginPkgJson: PackageJson): void {
-  const hasKey = Reflect.has(pluginPkgJson, 'atlas-plugin');
-  const isValid = Reflect.get(pluginPkgJson, 'atlas-plugin');
 
-  if (hasKey && isValid) return;
+  if (pluginPkgJson?.atlas) return;
 
-  throw new Error('This plugin is not a valid atlas-plugin. Contact the author if you think this is a failure.');
+  throw new Error('This plugin is not a valid Atlas plugin. Contact the author if you think this is a failure.');
 }
 
 
@@ -256,7 +254,7 @@ export const getGithubDownloadUrl = (authorRepo: string, ref: string) => `https:
  * @param {FSJetpack} tmpDir
  * @return {Promise<void>}
  */
-export async function processInstallOrUpdate(
+export async function setupAndDownloadPlugin(
     authorRepo: string,
     branch: string,
     pluginPkgJson: PackageJson,
@@ -283,8 +281,16 @@ export async function processInstallOrUpdate(
   await downloadBranch(githubDownloadUrl, authorRepo.replace('/', '_'), authorRepo, tmpDir);
   await extractBranch(authorRepo.replace('/', '_'), authorRepo, tmpDir);
 
-  successMessage('Download complete, install dependencies...');
+  successMessage('Download complete.');
+}
 
+/**
+ * Exectute packagemanager install the deps
+ *
+ * @return {Promise<void>}
+ */
+export async function processInstallDeps(): Promise<void> {
+  successMessage('Please wait a moment, install dependencies...');
   const command = env<string>('ATLAS_PLUGIN_INSTALLER_BIN', 'yarn') === 'yarn'
       ? 'yarn'
       : 'npm install';
