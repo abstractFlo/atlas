@@ -24,7 +24,8 @@
     "watch": "rollup -cw",
     "clean": "rimraf {dist,build,types,*.d.ts,*.tgz}",
     "types": "api-extractor run --local --verbose",
-    "local:pack": "yarn pack --filename client.tgz"
+    "local:pack": "yarn pack --filename client.tgz",
+    "postinstall": "echo 'FUUU'"
   },
   "peerDependencies": {
     "@abstractflo/atlas-shared": "^3.1.0",

@@ -75,7 +75,8 @@ export {
   pluginFolderName,
   getHookByType,
   checkIfValidHook,
-  runHook
+  runHook,
+  getAtlasRc
 } from './atlas';
 
 export { FSJetpack } from 'fs-jetpack/types';

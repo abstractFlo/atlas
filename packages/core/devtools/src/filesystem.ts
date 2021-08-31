@@ -1,5 +1,5 @@
 import { CopyOptions, ExistsResult, FindOptions, FSJetpack } from 'fs-jetpack/types';
-import jetpack from 'fs-jetpack';
+import jetpack, { file } from 'fs-jetpack';
 import { render, renderFile } from 'ejs';
 import { dotCase, normalize, pascalCase } from './string';
 import { errorMessage, successMessage } from './terminal';
@@ -150,9 +150,9 @@ export interface DirAndFileInstaller {
  * Load a file based on string path
  *
  * @param {string} filePath
- * @return {Promise<void>}
+ * @return {Promise<unknown>}
  */
-export function resolveAndLoadFile(filePath: string): Promise<void> {
+export function resolveAndLoadFile(filePath: string): Promise<unknown> {
   const fileUrl = pathToFileURL(filePath);
   return import(fileUrl.href)
 }
