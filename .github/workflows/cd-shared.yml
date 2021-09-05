@@ -80,7 +80,7 @@ jobs:
 
           echo -e "\n# Move the generated code to the newly-checked-out repo, to be committed and pushed"
           rsync -vaI package.json out/
-          rsync -vaI README out/
+          rsync -vaI README.md out/
           rsync -vaI LICENSE.md out/
           rsync -vaI dist/ out/dist
 
