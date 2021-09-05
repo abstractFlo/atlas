@@ -1,13 +1,13 @@
-name: Continuous Delivery - Shared
+name: Continuous Delivery - Server
 
 on:
   push:
     branches:
       - version-3-1-refactor # change this to `master` after release
     paths:
-      - packages/core/shared/**
+      - packages/core/server/**
       - package.json
-      - .github/workflows/cd-shared.yml
+      - .github/workflows/cd-server.yml
 
 jobs:
   pre_ci:
@@ -32,8 +32,8 @@ jobs:
     outputs:
       commit_message: $( [ -z "${{ steps.pr_get_commit_message.outputs.pr_commit_message }}" ] && echo "${{ steps.push_get_commit_message.outputs.push_commit_message }}" || echo "${{ steps.pr_get_commit_message.outputs.pr_commit_message }}" )
 
-  BuildShared:
-    name: Publish Shared
+  BuildServer:
+    name: Publish Server
     runs-on: ubuntu-latest
     if: "!contains(needs.pre_ci.outputs.commit_message, '[skip ci]')"
     needs: pre_ci
@@ -59,18 +59,18 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: Build Code
-        run: yarn workspace @abstractflo/atlas-shared build
+        run: yarn workspace @abstractflo/atlas-server build
 
       - name: Push new code
         if: github.event_name == 'push' && github.ref == 'refs/heads/version-3-1-refactor' # change this to `master` after release
         run: |
           REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
-          echo -e "\n# Move to the shared directory"
-          cd packages/core/shared
+          echo -e "\n# Move to the server directory"
+          cd packages/core/server
 
           echo -e "\n# Checkout the repo in the target branch"
-          TARGET_BRANCH="build-shared"
+          TARGET_BRANCH="build-server"
           git clone $REPO out -b $TARGET_BRANCH
 
           echo -e "\n# Remove any old files in the dist folder"
@@ -87,7 +87,7 @@ jobs:
           git add --all .
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git commit -m "build: shared build for ${GITHUB_SHA}" || true
+          git commit -m "build: server build for ${GITHUB_SHA}" || true
           git push origin $TARGET_BRANCH
         env:
           GITHUB_TOKEN: ${{ secrets.COMMIT_TOKEN }}
