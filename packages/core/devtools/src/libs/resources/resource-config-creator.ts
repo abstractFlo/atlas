@@ -134,12 +134,7 @@ export class ResourceConfigCreator {
             [
               ...resource.config.convert,
               ...modulesForConvert,
-              ...localInstalledPackages.filter((localPackage: string) => {
-                const localPackageJson = fsJetpack()
-                    .cwd('node_modules', localPackage)
-                    .read('package.json', 'json') as PackageJson;
-                return localPackageJson.type !== 'module';
-              })
+              ...this.checkForConvertableModules(localInstalledPackages)
             ],
             resource.config
         )
@@ -168,5 +163,22 @@ export class ResourceConfigCreator {
     });
 
     return this.createConfig(config);
+  }
+
+  /**
+   * Filter given packages fot type is not module
+   *
+   * @param {string[]} localInstalledPackages
+   * @return {string[]}
+   * @private
+   */
+  private checkForConvertableModules(localInstalledPackages: string[]): string[] {
+    return localInstalledPackages.filter((localPackage: string) => {
+      const localPackageJson = fsJetpack()
+          .cwd('node_modules', localPackage)
+          .read('package.json', 'json') as PackageJson;
+
+      return localPackageJson.type !== 'module';
+    });
   }
 }
