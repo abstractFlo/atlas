@@ -29,7 +29,7 @@
   "peerDependencies": {
     "@abstractflo/atlas-server": "^3.1.0",
     "@abstractflo/atlas-shared": "^3.1.0",
-    "@altv/types-server": "^1.9.7",
+    "@altv/types-server": "^2.0.0",
     "eris": "^0.15.1"
   },
   "devDependencies": {
