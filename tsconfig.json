@@ -1,21 +1,12 @@
 {
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/@altv"
-    ],
+    "typeRoots": ["./node_modules/@types", "./node_modules/@altv"],
     "skipLibCheck": false,
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": [
-      "es6",
-      "esnext"
-    ],
+    "lib": ["es6", "esnext"],
     "rootDir": ".",
     "outDir": "dist",
     "strict": false,
@@ -44,12 +35,9 @@
     "useDefineForClassFields": true,
     "baseUrl": "./",
     "paths": {
-      "@abstractflo/atlas-shared": [
-        "packages/core/shared/src"
-      ],
-      "@abstractflo/atlas-devtools": [
-        "packages/core/devtools/src"
-      ]
+      "@abstractflo/atlas-shared": ["packages/core/shared/src"],
+      "@abstractflo/atlas-devtools": ["packages/core/devtools/src"],
+      "@abstractflo/atlas-server": ["packages/core/server/src"]
     }
   }
 }

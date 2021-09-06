@@ -10,6 +10,7 @@ import { ResourceCreateConfigInterface } from './resource-create-config.interfac
 import typescript from '@rollup/plugin-typescript';
 import { isProduction } from '../../environment';
 import { terser } from 'rollup-plugin-terser';
+import { PackageJson } from '../../types';
 
 export class ResourceConfigCreator {
 
@@ -108,6 +109,11 @@ export class ResourceConfigCreator {
    * @private
    */
   private createServerConfig(resource: GameResourceModel): RollupOptions {
+    const localInstalledPackages = [
+      ...Object.keys(this.pkgJson.dependencies || {}),
+      ...Object.keys(this.pkgJson.devDependencies || {})
+    ];
+
     const modulesForConvert = [
       '@abraham/reflection',
       'dotenv',
@@ -115,9 +121,15 @@ export class ResourceConfigCreator {
       'tsyringe',
       'rxjs',
       'rxjs/operators',
-      ...Object.keys(this.pkgJson.dependencies || {}),
-      ...Object.keys(this.pkgJson.devDependencies || {})
+      ...localInstalledPackages.filter((localPackage: string) => {
+        const localPackageJson = fsJetpack()
+            .cwd('node_modules', localPackage)
+            .read('package.json', 'json') as PackageJson;
+
+        return localPackageJson.type === 'module';
+      })
     ];
+
 
     const config = new ResourceConfigModel().cast({
       input: resolvePath([resource.source, 'server', 'index.ts']),
@@ -128,7 +140,7 @@ export class ResourceConfigCreator {
         convertNamedImports(
             [
               ...resource.config.convert,
-              ...modulesForConvert.filter((m => !m.startsWith('@abstractflo')))
+              ...modulesForConvert
             ],
             resource.config
         )

@@ -12,7 +12,7 @@ export {
   dirAndFileInstaller,
   renderTemplateFromString,
   resolveAndLoadFile,
-  copy
+  copy,
 } from './filesystem';
 
 export type { DirAndFileInstaller } from './filesystem';
@@ -34,19 +34,10 @@ export {
   capitalCase,
   snakeCase,
   pathCase,
-  sentenceCase
+  sentenceCase,
 } from './string';
 
-export {
-  getResetScreen,
-  stderr,
-  handleError,
-  isTTY,
-  successMessage,
-  errorMessage,
-  createProgressBar,
-  executeCommand
-} from './terminal';
+export { getResetScreen, stderr, handleError, isTTY, successMessage, errorMessage, createProgressBar, executeCommand } from './terminal';
 
 export { formatBytes } from './numbers';
 
@@ -81,5 +72,5 @@ export {
 
 export { FSJetpack } from 'fs-jetpack/types';
 
-export { PackageJson } from './types';
+export { PackageJson, PackageJsonAtlas } from './types';
 export type { PackageJsonDep } from './types';

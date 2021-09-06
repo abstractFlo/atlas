@@ -1,6 +1,7 @@
 export interface PackageJson {
   name: string;
   version: string;
+  type: string;
 
   devDependencies: PackageJsonDep,
   dependencies: PackageJsonDep,
