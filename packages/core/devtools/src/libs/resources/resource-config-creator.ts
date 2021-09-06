@@ -120,14 +120,7 @@ export class ResourceConfigCreator {
       'fs-extra',
       'tsyringe',
       'rxjs',
-      'rxjs/operators',
-      ...localInstalledPackages.filter((localPackage: string) => {
-        const localPackageJson = fsJetpack()
-            .cwd('node_modules', localPackage)
-            .read('package.json', 'json') as PackageJson;
-
-        return localPackageJson.type === 'module';
-      })
+      'rxjs/operators'
     ];
 
 
@@ -140,12 +133,18 @@ export class ResourceConfigCreator {
         convertNamedImports(
             [
               ...resource.config.convert,
-              ...modulesForConvert
+              ...modulesForConvert,
+              ...localInstalledPackages.filter((localPackage: string) => {
+                const localPackageJson = fsJetpack()
+                    .cwd('node_modules', localPackage)
+                    .read('package.json', 'json') as PackageJson;
+                return localPackageJson.type !== 'module';
+              })
             ],
             resource.config
         )
       ],
-      external: ['alt-server', ...modulesForConvert]
+      external: ['alt-server', ...modulesForConvert, ...localInstalledPackages]
     });
 
     return this.createConfig(config);
