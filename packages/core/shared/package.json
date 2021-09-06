@@ -34,7 +34,7 @@
     "typescript": "4.3.5"
   },
   "peerDependencies": {
-    "@altv/types-shared": "^1.0.1"
+    "@altv/types-shared": "^1.0.3"
   },
   "devDependencies": {
     "@altv/types-shared": "*"
