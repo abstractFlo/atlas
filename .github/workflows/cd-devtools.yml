@@ -1,6 +1,7 @@
 name: Continuous Delivery - Devtools
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - version-3-1-refactor # change this to `master` after release
