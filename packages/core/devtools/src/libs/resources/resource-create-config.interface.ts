@@ -8,4 +8,4 @@ export interface ResourceCreateConfigInterface {
 export interface PrepareForCopyInterface {
   from: string,
   to: string
-};
+}
