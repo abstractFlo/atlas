@@ -17,15 +17,13 @@ export abstract class BasePool<T, K = string | number> {
   }
 
   /**
-   * Add new entry to pool if not exists
+   * Add or update map entry with key
    *
    * @param {K} identifier
    * @param {T} entity
    * @returns {Map<K, T> | void}
    */
-  public add(identifier: K, entity: T): Map<K, T> | void {
-    if (this.has(identifier)) return;
-
+  public upsert(identifier: K, entity: T): Map<K, T> | void {
     this.pool.set(identifier, entity);
   }
 
@@ -34,8 +32,8 @@ export abstract class BasePool<T, K = string | number> {
    *
    * @param {any} items
    */
-  public addMany(...items: [K, T][]): void {
-    items.forEach((item: [K, T]) => this.add(item[0], item[1]));
+  public upsertMany(...items: [K, T][]): void {
+    items.forEach((item: [K, T]) => this.upsert(item[0], item[1]));
   }
 
   /**
