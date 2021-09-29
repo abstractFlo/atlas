@@ -11,7 +11,6 @@ import typescript from '@rollup/plugin-typescript';
 import { isProduction } from '../../environment';
 import { terser } from 'rollup-plugin-terser';
 import { PackageJson } from '../../types';
-import { hasFolder } from '@abstractflo/atlas-devtools';
 
 export class ResourceConfigCreator {
 
