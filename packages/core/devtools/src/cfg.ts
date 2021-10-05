@@ -5,7 +5,6 @@ import { Config, Dict } from 'cfg-reader';
  *
  * @param {string} pathToConfig
  * @param {string} key
- * @param {number} valueType
  * @return {ValueType}
  */
 export function readKeyFromCfg<ValueType>(pathToConfig: string, key: string): ValueType {
@@ -25,7 +24,7 @@ export function readCfg(path: string): Config {
 
 /**
  * Create new temp cfg file they don't exists on filesystem
- * @param data
+ * @param {Dict} data
  * @return {Config}
  */
 export function createTempCfg(data: Dict): Config {
@@ -45,7 +44,7 @@ export function sanitizedCfg(cfg: string): string {
 /**
  * Generate cfg config string
  *
- * @param {[p: string]: any} data
+ * @param {Dict} data
  * @return {string}
  */
 export function cfgFromObject(data: Dict): string {
