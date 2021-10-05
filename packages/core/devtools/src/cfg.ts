@@ -28,7 +28,7 @@ export function readCfg(path: string): Config {
  * @param data
  * @return {Config}
  */
-export function createTempCfg(data: { [key: string]: any }): Config {
+export function createTempCfg(data: Dict): Config {
   return new Config('tmp.cfg', data);
 }
 
