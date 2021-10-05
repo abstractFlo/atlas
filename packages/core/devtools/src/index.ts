@@ -18,7 +18,7 @@ export {
 export type { DirAndFileInstaller } from './filesystem';
 
 export { jsonToYaml, yamlToJson, writeJsonToYaml, appendJsonToYaml, readYamlAsJson } from './yaml';
-export { createTempCfg, CfgValueType, readKeyFromCfg, readCfg, cfgFromObject, sanitizedCfg } from './cfg';
+export { createTempCfg, readKeyFromCfg, readCfg, cfgFromObject, sanitizedCfg } from './cfg';
 
 export { envToJson, jsonToEnv, env, appendToEnv } from './environment';
 

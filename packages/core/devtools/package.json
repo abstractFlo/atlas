@@ -32,7 +32,7 @@
     "@rollup/plugin-node-resolve": "^13.0.2",
     "@rollup/plugin-typescript": "^8.2.3",
     "@swc/core": "^1.2.64",
-    "cfg-reader": "^2.0.0",
+    "cfg-reader": "^3.0.0-rc6",
     "change-case": "^4.1.2",
     "colorette": "^1.2.2",
     "dotenv": "^10.0.0",

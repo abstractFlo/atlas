@@ -1,4 +1,4 @@
-import { Config, ValueType } from 'cfg-reader';
+import { Config, Dict } from 'cfg-reader';
 
 /**
  * Return a config value from given config file
@@ -8,9 +8,9 @@ import { Config, ValueType } from 'cfg-reader';
  * @param {number} valueType
  * @return {ValueType}
  */
-export function readKeyFromCfg(pathToConfig: string, key: string, valueType: ValueType): ValueType {
-  const config = new Config(pathToConfig, false);
-  return config.getOfType(key, valueType);
+export function readKeyFromCfg<ValueType>(pathToConfig: string, key: string): ValueType {
+  const config = new Config(pathToConfig);
+  return config.getOfType<ValueType>(key);
 }
 
 /**
@@ -20,7 +20,7 @@ export function readKeyFromCfg(pathToConfig: string, key: string, valueType: Val
  * @return {Config}
  */
 export function readCfg(path: string): Config {
-  return new Config(path, false);
+  return new Config(path);
 }
 
 /**
@@ -48,18 +48,6 @@ export function sanitizedCfg(cfg: string): string {
  * @param {[p: string]: any} data
  * @return {string}
  */
-export function cfgFromObject(data: { [key: string]: any }): string {
-  return createTempCfg(data).serialize();
+export function cfgFromObject(data: Dict): string {
+  return createTempCfg(data).serialize(false, false);
 }
-
-/**
- * Cfg-Reader types
- * @type {{Number: number, Dict: number, List: number, String: number, Boolean: number}}
- */
-export const CfgValueType = {
-  Boolean: 0,
-  Number: 1,
-  String: 2,
-  List: 3,
-  Dict: 4
-};
