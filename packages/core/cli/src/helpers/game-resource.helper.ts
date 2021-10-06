@@ -16,15 +16,15 @@ import {
  * @return {Promise<({file: string, name: string} | {file: string, name: string} | {file: string, name: string} | {file: string, name: string, standalone: boolean} | {file: string, name: string} | {file: string, name: string} | {file: string, name: string} | {file: string, name: string, standalone: boolean} | {file: {isGameResource: boolean, name: string}, name: string} | {file: string, name: string, standalone: boolean})[]>}
  */
 export const gameResourceInstallerFiles = async (resourceName: string, isStandalone: boolean) => ([
-  { name: `${resourceName}/server/components/.gitkeep`, file: 'empty' },
-  { name: `${resourceName}/server/services/.gitkeep`, file: 'empty' },
+  // { name: `${resourceName}/server/components/.gitkeep`, file: 'empty' },
+  // { name: `${resourceName}/server/services/.gitkeep`, file: 'empty' },
   {
     name: `${resourceName}/server/server.module.ts`,
     file: await renderTemplateFromString(ejsClassTemplate, { className: 'ServerModule', ...moduleClass })
   },
   { name: `${resourceName}/server/index.ts`, file: serverEntryFileTemplate(resourceName), standalone: true },
-  { name: `${resourceName}/client/components/.gitkeep`, file: 'empty' },
-  { name: `${resourceName}/client/services/.gitkeep`, file: 'empty' },
+  // { name: `${resourceName}/client/components/.gitkeep`, file: 'empty' },
+  // { name: `${resourceName}/client/services/.gitkeep`, file: 'empty' },
   {
     name: `${resourceName}/client/client.module.ts`,
     file: await renderTemplateFromString(ejsClassTemplate, { className: 'ClientModule', ...moduleClass })
