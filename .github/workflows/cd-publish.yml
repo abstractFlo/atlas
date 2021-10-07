@@ -40,6 +40,7 @@ jobs:
     outputs:
       semver: ${{ steps.version.outputs.TAG }}
       tag: ${{ steps.version.outputs.BRANCH }}
+      tag_set: ${{ steps.version.outputs.BRANCH }} != ""
 
   build-publish:
     name: Build & Publish
@@ -81,11 +82,21 @@ jobs:
           cd packages/core/cli/
           echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
 
-      - name: Publish atlas-cli
+      - name: Publish atlas-cli prerelease
+        if: ${{ needs.extract-version.outputs.tag_set }}
         shell: bash
         run: |
           cd packages/core/cli/
           npm publish --tag ${{ needs.extract-version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish atlas-cli release
+        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        shell: bash
+        run: |
+          cd packages/core/cli/
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
@@ -97,11 +108,21 @@ jobs:
           cd packages/core/client/
           echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
 
-      - name: Publish atlas-client
+      - name: Publish atlas-client prerelease
+        if: ${{ needs.extract-version.outputs.tag_set }}
         shell: bash
         run: |
           cd packages/core/client/
           npm publish --tag ${{ needs.extract-version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish atlas-client release
+        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        shell: bash
+        run: |
+          cd packages/core/client/
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
@@ -113,11 +134,21 @@ jobs:
           cd packages/core/devtools/
           echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
 
-      - name: Publish atlas-devtools
+      - name: Publish atlas-devtools prerelease
+        if: ${{ needs.extract-version.outputs.tag_set }}
         shell: bash
         run: |
           cd packages/core/devtools/
           npm publish --tag ${{ needs.extract-version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish atlas-devtools release
+        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        shell: bash
+        run: |
+          cd packages/core/devtools/
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
@@ -129,11 +160,21 @@ jobs:
           cd packages/core/server/
           echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
 
-      - name: Publish atlas-server
+      - name: Publish atlas-server prerelease
+        if: ${{ needs.extract-version.outputs.tag_set }}
         shell: bash
         run: |
           cd packages/core/server/
           npm publish --tag ${{ needs.extract-version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish atlas-server release
+        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        shell: bash
+        run: |
+          cd packages/core/server/
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
@@ -145,10 +186,20 @@ jobs:
           cd packages/core/shared/
           echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
 
-      - name: Publish atlas-shared
+      - name: Publish atlas-shared prerelease
+        if: ${{ needs.extract-version.outputs.tag_set }}
         shell: bash
         run: |
           cd packages/core/shared/
           npm publish --tag ${{ needs.extract-version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish atlas-shared release
+        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        shell: bash
+        run: |
+          cd packages/core/shared/
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
