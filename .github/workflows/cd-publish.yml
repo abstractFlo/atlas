@@ -45,6 +45,7 @@ jobs:
   build-publish:
     name: Build & Publish
     needs: [extract-version]
+    runs-on: ubuntu-18.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
