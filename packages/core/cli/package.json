@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-cli",
-  "version": "3.1.0-next.12",
+  "version": "3.1.0-next.13",
   "description": "> TODO: description",
   "author": "Florian Uhlrich <f.uhlrich@abstractmedia.de>",
   "homepage": "",
@@ -36,7 +36,7 @@
     "eslint": "^7.30.0"
   },
   "dependencies": {
-    "@abstractflo/atlas-devtools": "^3.1.0-next.12",
+    "@abstractflo/atlas-devtools": "^3.1.0-next.13",
     "axios": "^0.21.1",
     "colorette": "^1.2.2",
     "inquirer": "^8.1.2",

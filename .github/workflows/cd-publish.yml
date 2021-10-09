@@ -78,6 +78,15 @@ jobs:
         run: |
           yarn build
 
+      - name: Authenticate with Registry
+        run: |
+          yarn logout
+          echo "registry=http://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
       - name: Publish atlas-framework packages
         shell: bash
         run: |
