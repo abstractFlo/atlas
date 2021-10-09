@@ -13,8 +13,8 @@
     "stubs/*"
   ],
   "bin": {
-    "atlas": "dist/atlas-cli.esm.js",
-    "atlas-cjs": "dist/atlas-cli.mjs"
+    "atlas": "dist/atlas-cli.esm.mjs",
+    "atlas-cjs": "dist/atlas-cli.js"
   },
   "scripts": {
     "prebuild": "yarn clean",
