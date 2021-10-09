@@ -91,7 +91,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
       - name: Publish atlas-cli release
-        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        if: !${{ needs.extract-version.outputs.tag_set }}
         shell: bash
         run: |
           cd packages/core/cli/
