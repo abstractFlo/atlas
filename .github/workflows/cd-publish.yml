@@ -71,160 +71,25 @@ jobs:
         run: yarn --frozen-lockfile
 
 
-      # Bump & Publish cli
-      - name: Bump atlas-cli package.json version
+      # Publish atlas-framework packages
+      - name: Build atlas-framework packages
         shell: bash
         run: |
-          cd packages/core/cli/
-          echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
-
-      - name: Build atlas-cli
-        shell: bash
-        run: |
-          cd packages/core/cli
+          lerna version ${{ needs.extract-version.outputs.tag }} --no-git-tag-version --no-push
           yarn build
 
-      - name: Publish atlas-cli prerelease
-        if: ${{ needs.extract-version.outputs.tag_set }}
+      - name: Publish atlas-framework packages prerelease
         shell: bash
+        if: ${{ needs.extract-version.outputs.tag_set }}
         run: |
-          cd packages/core/cli/
-          yarn publish cli.tgz --tag ${{ needs.extract-version.outputs.tag }}
+          lerna publish --pre-dist-tag ${{ needs.extract-version.outputs.tag }} --no-git-tag-version --no-push
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
-      - name: Publish atlas-cli release
+      - name: Publish atlas-framework packages release
         if: ${{ needs.extract-version.outputs.tag_set == false }}
         shell: bash
         run: |
-          cd packages/core/cli/
-          yarn publish cli.tgz
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
-
-      # Bump & Publish client
-
-      - name: Bump atlas-client package.json version
-        shell: bash
-        run: |
-          cd packages/core/client/
-          echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
-
-      - name: Build atlas-client
-        shell: bash
-        run: |
-          cd packages/core/client
-          yarn build
-
-      - name: Publish atlas-client prerelease
-        if: ${{ needs.extract-version.outputs.tag_set }}
-        shell: bash
-        run: |
-          cd packages/core/client/
-          yarn publish client.tgz --tag ${{ needs.extract-version.outputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
-
-      - name: Publish atlas-client release
-        if: ${{ needs.extract-version.outputs.tag_set == false }}
-        shell: bash
-        run: |
-          cd packages/core/client/
-          yarn publish client.tgz
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
-
-      # Bump & Publish devtools
-      - name: Bump atlas-devtools package.json version
-        shell: bash
-        run: |
-          cd packages/core/devtools/
-          echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
-
-      - name: Build atlas-devtools
-        shell: bash
-        run: |
-          cd packages/core/devtools
-          yarn build
-
-      - name: Publish atlas-devtools prerelease
-        if: ${{ needs.extract-version.outputs.tag_set }}
-        shell: bash
-        run: |
-          cd packages/core/devtools/
-          yarn publish devtools.tgz --tag ${{ needs.extract-version.outputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
-
-      - name: Publish atlas-devtools release
-        if: ${{ needs.extract-version.outputs.tag_set == false }}
-        shell: bash
-        run: |
-          cd packages/core/devtools/
-          yarn publish devtools.tgz
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
-
-      # Bump & Publish server
-
-      - name: Bump atlas-server package.json version
-        shell: bash
-        run: |
-          cd packages/core/server/
-          echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
-
-      - name: Build atlas-server
-        shell: bash
-        run: |
-          cd packages/core/server/
-          yarn build
-
-      - name: Publish atlas-server prerelease
-        if: ${{ needs.extract-version.outputs.tag_set }}
-        shell: bash
-        run: |
-          cd packages/core/server/
-          yarn publish server.tgz --tag ${{ needs.extract-version.outputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
-
-      - name: Publish atlas-server release
-        if: ${{ needs.extract-version.outputs.tag_set == false }}
-        shell: bash
-        run: |
-          cd packages/core/server/
-          yarn publish server.tgz
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
-
-      # Bump & Publish shared
-
-      - name: Bump atlas-shared package.json version
-        shell: bash
-        run: |
-          cd packages/core/shared/
-          echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
-
-      - name: Build atlas-shared
-        shell: bash
-        run: |
-          cd packages/core/shared/
-          yarn build
-
-      - name: Publish atlas-shared prerelease
-        if: ${{ needs.extract-version.outputs.tag_set }}
-        shell: bash
-        run: |
-          cd packages/core/shared/
-          yarn publish shared.tgz --tag ${{ needs.extract-version.outputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
-
-      - name: Publish atlas-shared release
-        if: ${{ needs.extract-version.outputs.tag_set == false }}
-        shell: bash
-        run: |
-          cd packages/core/shared/
-          yarn publish shared.tgz
+          lerna publish --dist-tag ${{ needs.extract-version.outputs.tag }} --no-git-tag-version --no-push
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}

@@ -10,7 +10,7 @@
   },
   "workspaces": [
     "packages/core/*",
-    "packages/plugins/*"
+    "packages/pluginss/*"
   ],
   "devDependencies": {
     "@microsoft/api-extractor": "^7.18.4",

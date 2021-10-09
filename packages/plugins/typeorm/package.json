@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-plugin-typeorm",
-  "version": "1.0.0",
+  "version": "3.1.0-next.8",
   "description": "> TODO: description",
   "author": "Florian Uhlrich <f.uhlrich@abstractmedia.de>",
   "homepage": "",
@@ -31,8 +31,8 @@
     "@abstractflo/atlas-shared": "^3.1.0"
   },
   "devDependencies": {
-    "@abstractflo/atlas-devtools": "*",
-    "@abstractflo/atlas-shared": "*"
+    "@abstractflo/atlas-devtools": "^3.1.0-next.8",
+    "@abstractflo/atlas-shared": "^3.1.0-next.8"
   },
   "dependencies": {
     "typeorm": "^0.2.36"
