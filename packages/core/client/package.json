@@ -36,5 +36,8 @@
     "@abstractflo/atlas-shared": "*",
     "@altv/types-client": "*",
     "@altv/types-natives": "*"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

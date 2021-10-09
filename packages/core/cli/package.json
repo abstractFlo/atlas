@@ -13,8 +13,8 @@
     "stubs/*"
   ],
   "bin": {
-    "atlas": "dist/atlas-cli.js",
-    "atlas-esm": "dist/atlas-cli.esm.mjs"
+    "atlas": "dist/atlas-cli.esm.js",
+    "atlas-cjs": "dist/atlas-cli.mjs"
   },
   "scripts": {
     "prebuild": "yarn clean",
@@ -44,5 +44,8 @@
     "rollup": "2.52.7",
     "tar": "^6.1.8",
     "yargs": "^17.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

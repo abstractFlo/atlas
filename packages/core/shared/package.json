@@ -38,5 +38,8 @@
   },
   "devDependencies": {
     "@altv/types-shared": "*"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
