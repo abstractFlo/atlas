@@ -78,18 +78,9 @@ jobs:
         run: |
           yarn build
 
-      - name: Publish atlas-framework packages prerelease
-        shell: bash
-        if: ${{ needs.extract-version.outputs.tag_set }}
-        run: |
-          lerna publish --pre-dist-tag ${{ needs.extract-version.outputs.tag }} --no-git-tag-version --no-push
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
-
-      - name: Publish atlas-framework packages release
-        if: ${{ needs.extract-version.outputs.tag_set == false }}
+      - name: Publish atlas-framework packages
         shell: bash
         run: |
-          lerna publish --dist-tag ${{ needs.extract-version.outputs.tag }} --no-git-tag-version --no-push
+          lerna publish from-package --no-git-tag-version --no-push --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
