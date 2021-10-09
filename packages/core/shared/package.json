@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-shared",
-  "version": "3.1.0-next.9",
+  "version": "3.1.0-next.10",
   "description": "> TODO: description",
   "author": "Florian Uhlrich <f.uhlrich@abstractmedia.de>",
   "homepage": "",
@@ -34,7 +34,7 @@
     "typescript": "4.3.5"
   },
   "peerDependencies": {
-    "@altv/types-shared": "^1.0.3"
+    "@altv/types-shared": "^1.0.6"
   },
   "devDependencies": {
     "@altv/types-shared": "*"
