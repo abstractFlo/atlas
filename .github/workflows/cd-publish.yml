@@ -68,14 +68,15 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn --frozen-lockfile
+        run: |
+          yarn --frozen-lockfile
+          yarn global lerna
 
 
       # Publish atlas-framework packages
       - name: Build atlas-framework packages
         shell: bash
         run: |
-          lerna version ${{ needs.extract-version.outputs.tag }} --no-git-tag-version --no-push
           yarn build
 
       - name: Publish atlas-framework packages prerelease

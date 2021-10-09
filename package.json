@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "build": "lerna run build",
-    "cleanAll": "rimraf packages/**/{dist,build,types,*.d.ts,*.tgz}"
+    "cleanAll": "rimraf packages/**/{dist,build,types,*.d.ts,*.tgz}",
+    "bumpForRelease": "lerna version --no-git-tag-version --no-push"
   },
   "workspaces": [
     "packages/core/*",
