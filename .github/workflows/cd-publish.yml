@@ -70,8 +70,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           yarn --frozen-lockfile
-          yarn global lerna
-
+          yarn global add lerna
 
       # Publish atlas-framework packages
       - name: Build atlas-framework packages
