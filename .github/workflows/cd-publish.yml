@@ -1,0 +1,205 @@
+name: Build & Publish
+on:
+  push:
+    branches-ignore:
+      - '**'
+    tags:
+      - '*.*.*'
+      - '*.*.*-*.*'
+
+jobs:
+  extract-version:
+    name: Extract version
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Extract version
+        id: version
+        shell: bash
+        run: |
+          TAG=${GITHUB_REF/refs\/tags\//}
+          echo ::set-output name=TAG::${TAG}
+
+          semver=( ${TAG//./ } )
+          major="${semver[0]}"
+          minor="${semver[1]}"
+          patch="0"
+          branch=""
+          build="${semver[3]}"
+
+          if [[ "${semver[2]}" =~ "-" ]]; then
+          branch=${semver[2]/*\-}
+          patch=${semver[2]/\-*}
+          else
+          patch="${semver[2]}"
+          fi
+
+          echo ::set-output name=BRANCH::"${branch}"
+          echo ::set-output name=BUILD::"${build}"
+          echo ::set-output name=VERSION::"${major}.${minor}.${patch}"
+
+    outputs:
+      semver: ${{ steps.version.outputs.TAG }}
+      tag: ${{ steps.version.outputs.BRANCH }}
+      tag_set: ${{ steps.version.outputs.BRANCH }} != ""
+
+  build-publish:
+    name: Build & Publish
+    needs: [extract-version]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          lfs: true
+
+      - name: Install Node.js v16 with NPM Registry
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+
+      - name: Restore dependency cache
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-16-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      # Bump & Publish cli
+
+      - name: Bump atlas-cli package.json version
+        shell: bash
+        run: |
+          cd packages/core/cli/
+          echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
+
+      - name: Publish atlas-cli prerelease
+        if: ${{ needs.extract-version.outputs.tag_set }}
+        shell: bash
+        run: |
+          cd packages/core/cli/
+          yarn publish --tag ${{ needs.extract-version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish atlas-cli release
+        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        shell: bash
+        run: |
+          cd packages/core/cli/
+          yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      # Bump & Publish client
+
+      - name: Bump atlas-client package.json version
+        shell: bash
+        run: |
+          cd packages/core/client/
+          echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
+
+      - name: Publish atlas-client prerelease
+        if: ${{ needs.extract-version.outputs.tag_set }}
+        shell: bash
+        run: |
+          cd packages/core/client/
+          yarn publish --tag ${{ needs.extract-version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish atlas-client release
+        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        shell: bash
+        run: |
+          cd packages/core/client/
+          yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      # Bump & Publish devtools
+
+      - name: Bump atlas-devtools package.json version
+        shell: bash
+        run: |
+          cd packages/core/devtools/
+          echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
+
+      - name: Publish atlas-devtools prerelease
+        if: ${{ needs.extract-version.outputs.tag_set }}
+        shell: bash
+        run: |
+          cd packages/core/devtools/
+          yarn publish --tag ${{ needs.extract-version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish atlas-devtools release
+        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        shell: bash
+        run: |
+          cd packages/core/devtools/
+          yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      # Bump & Publish server
+
+      - name: Bump atlas-server package.json version
+        shell: bash
+        run: |
+          cd packages/core/server/
+          echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
+
+      - name: Publish atlas-server prerelease
+        if: ${{ needs.extract-version.outputs.tag_set }}
+        shell: bash
+        run: |
+          cd packages/core/server/
+          yarn publish --tag ${{ needs.extract-version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish atlas-server release
+        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        shell: bash
+        run: |
+          cd packages/core/server/
+          yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      # Bump & Publish shared
+
+      - name: Bump atlas-shared package.json version
+        shell: bash
+        run: |
+          cd packages/core/shared/
+          echo "`jq '.version="${{ needs.extract-version.outputs.semver }}"' package.json`" > package.json
+
+      - name: Publish atlas-shared prerelease
+        if: ${{ needs.extract-version.outputs.tag_set }}
+        shell: bash
+        run: |
+          cd packages/core/shared/
+          yarn publish --tag ${{ needs.extract-version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish atlas-shared release
+        if: "!${{ needs.extract-version.outputs.tag_set }}"
+        shell: bash
+        run: |
+          cd packages/core/shared/
+          yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
