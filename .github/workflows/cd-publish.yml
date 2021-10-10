@@ -6,44 +6,13 @@ on:
       - '*.*.*-*.*'
 
 jobs:
-  extract-version:
-    name: Extract version
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Extract version
-        id: version
-        shell: bash
-        run: |
-          TAG=${GITHUB_REF/refs\/tags\//}
-          echo ::set-output name=TAG::${TAG}
-
-          semver=( ${TAG//./ } )
-          major="${semver[0]}"
-          minor="${semver[1]}"
-          patch="0"
-          branch=""
-          build="${semver[3]}"
-
-          if [[ "${semver[2]}" =~ "-" ]]; then
-          branch=${semver[2]/*\-}
-          patch=${semver[2]/\-*}
-          else
-          patch="${semver[2]}"
-          fi
-
-          echo ::set-output name=BRANCH::"${branch}"
-          echo ::set-output name=BUILD::"${build}"
-          echo ::set-output name=VERSION::"${major}.${minor}.${patch}"
-
-    outputs:
-      semver: ${{ steps.version.outputs.TAG }}
-      tag: ${{ steps.version.outputs.BRANCH }}
-      tag_set: ${{ steps.version.outputs.BRANCH }} != ""
-
   build-publish:
     name: Build & Publish
     needs: [ extract-version ]
     runs-on: ubuntu-18.04
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -74,22 +43,8 @@ jobs:
 
       # Publish atlas-framework packages
       - name: Build atlas-framework packages
-        shell: bash
-        run: |
-          yarn build
-
-      - name: Authenticate with Registry
-        run: |
-          yarn logout
-          echo "registry=https://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
-          npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+        run: yarn build
 
       - name: Publish atlas-framework packages
-        shell: bash
-        run: |
-          lerna publish from-package --no-git-tag-version --no-push --yes
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+        run: lerna publish from-package --no-git-tag-version --no-push --yes
+
