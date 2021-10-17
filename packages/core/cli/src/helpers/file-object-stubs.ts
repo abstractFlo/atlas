@@ -135,12 +135,16 @@ export const pkgJson = {
  * Base Environment File
  */
 export const baseEnv = {
+  atlasPluginInstaller: 'npm',
   atlasProduction: false,
   atlasBuildOutput: 'dist',
   atlasClearBeforeBuild: true,
   atlasClearPreserver: null,
   atlasProjectPath: '.',
-  atlasRetailFolder: 'retail'
+  atlasRetailFolder: 'retail',
+  atlasAutoAddResource: true,
+  atlasPluginFolder: 'plugins',
+  serverBranch: 'release'
 };
 
 /**

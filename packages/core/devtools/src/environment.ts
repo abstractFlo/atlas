@@ -43,7 +43,7 @@ export function appendToEnv(data: Record<string, any>): void {
  * Return .env as json object
  */
 export function envToJson(): Record<string, any> {
-  const env = fsJetpack().read('.env');
+  const env = fsJetpack().read('.env') || '';
   return parse(env);
 }
 

@@ -36,52 +36,54 @@ program.command(NewCommand);
 async function bootstrap() {
   ///// TEST HOOKS
   // GITHUB INSTALLED PLUGINS
-  const commandExtends = [];
-  const githubPlugins = fsJetpack().find(pluginFolderName, {
-    matching: [
-      '!node_modules',
-      '!node_modules/**',
-      'package.json'
-    ],
-    files: true,
-    directories: false,
-    recursive: true
-  });
-
-  githubPlugins.forEach((plugin: string) => {
-    const packageJson = fsJetpack().read(plugin, 'json');
-    if (!packageJson?.atlas?.commands) return;
-
-    commandExtends.push(fsJetpack().path(plugin.replace('package.json', ''), packageJson.atlas.commands));
-  });
-
-
-  const rootPackageJson = fsJetpack().read('package.json', 'json');
-  const installedPackages = [...Object.keys(rootPackageJson.dependencies), ...Object.keys(rootPackageJson.devDependencies)];
-
-
-  installedPackages.forEach((packageName: string) => {
-
-    const packageJsonPath = fsJetpack().cwd('node_modules').path(packageName, 'package.json');
-
-    if (!fsJetpack().exists(packageJsonPath)) return;
-    const installedPackageJson = fsJetpack().read(packageJsonPath, 'json');
-
-    if (!installedPackageJson?.atlas?.commands) return;
-    commandExtends.push(fsJetpack().path(
-        packageJsonPath.replace('package.json', ''),
-        installedPackageJson.atlas.commands
-    ));
-
-  });
-
-  for (const commandFile of commandExtends) {
-    const file: any = await resolveAndLoadFile(commandFile);
-    const resolvedFile = file.default || file;
-
-    Object.values(resolvedFile).forEach((command: CommandModule) => {
-      program.command(command);
+  if(fsJetpack().exists(pluginFolderName)) {
+    const commandExtends = [];
+    const githubPlugins = fsJetpack().find(pluginFolderName, {
+      matching: [
+        '!node_modules',
+        '!node_modules/**',
+        'package.json'
+      ],
+      files: true,
+      directories: false,
+      recursive: true
     });
+
+    githubPlugins.forEach((plugin: string) => {
+      const packageJson = fsJetpack().read(plugin, 'json');
+      if (!packageJson?.atlas?.commands) return;
+
+      commandExtends.push(fsJetpack().path(plugin.replace('package.json', ''), packageJson.atlas.commands));
+    });
+
+
+    const rootPackageJson = fsJetpack().read('package.json', 'json');
+    const installedPackages = [...Object.keys(rootPackageJson.dependencies), ...Object.keys(rootPackageJson.devDependencies)];
+
+
+    installedPackages.forEach((packageName: string) => {
+
+      const packageJsonPath = fsJetpack().cwd('node_modules').path(packageName, 'package.json');
+
+      if (!fsJetpack().exists(packageJsonPath)) return;
+      const installedPackageJson = fsJetpack().read(packageJsonPath, 'json');
+
+      if (!installedPackageJson?.atlas?.commands) return;
+      commandExtends.push(fsJetpack().path(
+          packageJsonPath.replace('package.json', ''),
+          installedPackageJson.atlas.commands
+      ));
+
+    });
+
+    for (const commandFile of commandExtends) {
+      const file: any = await resolveAndLoadFile(commandFile);
+      const resolvedFile = file.default || file;
+
+      Object.values(resolvedFile).forEach((command: CommandModule) => {
+        program.command(command);
+      });
+    }
   }
 //// END TEST HOOKS
 
