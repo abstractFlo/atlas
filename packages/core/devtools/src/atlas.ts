@@ -1,6 +1,8 @@
 import { fsJetpack, resolveAndLoadFile } from './filesystem';
 import { PackageJson, PackageJsonAtlas } from './types';
 import { env } from './environment';
+import { stderr } from './terminal';
+import got from 'got';
 
 /**
  * Read the complete atlas.json file if exists
@@ -75,4 +77,23 @@ export async function runHook(hookType: keyof PackageJsonAtlas, plugin: string):
 
   checkIfValidHook(hookFile);
   await resolveAndLoadFile(hookFile);
+}
+
+/**
+ * Resolve latest package version from npm registry
+ *
+ * @param {string} packageName
+ * @return {Promise<string>}
+ */
+export async function getNodeVersionNumber(packageName: string): Promise<string> {
+  let version = 'latest';
+
+  try {
+    const response = await got.get(`https://registry.npmjs.com/${packageName}/latest`).json() as Pick<PackageJson, 'version'>;
+    version = response.version;
+  } catch (e) {
+    stderr(`There is no version found for package ${packageName} use latest instead`);
+  }
+
+  return version;
 }

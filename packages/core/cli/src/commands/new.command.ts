@@ -58,9 +58,11 @@ export const NewCommand: CommandModule = {
    */
   async handler(args: Arguments<{ name: string, docker: boolean, force: boolean }>): Promise<void> {
     const { docker, force } = args;
-    const installConfig = newProjectInstaller(args.name).filter(
-        (item: DirAndFileInstaller & { dockerOnly?: boolean }) => docker ? item : !item.dockerOnly
-    );
+
+    let installConfig = (await newProjectInstaller(args.name))
+        .filter(
+            (item: DirAndFileInstaller & { dockerOnly?: boolean }) => docker ? item : !item.dockerOnly
+        );
 
     dirAndFileInstaller(args.name, installConfig, force);
     dirAndFileInstaller(
@@ -74,11 +76,11 @@ export const NewCommand: CommandModule = {
 /**
  * Project Installer
  */
-function newProjectInstaller(name: string) {
+async function newProjectInstaller(name: string): Promise<{ name: string, file: string | Record<any, any>, dockerOnly?: boolean }[]> {
   return [
     { name: 'tsconfig.json', file: tsConfig },
     { name: 'tsconfig.eslint.json', file: tsEslint },
-    { name: 'package.json', file: pkgJsonStub(name) },
+    { name: 'package.json', file: await pkgJsonStub(name) },
     { name: '.env', file: jsonToEnv(baseEnv) },
     { name: 'atlas.json', file: atlasJson },
     { name: 'retail/server.cfg', file: getServerCfgBase().replace(/}/g, '#}') },

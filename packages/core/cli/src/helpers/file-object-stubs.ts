@@ -1,6 +1,8 @@
 /**
  * Config for docker-compose yml
  */
+import { getNodeVersionNumber } from '@abstractflo/atlas-devtools';
+
 export const dockerCompose = {
   version: '3.3',
   services: {
@@ -105,7 +107,13 @@ export const tsEslint = {
 /**
  * package.json Example
  */
-export function pkgJsonStub(name: string) {
+export async function pkgJsonStub(name: string) {
+
+  const typesServerVersion = await getNodeVersionNumber('@altv/types-server');
+  const typesSharedVersion = await getNodeVersionNumber('@altv/types-shared');
+  const typesClientVersion = await getNodeVersionNumber('@altv/types-client');
+  const typesNativesVersion = await getNodeVersionNumber('@altv/types-natives');
+
   return {
     'name': name,
     'private': true,
@@ -121,9 +129,10 @@ export function pkgJsonStub(name: string) {
     'license': 'MIT',
     'devDependencies': {
       '@abstractflo/atlas-cli': `^__buildNumber__`,
-      '@altv/types-client': '^1.8.8',
-      '@altv/types-natives': '^1.4.2',
-      '@altv/types-server': '^1.9.9'
+      '@altv/types-client': `^${typesClientVersion}`,
+      '@altv/types-natives': `^${typesNativesVersion}`,
+      '@altv/types-server': `^${typesServerVersion}`,
+      '@altv/types-shared': `^${typesSharedVersion}`
     },
     'dependencies': {
       '@abstractflo/atlas-client': `^__buildNumber__`,

@@ -72,7 +72,8 @@ export {
   getHookByType,
   checkIfValidHook,
   runHook,
-  getAtlasRc
+  getAtlasRc,
+  getNodeVersionNumber
 } from './atlas';
 
 export { FSJetpack } from 'fs-jetpack/types';
