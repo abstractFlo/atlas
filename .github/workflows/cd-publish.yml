@@ -8,7 +8,6 @@ on:
 jobs:
   build-publish:
     name: Build & Publish
-    needs: [ extract-version ]
     runs-on: ubuntu-18.04
     env:
       NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
