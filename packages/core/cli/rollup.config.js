@@ -1,5 +1,6 @@
 import baseConfig from '../../../scripts/rollup.config';
 import pkg from './package.json';
+import replace from '@rollup/plugin-replace';
 
 const outputConfigs = {
   cjs: {
@@ -19,4 +20,9 @@ export default baseConfig({
   output: outputConfigs,
   external: ['yargs/helpers', '@abstractflo/atlas-devtools'],
   pkg,
+  plugins: [
+      replace({
+        __buildNumber__: pkg.version
+      })
+  ]
 });

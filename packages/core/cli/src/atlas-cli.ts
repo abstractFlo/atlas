@@ -56,10 +56,8 @@ async function bootstrap() {
       commandExtends.push(fsJetpack().path(plugin.replace('package.json', ''), packageJson.atlas.commands));
     });
 
-
     const rootPackageJson = fsJetpack().read('package.json', 'json');
     const installedPackages = [...Object.keys(rootPackageJson.dependencies), ...Object.keys(rootPackageJson.devDependencies)];
-
 
     installedPackages.forEach((packageName: string) => {
 

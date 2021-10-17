@@ -14,7 +14,7 @@ import {
   atlasJson,
   baseEnv,
   dockerCompose,
-  pkgJson,
+  pkgJsonStub,
   serverCfgBase,
   tsConfig,
   tsEslint
@@ -58,7 +58,7 @@ export const NewCommand: CommandModule = {
    */
   async handler(args: Arguments<{ name: string, docker: boolean, force: boolean }>): Promise<void> {
     const { docker, force } = args;
-    const installConfig = newProjectInstaller.filter(
+    const installConfig = newProjectInstaller(args.name).filter(
         (item: DirAndFileInstaller & { dockerOnly?: boolean }) => docker ? item : !item.dockerOnly
     );
 
@@ -74,16 +74,18 @@ export const NewCommand: CommandModule = {
 /**
  * Project Installer
  */
-const newProjectInstaller = [
-  { name: 'tsconfig.json', file: tsConfig },
-  { name: 'tsconfig.eslint.json', file: tsEslint },
-  { name: 'package.json', file: pkgJson },
-  { name: '.env', file: jsonToEnv(baseEnv) },
-  { name: 'atlas.json', file: atlasJson },
-  { name: 'retail/server.cfg', file: getServerCfgBase().replace(/}/g, '#}') },
-  { name: '.docker/Dockerfile', file: dockerFile(), dockerOnly: true },
-  { name: 'docker-compose.yaml', file: jsonToYaml(dockerCompose), dockerOnly: true }
-];
+function newProjectInstaller(name: string) {
+  return [
+    { name: 'tsconfig.json', file: tsConfig },
+    { name: 'tsconfig.eslint.json', file: tsEslint },
+    { name: 'package.json', file: pkgJsonStub(name) },
+    { name: '.env', file: jsonToEnv(baseEnv) },
+    { name: 'atlas.json', file: atlasJson },
+    { name: 'retail/server.cfg', file: getServerCfgBase().replace(/}/g, '#}') },
+    { name: '.docker/Dockerfile', file: dockerFile(), dockerOnly: true },
+    { name: 'docker-compose.yaml', file: jsonToYaml(dockerCompose), dockerOnly: true }
+  ];
+};
 
 /**
  * Read docker file

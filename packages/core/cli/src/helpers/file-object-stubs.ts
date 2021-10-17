@@ -105,30 +105,32 @@ export const tsEslint = {
 /**
  * package.json Example
  */
-export const pkgJson = {
-  'name': '',
-  'private': true,
-  'version': '1.0.0',
-  'description': '',
-  'type': 'module',
-  'scripts': {
-    'build': 'atlas build',
-    'watch': 'atlas build --watch'
-  },
-  'keywords': [],
-  'author': '',
-  'license': 'MIT',
-  'devDependencies': {
-    '@abstractflo/atlas-cli': '^1.1.0',
-    '@altv/types-client': '^1.7.6',
-    '@altv/types-natives': '^1.4.2',
-    '@altv/types-server': '^1.9.6'
-  },
-  'dependencies': {
-    '@abstractflo/atlas-client': '^3.1.0',
-    '@abstractflo/atlas-server': '^3.1.0',
-    '@abstractflo/atlas-shared': '^3.1.0'
-  }
+export function pkgJsonStub(name: string) {
+  return {
+    'name': name,
+    'private': true,
+    'version': '1.0.0',
+    'description': '',
+    'type': 'module',
+    'scripts': {
+      'build': 'atlas build',
+      'watch': 'atlas build --watch'
+    },
+    'keywords': [],
+    'author': '',
+    'license': 'MIT',
+    'devDependencies': {
+      '@abstractflo/atlas-cli': `^__buildNumber__`,
+      '@altv/types-client': '^1.8.8',
+      '@altv/types-natives': '^1.4.2',
+      '@altv/types-server': '^1.9.9'
+    },
+    'dependencies': {
+      '@abstractflo/atlas-client': `^__buildNumber__`,
+      '@abstractflo/atlas-server': `^__buildNumber__`,
+      '@abstractflo/atlas-shared': `^__buildNumber__`
+    }
+  };
 };
 
 /**
