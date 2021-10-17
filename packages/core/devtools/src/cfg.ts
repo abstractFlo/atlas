@@ -19,7 +19,7 @@ export function readKeyFromCfg<T = unknown>(pathToConfig: string, key: string): 
  * @return {Config}
  */
 export function readCfg(path: string): Config {
-  return new Config(path, false);
+  return new Config(path, {});
 }
 
 /**
