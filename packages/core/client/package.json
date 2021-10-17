@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-client",
-  "version": "3.1.0-next.6",
+  "version": "3.1.0-next.7",
   "description": "> TODO: description",
   "author": "Florian Uhlrich <f.uhlrich@abstractmedia.de>",
   "homepage": "",
@@ -32,7 +32,7 @@
     "@altv/types-natives": "^1.4.2"
   },
   "devDependencies": {
-    "@abstractflo/atlas-shared": "^3.1.0-next.6",
+    "@abstractflo/atlas-shared": "^3.1.0-next.7",
     "@altv/types-client": "*",
     "@altv/types-natives": "*"
   },
