@@ -43,12 +43,10 @@ export const GameResourceCommand: CommandModule = {
    * @return {Promise<void>}
    */
   async handler(args: Arguments<{ name: string, standalone: boolean }>) {
-    const name = args.name;
-    const resourceName = normalize(args.name).split('/').pop();
-    const installFiles = await gameResourceInstallerFiles(resourceName, args.standalone);
+    const installFiles = await gameResourceInstallerFiles('.', args.standalone);
 
     dirAndFileInstaller<{ standalone?: boolean }>(
-        name,
+        args.name,
         installFiles
             .filter((item: DirAndFileInstaller & { standalone?: boolean }) => args.standalone ? item : !item.standalone)
     );
