@@ -35,7 +35,7 @@
     "@abstractflo/atlas-shared": "^3.1.0-rc.0"
   },
   "dependencies": {
-    "typeorm": "^0.2.36"
+    "typeorm": "^0.2.38"
   },
   "publishConfig": {
     "access": "public"

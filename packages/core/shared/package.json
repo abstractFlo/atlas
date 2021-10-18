@@ -28,10 +28,10 @@
   },
   "dependencies": {
     "@abraham/reflection": "^0.8.0",
-    "rxjs": "^7.2.0",
-    "tslib": "^2.3.0",
+    "rxjs": "^7.4.0",
+    "tslib": "^2.3.1",
     "tsyringe": "^4.6.0",
-    "typescript": "4.3.5"
+    "typescript": "4.4.4"
   },
   "peerDependencies": {
     "@altv/types-shared": "^1.0.6"

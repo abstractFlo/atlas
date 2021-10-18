@@ -29,21 +29,21 @@
   "peerDependencies": {
     "@abstractflo/atlas-server": "^3.1.0",
     "@abstractflo/atlas-shared": "^3.1.0",
-    "@altv/types-server": "^2.0.0",
+    "@altv/types-server": "^2.0.6",
     "eris": "^0.15.1"
   },
   "devDependencies": {
     "@abstractflo/atlas-server": "^3.1.0-rc.0",
     "@abstractflo/atlas-shared": "^3.1.0-rc.0",
-    "@types/node": "^16.4.13",
-    "@types/ws": "^7.4.7",
+    "@types/node": "^16.11.1",
+    "@types/ws": "^8.2.0",
     "eris": "^0.15.1"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.23.0",
     "cors": "^2.8.5",
-    "fastify": "^3.20.1",
-    "rxjs": "^7.3.0"
+    "fastify": "^3.22.0",
+    "rxjs": "^7.4.0"
   },
   "publishConfig": {
     "access": "public"
