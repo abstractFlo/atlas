@@ -1,6 +1,6 @@
 {
   "name": "@abstractflo/atlas-plugin-discord",
-  "version": "3.1.0-rc.0",
+  "version": "3.1.0-rc.1",
   "description": "> TODO: description",
   "author": "Florian Uhlrich <f.uhlrich@abstractmedia.de>",
   "homepage": "",
@@ -33,8 +33,8 @@
     "eris": "^0.15.1"
   },
   "devDependencies": {
-    "@abstractflo/atlas-server": "^3.1.0-rc.0",
-    "@abstractflo/atlas-shared": "^3.1.0-rc.0",
+    "@abstractflo/atlas-server": "^3.1.0-rc.1",
+    "@abstractflo/atlas-shared": "^3.1.0-rc.1",
     "@types/node": "^16.11.1",
     "@types/ws": "^8.2.0",
     "eris": "^0.15.1"
