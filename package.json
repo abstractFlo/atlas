@@ -7,7 +7,7 @@
   "scripts": {
     "build": "lerna run build",
     "cleanAll": "rimraf packages/**/{dist,build,types,*.d.ts,*.tgz}",
-    "bumpForRelease": "lerna version"
+    "bumpForRelease": "lerna version --no-push"
   },
   "workspaces": [
     "packages/core/*",
