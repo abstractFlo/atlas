@@ -73,10 +73,10 @@ async function newProjectInstaller(name: string): Promise<{ name: string, file: 
     { name: 'tsconfig.eslint.json', file: tsEslint },
     { name: 'package.json', file: await pkgJsonStub(name) },
     { name: '.env', file: getStubFile('stubs/env') },
-    { name: 'atlas.json', file: atlasJson },
     { name: 'retail/server.cfg', file: getServerCfgBase().replace(/}/g, '#}') },
     { name: '.docker/Dockerfile', file: getStubFile('stubs/Dockerfile'), dockerOnly: true },
-    { name: 'docker-compose.yaml', file: jsonToYaml(dockerCompose), dockerOnly: true }
+    { name: 'docker-compose.yaml', file: jsonToYaml(dockerCompose), dockerOnly: true },
+    { name: 'shared-data/server.log', file: 'empty', dockerOnly: true },
   ];
 }
 

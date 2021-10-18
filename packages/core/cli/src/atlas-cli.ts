@@ -36,6 +36,7 @@ program.command(NewCommand);
 async function bootstrap() {
   ///// TEST HOOKS
   // GITHUB INSTALLED PLUGINS
+  // ONLY FOR TESTING NOT FOR PRODUCTION
   if(fsJetpack().exists(pluginFolderName)) {
     const commandExtends = [];
     const githubPlugins = fsJetpack().find(pluginFolderName, {
