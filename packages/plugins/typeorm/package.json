@@ -36,5 +36,8 @@
   },
   "dependencies": {
     "typeorm": "^0.2.36"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
