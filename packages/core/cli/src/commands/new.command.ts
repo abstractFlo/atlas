@@ -6,19 +6,10 @@ import {
   dirAndFileInstaller,
   DirAndFileInstaller,
   fsJetpack,
-  jsonToEnv,
   jsonToYaml,
   sanitizedCfg
 } from '@abstractflo/atlas-devtools';
-import {
-  atlasJson,
-  baseEnv,
-  dockerCompose,
-  pkgJsonStub,
-  serverCfgBase,
-  tsConfig,
-  tsEslint
-} from '../helpers/file-object-stubs';
+import { atlasJson, dockerCompose, pkgJsonStub, serverCfgBase, tsConfig, tsEslint } from '../helpers/file-object-stubs';
 import { gameResourceInstallerFiles } from '../helpers/game-resource.helper';
 
 export const NewCommand: CommandModule = {
@@ -81,24 +72,25 @@ async function newProjectInstaller(name: string): Promise<{ name: string, file: 
     { name: 'tsconfig.json', file: tsConfig },
     { name: 'tsconfig.eslint.json', file: tsEslint },
     { name: 'package.json', file: await pkgJsonStub(name) },
-    { name: '.env', file: jsonToEnv(baseEnv) },
+    { name: '.env', file: getStubFile('stubs/env') },
     { name: 'atlas.json', file: atlasJson },
     { name: 'retail/server.cfg', file: getServerCfgBase().replace(/}/g, '#}') },
-    { name: '.docker/Dockerfile', file: dockerFile(), dockerOnly: true },
+    { name: '.docker/Dockerfile', file: getStubFile('stubs/Dockerfile'), dockerOnly: true },
     { name: 'docker-compose.yaml', file: jsonToYaml(dockerCompose), dockerOnly: true }
   ];
-};
+}
 
 /**
- * Read docker file
+ * Read a stub file
  *
+ * @param {string} path
  * @return {string}
  */
-function dockerFile(): string {
+function getStubFile(path: string): string {
   const currentDir = dirname(fileURLToPath(import.meta.url));
   return fsJetpack()
       .cwd(currentDir, '..')
-      .read('stubs/Dockerfile', 'utf8');
+      .read(path, 'utf8');
 }
 
 /**

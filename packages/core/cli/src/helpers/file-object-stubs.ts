@@ -2,6 +2,7 @@
  * Config for docker-compose yml
  */
 import { getNodeVersionNumber } from '@abstractflo/atlas-devtools';
+import inquirer from 'inquirer';
 
 export const dockerCompose = {
   version: '3.3',

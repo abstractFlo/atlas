@@ -1,0 +1,34 @@
+# Change your cli tool to fit your needs: available yarn and npm
+ATLAS_PLUGIN_INSTALLER_BIN=npm
+
+# Set atlas to production, this means the build files would be minimized
+ATLAS_PRODUCTION=false
+
+# Where to store the builded files, represented my the main Directory of your Server
+# Excluding the /resources path
+# E.g C:\altV\Server
+ATLAS_BUILD_OUTPUT=dist
+
+# Clear the build dir before new build is triggered
+# only for build not for watch
+ATLAS_CLEAR_BEFORE_BUILD=true
+
+# Define which files would be preserve for clean up
+# Base server files already preserved
+ATLAS_CLEAR_PRESERVE=
+
+# Path to this project, only needed if you using the docker starter
+# Otherwise it is ignored
+ATLAS_PROJECT_PATH=.
+
+# Describe where your static resources live
+ATLAS_RETAIL_FOLDER=retail
+
+# If true, the builder would add all resource to your server.cfg
+ATLAS_AUTO_ADD_RESOURCE=true
+
+# Define the folder where thirdparty plugins lives
+ATLAS_PLUGIN_FOLDER=plugins
+
+# Describe which branch you want to use for serverfiles in docker
+SERVER_BRANCH=dev
