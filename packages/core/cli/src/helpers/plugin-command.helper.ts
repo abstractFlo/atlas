@@ -72,12 +72,12 @@ export async function extractBranch(pluginName: string, extractTo: string, tmpDi
 export async function downloadBranch(url: string, pluginName: string, downloadRef: string, tmpDir: FSJetpack): Promise<FSJetpack | void> {
   const writer = tmpDir.createWriteStream(pluginName);
 
-  const { data, headers } = await axios.get(url, {
+  const { data, headers } = await axios.get<{on: Function, pipe: Function}>(url, {
     responseType: 'stream',
     headers: axiosNoCacheOptions.headers
   });
 
-  const totalLength = headers['content-length'] || 0;
+  const totalLength = headers['content-length'] || '0';
 
   const progressBar = createProgressBar(
       '-> downloading [:bar] :percent :etas',
@@ -195,7 +195,7 @@ export async function selectPluginPackageVersion(
  */
 export async function checkIfRepoExists(apiBaseUrl: string, branch: string): Promise<string> {
   try {
-    const { data } = await axios.get(apiBaseUrl, axiosNoCacheOptions);
+    const { data } = await axios.get<{default_branch: string}>(apiBaseUrl, axiosNoCacheOptions);
     return branch ?? data.default_branch;
   } catch (err) {
     throw Error('Could not load repository information. Please check if the repository is available publicy');
@@ -212,7 +212,7 @@ export async function checkIfRepoExists(apiBaseUrl: string, branch: string): Pro
 export async function getPackageJson(rawBaseUrl: string, branch: string): Promise<PackageJson> {
 
   try {
-    const { data } = await axios.get(`${rawBaseUrl}/${branch}/package.json`, axiosNoCacheOptions);
+    const { data } = await axios.get<PackageJson>(`${rawBaseUrl}/${branch}/package.json`, axiosNoCacheOptions);
     return data;
 
   } catch (err) {
