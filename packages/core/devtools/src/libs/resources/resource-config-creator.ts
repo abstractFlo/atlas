@@ -125,7 +125,7 @@ export class ResourceConfigCreator {
 
 
     const config = new ResourceConfigModel().cast({
-      input: resolvePath([resource.source, 'server', 'index.ts']),
+      input: typeof resource.config.serverMain !== "string" ? resolvePath([resource.source, 'server', 'index.ts']) : resolvePath([resource.source, ...resource.config.serverMain.split('/')]),
       output: {
         file: resolvePath([resource.output, 'server.js'])
       },
@@ -154,7 +154,7 @@ export class ResourceConfigCreator {
    */
   private createClientConfig(resource: GameResourceModel): RollupOptions {
     const config = new ResourceConfigModel().cast({
-      input: resolvePath([resource.source, 'client', 'index.ts']),
+      input: typeof resource.config.clientMain !== "string" ? resolvePath([resource.source, 'client', 'index.ts']) : resolvePath([resource.source, ...resource.config.clientMain.split('/')]),
       output: {
         file: resolvePath([resource.output, 'client.js'])
       },

@@ -32,5 +32,11 @@ export class GameResourceConfigModel extends JsonEntityModel {
   useStarImport: boolean = false;
 
   @Cast()
+  serverMain: string;
+
+  @Cast()
+  clientMain: string;
+
+  @Cast()
   readonly path: string;
 }

@@ -27,8 +27,8 @@ export class ResourceManager {
             config: { ...config, name: config.name || resourcePath },
             source: resolvePath([resourcePath]),
             output: resolvePath([outDir, resourcePath]),
-            isServer: !!hasFolder(`${resourcePath}/server`),
-            isClient: !!hasFolder(`${resourcePath}/client`),
+            isServer: !!hasFolder(`${resourcePath}/server`) || typeof config.serverMain === "string",
+            isClient: !!hasFolder(`${resourcePath}/client`) || typeof config.clientMain === "string",
             hasAssets: !!hasFolder(`${resourcePath}/assets`)
           });
         });
