@@ -3,14 +3,12 @@ import { Plugin, RollupOptions } from 'rollup';
 import { ResourceConfigModel } from '../../models/resource-config.model';
 import { unique } from '../../array';
 import { fsJetpack, resolvePath } from '../../filesystem';
-import convertNamedImports from '../../transformers/convertNamedImports';
 import json from '@rollup/plugin-json';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import { ResourceCreateConfigInterface } from './resource-create-config.interface';
 import typescript from '@rollup/plugin-typescript';
 import { isProduction } from '../../environment';
 import { terser } from 'rollup-plugin-terser';
-import { PackageJson } from '../../types';
 
 export class ResourceConfigCreator {
 
@@ -129,16 +127,7 @@ export class ResourceConfigCreator {
       output: {
         file: resolvePath([resource.output, 'server.js'])
       },
-      plugins: [
-        convertNamedImports(
-            [
-              ...resource.config.convert,
-              ...modulesForConvert,
-              ...this.checkForConvertableModules(localInstalledPackages)
-            ],
-            resource.config
-        )
-      ],
+      plugins: [],
       external: ['alt-server', ...modulesForConvert, ...localInstalledPackages]
     });
 
@@ -163,22 +152,5 @@ export class ResourceConfigCreator {
     });
 
     return this.createConfig(config);
-  }
-
-  /**
-   * Filter given packages fot type is not module
-   *
-   * @param {string[]} localInstalledPackages
-   * @return {string[]}
-   * @private
-   */
-  private checkForConvertableModules(localInstalledPackages: string[]): string[] {
-    return localInstalledPackages.filter((localPackage: string) => {
-      const localPackageJson = fsJetpack()
-          .cwd('node_modules', localPackage)
-          .read('package.json', 'json') as PackageJson;
-
-      return localPackageJson.type !== 'module';
-    });
   }
 }

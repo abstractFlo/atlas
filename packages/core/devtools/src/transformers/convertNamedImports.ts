@@ -153,18 +153,3 @@ export default function (modules: string[] = [], config: GameResourceConfigModel
     }
   };
 }
-
-/**
- * Named Export
- *
- * @param {string[]} modules
- * @param {GameResourceConfigModel} config
- * @return {Plugin}
- */
-export function convertNamedImports(modules: string[] = [], config: GameResourceConfigModel): Plugin {
-  return {
-    transform(fileInfo) {
-      return convert(fileInfo, modules, config);
-    }
-  };
-}

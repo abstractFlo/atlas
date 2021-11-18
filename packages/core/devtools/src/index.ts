@@ -60,8 +60,6 @@ export { AtlasRcInterface, AtlasHooksInterface } from './interfaces/atlas-rc.int
 
 export { ResourceManager, ResourceConfigCreator } from './libs/resources';
 
-export { convertNamedImports } from './transformers/convertNamedImports';
-
 export { relativeId } from './relativeId';
 
 // Atlas Helpers
