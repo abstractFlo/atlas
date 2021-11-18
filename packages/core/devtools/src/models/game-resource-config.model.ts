@@ -30,6 +30,12 @@ export class GameResourceConfigModel extends JsonEntityModel {
    */
   @Cast()
   useStarImport: boolean = false;
+  
+  /**
+   * Exclude module for convertNameImport function
+   */
+  @Cast()
+  excludeConvertNames: string[] = [];
 
   @Cast()
   readonly path: string;

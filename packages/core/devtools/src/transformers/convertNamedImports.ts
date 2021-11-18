@@ -24,7 +24,7 @@ function convert(code: string, modules: string[] = [], config: GameResourceConfi
     let moduleName = path.value.source.value;
     moduleMap[moduleName] = [];
 
-    if (moduleName.startsWith('.') || !modulesForConvert.includes(moduleName) || !path.node.specifiers.length)
+    if (moduleName.startsWith('.') || !modulesForConvert.includes(moduleName) || !path.node.specifiers.length || config.excludeConvertNames.includes(moduleName))
       return;
 
     path.node.specifiers.forEach((specifier) => {
